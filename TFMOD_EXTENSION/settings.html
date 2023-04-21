@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			:root {
+				--border: #d7d7db;
+				--accent: #0061e0;
+				accent-color: var(--accent);
+			}
+			@media (prefers-color-scheme: dark) {
+				body {
+					background-color: rgb(35 34 43);
+					color: rgb(251 251 254);
+				}
+				:root {
+					--border: rgba(249,249,250,0.2);
+					--accent: rgb(0,221,255);
+				}
+			}
+			body, html {
+				/* margin-block-end: 80px; */
+				overflow: hidden;
+				block-size: 100%;
+			}
+			p {
+				font-size: 15px;
+			}
+			h1 {
+				display: flex;
+				justify-content: center;
+			}
+			a {
+				text-decoration: none;
+			}
+			a:hover {
+				text-decoration: underline;
+			}
+			a:link {
+				color: var(--accent);
+			}
+			a:visited {
+				color: var(--accent);
+			}
+			img {
+				inline-size: 16px;
+				block-size: 16px;
+				display: inline-block;
+				margin-inline-end: 10px;
+			}
+			section {
+				border-block-start: 1px solid var(--border);
+				margin-block-end: 10px;
+			}
+			section > * {
+				padding-inline: 12px;
+			}
+			.row {
+				font-size: 15px;
+				display: flex;
+				justify-content: space-between;
+				padding-block: 5px;
+			}
+			.row > label {
+				font-size: 15px;
+				padding-block: 2px;
+			}
+			.red {
+				color: red;
+			}
+		</style>
+		<script type="module" src="/build/settings.bundle.js"></script>
+	</head>
+	<body>
+		<a href="https://www.github.com"><h1 id="version">...</h1></a>
+		<section>
+			<h2 data-string="sectionWebsite">...</h2>
+			<div class="row">
+				<label for="enableGameBanana"><img src="https://icons.duckduckgo.com/ip2/gamebanana.com.ico" alt="GameBanana Logo">GameBanana</label>
+				<input id="enableGameBanana" type="checkbox" data-website="gamebanana">
+			</div>
+			<div class="row">
+				<label for="enableModsTf"><img src="https://icons.duckduckgo.com/ip2/mods.tf.ico" alt="Mod.tf Logo">Mods.tf</label>
+				<input id="enableModsTf" type="checkbox" data-website="mods_tf">
+			</div>
+		</section>
+	</body>
+</html>

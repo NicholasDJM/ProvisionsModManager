@@ -1,0 +1,4 @@
+.defaultMargin {
+	padding-inline: var(--defaultMargin);
+	padding-block: calc(var(--defaultMargin) * 2);
+}

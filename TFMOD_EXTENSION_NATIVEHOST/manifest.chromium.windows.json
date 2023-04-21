@@ -1,0 +1,9 @@
+{
+	"name": "tfmod.extension.nativehost",
+	"description": "Provides a connection between 'Provisions Mod Manager' and 'Provisions Mod Manager: One-Click Installer' web extension.",
+	"path": "./tfmod.extension.nativehost.bat",
+	"type": "stdio",
+	"allow_origins": [
+		"chrome://extension id"
+	]
+}

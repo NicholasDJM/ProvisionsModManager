@@ -1,0 +1,56 @@
+VPK File Structure in Hexadecimal
+TODO: Create HTML Page to explain this with images
+NOTE: Looks like some of the bytes are backwards...
+
+https://developer.valvesoftware.com/wiki/VPK_File_Format
+
+0x00: 34 12 AA 55
+Magic Number
+Identifies as a VPK file.
+
+0x04: 02 00 00 00
+Version Number
+Should be version 2
+
+0x08
+Tree Size
+
+0x0C
+VPK File Size
+
+0x10: 00 00 00 00
+Size of MD5 checksums for external content
+
+0x14: 30 00 00 00
+Size of MD5 checksums for internal content
+Always decimal 48, so always hexadecimal: 30 00 00 00
+
+	MD5 Checksums are used to see if any content in a file has changed, so it can be updated.
+
+0x18: 00 00 00 00
+Size of Signature (Either 0 or 296 in decimal)
+
+0x1C
+	0x1c is always the start of the Directory Tree
+First: File extension, null terminated, if no extension, a space character instead
+Second: Folder Path, null terminated, if no path, a space character instead
+Third: File name, if no name, a space character instead
+Fourth: CRC
+Fifth: Preload Bytes: 00 00
+	NOTE: Value is short
+Fifth: Archive Index: FF 7F
+	NOTE: Value is short
+	If not in external archive, this value will be 0x7fff
+Sixth: Entry Offset: File Position in VPK
+	"If the file data is stored in the same file as the directory, offset is (sizeof(VPKHeader_v2) + TreeLength)" from Valve Dev Wiki
+Seventh: File Size
+Finally: Entry Terminator: FF FF
+
+If preload is not 00 00, preload data comes next, not the next directory entry!
+"If a file contains preload data, the preload data immediately follows the above structure. The entire size of a file is PreloadBytes + EntryLength." from Valve Dev Wiki
+
+
+Repeat until the 0x08 Tree Size is reached?
+
+And then data...
+TODO: Finish this guide

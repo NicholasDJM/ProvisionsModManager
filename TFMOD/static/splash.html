@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			:root {
+				--borderSize: 5px;
+
+				background-color: black;
+				color: white;
+				overflow: hidden;
+				accent-color: #0089fc;
+				border: var(--borderSize) solid #0089fc;
+				/* border-radius: 20px; */
+			}
+			.center {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				text-align: center;
+			}
+			body {
+				height: calc(100vh - (var(--borderSize) * 2));
+				width: calc(100vw - (var(--borderSize) * 2));
+				margin: 0;
+				/* border-radius: 20px; */
+			}
+			.grid {
+				height: 100vh;
+				display: grid;
+				grid-template-rows: auto;
+				width: 100%;
+				justify-content: center;
+			}
+			h1 {
+				margin: 0;
+				font-size: 16px;
+				font-family: sans-serif;
+			}
+			progress {
+				width: 100%;
+			}
+		</style>
+	</head>
+	<body class="center">
+		<div class="grid">
+			<h1 class="center">Provisions Mod Manager</h1>
+			<progress></progress>
+		</div>
+	</body>
+</html>

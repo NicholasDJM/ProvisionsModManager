@@ -1,0 +1,136 @@
+<script lang="ts">
+	import "@fontsource/roboto";
+	import "../app.css";
+	import "reasonable-colors";
+	import "../stylify.css";
+	import { i18n } from "$lib/i18n.js"
+	import jq from "jquery";
+	import { title } from "$lib/title.js";
+	import { currentPage } from "$lib/page.js";
+	import Cog from "svelte-material-icons/Cog.svelte";
+	import Tools from "svelte-material-icons/Tools.svelte";
+	import Menu from "svelte-material-icons/Menu.svelte";
+	import MenuOpen from "svelte-material-icons/MenuOpen.svelte";
+	import File from "svelte-material-icons/FileOutline.svelte";
+	import Options from "svelte-material-icons/DotsVertical.svelte";
+	import Update from "svelte-material-icons/Update.svelte";
+	import DragAndDrop from "$lib/Drag-And-Drop.svelte";
+	const buttonSize = "25px"
+	// Use this for menu? https://codepen.io/fabean/pen/XXegoQ
+	function activate() {
+		const buttons = document.querySelectorAll(".navRailButton");
+		buttons.forEach((button, index) => {
+			const data = $currentPage;
+			button?.classList?.remove("active");
+			if (index+1 == data) {
+				button?.classList?.add("active");
+			}
+		})
+	}
+	jq(()=>{
+		activate();
+	});
+	function gotoPage(this: HTMLElement) {
+		window.location = this.dataset.page;
+	}
+	let menuOpen=false;
+	function toggleMenu(this: HTMLElement) {
+		menuOpen = !menuOpen;
+		this.classList.toggle("menuOpen");
+	}
+	let updateAvailable = true
+</script>
+<a class="position:fixed border-radius:0_0_20px_0 padding:10px background-color:white transition:0.2s inset-block-start:-50px focus:inset-block-start:0" href="#mainContent">{$i18n.t("skipToContent")}</a>
+<nav class="background:var(--color-blue-3) display:grid grid-template-rows:55px_1fr overflow:hidden block-size:100%">
+	<div id="navbar" class="display:grid grid-template-columns:auto_1fr_auto overflow:hidden padding-inline:20px padding-block:10px gap:10px">
+		<button name="Menu Toggle" on:click={toggleMenu}>
+			{#if menuOpen}
+				<MenuOpen size="25px"/>
+			{:else}
+				<Menu size="25px"/>
+			{/if}
+		</button>
+		<h1 class="margin:0 text-align:center color:white">
+			{$title}
+		</h1>
+		<button name="Options Dropdown"><Options size="25px"/></button>
+	</div>
+	<!-- TODO: Figure out how to make page take up as much space as possible without overflowing the window. Showing a scrollbar is okay. -->
+	<div class="display:flex flex-direction:column block-size:100vh">
+		<div class="display:grid grid-template-columns:65px_1fr flex:1 transition:0.2s">
+			<aside id="nav-rail" class="display:grid grid-template-rows:auto_auto_1fr_auto padding-inline:5px margin-block-start:30px margin-block-end:10px gap:5px">
+				<button class="navRailButton" on:click={gotoPage} data-page="/"><File size={buttonSize}/></button>
+				<button class="navRailButton" on:click={gotoPage} data-page="/utils"><Tools size={buttonSize}/></button>
+				<span></span>
+				<div class="display:grid grid-template-rows:auto_auto gap:5px">
+					{#if updateAvailable}
+						<button class="navRailButton"><Update size={buttonSize}/></button>
+					{:else}
+						<span></span>
+					{/if}
+					<button class="navRailButton" on:click={gotoPage} data-page="/settings"><Cog size={buttonSize}/></button>
+				</div>
+			</aside>
+			<main id="#mainContent" class="background:var(--color-blue-2) border-radius:25px_0_0_0 padding-inline:20px padding-block-start:10px overflow:scroll">
+				<slot />
+			</main>
+		</div>
+	</div>
+</nav>
+<span class="background:var(--test)"></span>
+<style>
+	button {
+		background-color: rgb(0 0 0 / 0);
+		border: 0;
+		color: white;
+		cursor: pointer;
+		transition: var(--transition-speed);
+		aspect-ratio: 1;
+		border-radius: 50%;
+		&:hover,&:focus-visible {
+			background-color: rgb(255 255 255 / 1);
+			color: black;
+		}
+	}
+	#nav-rail>button {
+		border-radius: 50%;
+		border: 0;
+		cursor: pointer;
+		transition: var(--transition-speed);
+		aspect-ratio: 1;
+		background-color: rgb(0 0 0 / 0);
+		color: white;
+		&:hover,&:focus-visible {
+			background-color: rgb(255 255 255 / 1);
+			color: black;
+			box-shadow: 0 0 20px 1px white;
+		}
+	}
+	.active {
+		background-color: rgb(255 255 255 / 1) !important;
+		color: black !important;
+	}
+	.menuOpen {
+		background-color: rgb(255 255 255 / 1) !important;
+		color: black !important;
+	}
+</style>
+<svelte:head>
+	<style class="active menuOpen">
+		:root,body {
+			font-family: Roboto, sans-serif;
+			margin-block: 0;
+			margin-inline: 0;
+			inline-size:100%;
+			block-size: 100%;
+			background: var(--color-blue-3);
+			--nav-button-size: 25px;
+			--transition-speed: 0.5s;
+		}
+		body > div {
+			block-size: 100%;
+			min-block-size: 100vh;
+		}
+	</style>
+</svelte:head>
+<DragAndDrop/>

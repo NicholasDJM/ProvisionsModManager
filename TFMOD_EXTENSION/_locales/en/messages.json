@@ -1,0 +1,24 @@
+{
+	"extensionName": {
+		"message": "Provisions Mod Manager: One-Click Installer",
+		"description": "Name of the extension"
+	},
+	"extensionDescription": {
+		"message": "Companion extension for Provisions Mod Manager that provides a button on supported websites, like GameBanana, to quickly install mods.",
+		"description": "Description of the extension"
+	},
+	"optionsTitle": {
+		"message": "One-Click Installer $version$",
+		"description": "Title of the options page, with version number.",
+		"placeholders": {
+			"version": {
+				"content": "$1",
+				"example": "0.1"
+			}
+		}
+	},
+	"sectionWebsite": {
+		"message": "Supported Websites",
+		"descriptions": "Title of the Supported Websites section in the options page"
+	}
+}

@@ -1,0 +1,180 @@
+#![cfg_attr(
+	all(not(debug_assertions), target_os = "windows"),
+	windows_subsystem = "windows"
+)]
+
+// use tauri::{CustomMenuItem, Menu, MenuItem, Submenu, SystemTrayMenu, SystemTrayMenuItem, SystemTrayEvent, SystemTray, WindowBuilder, Manager};
+
+use tauri::Manager;
+
+// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+#[tauri::command]
+fn greet(name: &str) -> String {
+	format!("Hello, {}! You've been greeted from Rust!", name)
+}
+
+// This works. Just followed the example on tauri.app.
+//  However, useless, as the splash screen has the same problem the main window has.
+// Vite keeps recompiling the frontend on load. Maybe not while in production?
+#[tauri::command]
+async fn close_splashscreen(window: tauri::Window) {
+	if let Some(splashscreen) = window.get_window("splashscreen") {
+		splashscreen.close().unwrap();
+	}
+	window.get_window("main").unwrap().show().unwrap();
+}
+
+// use tauri::Manager;
+// use registry;
+// #[derive(Clone, serde::Serialize)]
+// struct Payload {
+// 	message: String
+// }
+// // Grab window accentColor (check if windows), send to front end.
+// // #[tauri::command]
+// fn accent_color() {
+// 	let color = Hive::CurrentUser.open(r"SOFTWARE\Microsoft\Windows\DWM\AccentColor", Security::Read)?;
+// // Send to all windows via event... I DON'T KNOW WHAT I'M DOING
+// }
+
+
+// This code causes the backend to hang.
+// Create window with menu. (Make it look like a real text editor)
+// #[tauri::command]
+// fn open_ide() {
+// 	let close = CustomMenuItem::new("close".to_string(), "Close");
+// 	let filemenu = Submenu::new("File", Menu::new()
+// 		.add_item(close)
+// 	);
+// 	let editmenu = Submenu::new("Edit", Menu::new()
+// 		.add_native_item(MenuItem::Copy)
+// 		.add_native_item(MenuItem::Cut)
+// 		.add_native_item(MenuItem::Paste)
+// 	);
+// 	let menu = Menu::new().add_submenu(filemenu).add_submenu(editmenu);
+// 	tauri::Builder::default()
+// 		.setup(|app| {
+// 			let window = WindowBuilder::new(
+// 				app,
+// 				"ide".to_string(),
+// 				tauri::WindowUrl::App("/utils/ide/editor.html".into()),
+// 			)
+// 			.menu(menu)
+// 			.build()?;
+// 			let window_ = window.clone();
+// 			window.on_menu_event(move |event| {
+// 				match event.menu_item_id() {
+// 					"close" => {
+// 						window_.close().unwrap();
+// 					}
+// 					_ => {}
+// 				}
+// 			});
+// 			Ok(())
+// 		})
+// 		.run(tauri::generate_context!())
+// 		.expect("error while running tauri application");
+// }
+
+// #[derive(Clone, serde::Serialize)]
+// struct Payload {
+// 	message: String,
+// }
+
+use async_trait::async_trait;
+use ezsockets::ClientConfig;
+use std::io::BufRead;
+use url::Url;
+
+struct Client {}
+
+#[async_trait]
+impl ezsockets::ClientExt for Client {
+	type Call = ();
+
+	async fn on_text(&mut self, text: String) -> Result<(), ezsockets::Error> {
+		tracing::info!("recieved message: {text}");
+		Ok(())
+	}
+
+	async fn on_binary(&mut self, bytes: Vec<u8>) -> Result<(), ezsockets::Error> {
+		tracing::info!("recieved message: {bytes:?}");
+		Ok(())
+	}
+
+	async fn on_call(&mut self, call: Self::Call) -> Result<(), ezsockets::Error> {
+		let () = call;
+		Ok(())
+	}
+}
+
+//Load the webextension handler (listen for data from extension and emit to frontend), and create main window.
+// Can sorta create tray menu. Don't need it right now because I can't figure out how to keep the backend from quitting.
+//		Following the example on tauri.app doesn't work.
+//Remember to add new functions to the builder! https://tauri.app/v1/guides/features/command
+#[tokio::main]
+async fn main() {
+	tracing_subscriber::fmt::init();
+	let config = ClientConfig::new("ws://localhost:4200");
+	let (handle, future) = ezsockets::connect(|_client| Client {}, config).await;
+	tokio::spawn(async move {
+		future.await.unwrap();
+	});
+	let stdin = stdin::io::stdin();
+	let lines = stdin.lock().lines();
+	for line in lines {
+		let line = line.unwrap();
+		tracing::info!("sending {line}");
+		handle.text(line);
+	}
+	// let quit = CustomMenuItem::new("quit".to_string(), "Quit");
+	// let hide = CustomMenuItem::new("hide".to_string(), "Hide");
+	// let tray_menu = SystemTrayMenu::new()
+	// 	.add_item(quit)
+	// 	.add_native_item(SystemTrayMenuItem::Separator)
+	// 	.add_item(hide);
+	// let tray = SystemTray::new()
+	// 	.with_menu(tray_menu);
+	tauri::Builder::default()
+		.invoke_handler(tauri::generate_handler![greet])
+		.invoke_handler(tauri::generate_handler![close_splashscreen])
+		// .invoke_handler(tauri::generate_handler![open_ide])
+		// .setup(|app| {
+		// 	app.listen_global("theme-green", |event| {
+		// 		app.emit_all("theme", Payload { message: "theme-green".into()}).unwrap();
+		// 	});
+		// 	app.listen_global("theme-blue", |event| {
+		// 		app.emit_all("theme", Payload { message: "theme-blue".into()}).unwrap();
+		// 	});
+		// 	Ok(())
+		// })
+		// .system_tray(tray)
+		// .on_system_tray_event(|app, event| match event {
+		// 	SystemTrayEvent::LeftClick { position: _, size: _, .. } => {
+		// 		let window = app.get_window("main").unwrap();
+		// 		window.show().unwrap();
+		// 	}
+		// 	SystemTrayEvent::MenuItemClick { id, .. } => {
+		// 		match id.as_str() {
+		// 			"quit" => {
+		// 				std::process::exit(0)
+		// 			}
+		// 			"hide" => {
+		// 				let window = app.get_window("main").unwrap();
+		// 				window.hide().unwrap()
+		// 			}
+		// 			_ => {}
+		// 		}
+		// 	}
+		// 	_ => {}
+		// })
+		.run(tauri::generate_context!())
+		// .build(tauri::generate_context!())
+		.expect("error while building tauri application");
+		// .run(|_app_handle, event| match event {
+		// 	tauri::RunEvent::ExitRequested { api, ..} => {
+		// 		api.prevent_exit();
+		// 	}
+		// 	_ => {}
+		// })
+}

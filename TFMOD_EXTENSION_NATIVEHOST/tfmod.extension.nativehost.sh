@@ -1,0 +1,1 @@
+node ./tfmod.extension.nativehost.js

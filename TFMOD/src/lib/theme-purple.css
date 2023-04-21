@@ -1,0 +1,30 @@
+.theme-purple {
+	--accentColor: var(--color-purple-3);
+	--accentColorAlt: var(--color-violet-2);
+	--textColor: var(--color-gray-6);
+	--backgroundColor: var(--color-gray-2);
+	--textColorInverse: var(--color-gray-1);
+}
+@media (prefers-color-scheme: dark) {
+	.theme-purple {
+		--accentColor: var(--color-purple-4);
+		--accentColorAlt: var(--color-purple-5);
+		--textColor: var(--color-gray-1);
+		--backgroundColor: var(--color-gray-6);
+		--textColorInverse: var(--color-gray-6);
+	}
+}
+.theme-purple.light {
+	--accentColor: var(--color-purple-3) !important;
+	--accentColorAlt: var(--color-violet-2) !important;
+	--textColor: var(--color-gray-6) !important;
+	--backgroundColor: var(--color-gray-2) !important;
+	--textColorInverse: var(--color-gray-1) !important;
+}
+.theme-purple.dark {
+	--accentColor: var(--color-purple-4) !important;
+	--accentColorAlt: var(--color-purple-5) !important;
+	--textColor: var(--color-gray-1) !important;
+	--backgroundColor: var(--color-gray-6) !important;
+	--textColorInverse: var(--color-gray-6) !important;
+}

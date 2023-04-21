@@ -1,0 +1,141 @@
+{
+	"build": {
+		"beforeDevCommand": "npm run dev",
+		"beforeBuildCommand": "npm run build",
+		"devPath": "http://localhost:1420",
+		"distDir": "../build",
+		"withGlobalTauri": false
+	},
+	"package": {
+		"productName": "Provisions Mod Manager",
+		"version": "0.0.1"
+	},
+	"tauri": {
+		"allowlist": {
+			"all": false,
+			"shell": {
+				"all": false,
+				"open": true,
+				"sidecar": true,
+				"scope": [
+				]
+			},
+			"fs": {
+				"all": false,
+				"copyFile": false,
+				"createDir": false,
+				"exists": true,
+				"readDir": false,
+				"readFile": true,
+				"removeDir": false,
+				"removeFile": true,
+				"renameFile": false,
+				"scope": [
+					"C:/Program Files (x86)/Steam/steamapps/common/Team Fortress 2/**/*",
+					"C:/Program Files (x86)/Steam/steamapps/workshop/content/440/**/*",
+					"$APPDATA/tfmod.command.install.txt",
+					"$APPDATA/tfmod.command.disable.txt",
+					"$APPDATA/tfmod.command.enable.txt",
+					"$APPDATA/tfmod.extension.command.current.txt",
+					"$APPDATA/Downloads/*"
+
+				],
+				"writeFile": true
+			},
+			"process": {
+				"exit" :true
+			},
+			"window": {
+				"minimize": true,
+				"maximize": true,
+				"unmaximize": true,
+				"startDragging": true,
+				"setDecorations": true,
+				"create": true
+			},
+			"http": {
+				"all": false,
+				"request": true,
+				"scope": [
+					"https://gamebanana.com/dl/*",
+					"https://files.gamebanana.com/mods/*",
+					"https://api.gamebanana.com/Core/Item/Data*"
+				]
+			}
+		},
+		"bundle": {
+			"active": false,
+			"category": "Utility",
+			"copyright": "",
+			"deb": {
+				"depends": []
+			},
+			"externalBin": [
+			],
+			"icon": [
+				"icons/32x32.png",
+				"icons/128x128.png",
+				"icons/128x128@2x.png",
+				"icons/icon.icns",
+				"icons/icon.ico"
+			],
+			"identifier": "tf.mod.manager",
+			"longDescription": "A Mod Manager for Team Fortress 2. Handles Downloading, organizing and installing mods.\nAdditional utilities include: Detection of conflicting mods: See what files are overriding what; CFG IDE: An editor for scripting in TF2, with command explanation;",
+			"macOS": {
+				"entitlements": null,
+				"exceptionDomain": "",
+				"frameworks": [],
+				"providerShortName": null,
+				"signingIdentity": null
+			},
+			"resources": [],
+			"shortDescription": "A Mod Manager for Team Fortress 2",
+			"targets": "all",
+			"windows": {
+				"certificateThumbprint": null,
+				"digestAlgorithm": "sha256",
+				"timestampUrl": ""
+			}
+		},
+		"security": {
+			"csp": null
+		},
+		"updater": {
+			"active": false
+		},
+		"windows": [
+			{
+				"label": "splashscreen",
+				"center": true,
+				"visible": true,
+				"url": "/splash.html",
+				"title": "Provisions Mod Manager",
+				"decorations": false,
+				"height": 200,
+				"width": 300
+			},
+			{
+				"label": "main",
+				"fullscreen": false,
+				"height": 840,
+				"resizable": true,
+				"title": "Provisions Mod Manager",
+				"width": 700,
+				"center": true,
+				"decorations": true,
+				"minWidth": 700,
+				"url": "/main",
+				"visible": false
+			},
+			{
+				"label": "manager",
+				"url": "/manager",
+				"title": "Mod Manager System",
+				"visible": true
+			}
+		],
+		"systemTray": {
+			"iconPath": "icons/icon.png"
+		}
+	}
+}

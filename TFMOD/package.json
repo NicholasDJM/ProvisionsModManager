@@ -1,0 +1,367 @@
+{
+	"name": "TFMOD",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"root": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"tauri": "tauri",
+		"tdev": "tauri dev",
+		"lint": "eslint ./src/**/*"
+	},
+	"dependencies": {
+		"@tauri-apps/api": "^1.2.0"
+	},
+	"devDependencies": {
+		"@fontsource/roboto": "4.5.8",
+		"@stylify/unplugin": "0.5.31",
+		"@sveltejs/adapter-static": "^2.0.1",
+		"@sveltejs/kit": "^1.15.2",
+		"@tauri-apps/cli": "^1.2.3",
+		"@types/eslint": "^8.37.0",
+		"@types/jquery": "^3.5.16",
+		"@types/simple-peer": "^9.11.5",
+		"@types/sortablejs": "^1.15.1",
+		"@typescript-eslint/eslint-plugin": "5.57.1",
+		"@typescript-eslint/parser": "5.57.1",
+		"ace-diff-pro": "1.0.9",
+		"blurhash": "2.0.5",
+		"brace": "0.11.1",
+		"combo-storage": "2.1.2",
+		"eslint": "8.38.0",
+		"eslint-plugin-i18next": "6.0.0-6",
+		"eslint-plugin-import": "2.27.5",
+		"eslint-plugin-node": "11.1.0",
+		"eslint-plugin-promise": "6.1.1",
+		"eslint-plugin-svelte3": "4.0.0",
+		"eslint-plugin-unicorn": "46.0.0",
+		"i18next": "22.4.14",
+		"i18next-browser-languagedetector": "7.0.1",
+		"i18next-fluent": "2.0.0",
+		"jquery": "3.6.4",
+		"jquery-sortablejs": "1.0.1",
+		"lazysizes": "5.3.2",
+		"magic-regexp": "0.6.3",
+		"nanoid": "4.0.2",
+		"normalize.css": "8.0.1",
+		"postcss": "8.4.21",
+		"postcss-discard-comments": "^6.0.0",
+		"postcss-each": "1.1.0",
+		"postcss-for": "2.1.1",
+		"postcss-html": "1.5.0",
+		"postcss-mixins": "^9.0.4",
+		"postcss-nested": "6.0.1",
+		"postcss-nested-vars": "1.0.0",
+		"postcss-subgrid": "1.1.0",
+		"reasonable-colors": "0.4.0",
+		"simple-peer": "9.11.1",
+		"sortablejs": "1.15.0",
+		"stylelint": "15.4.0",
+		"stylelint-a11y": "^1.2.3",
+		"stylelint-config-html": "1.1.0",
+		"stylelint-config-recommended": "11.0.0",
+		"stylelint-config-standard": "32.0.0",
+		"stylelint-logical-properties": "^1.0.0",
+		"stylelint-non-zero-length-expect-unit": "1.0.0",
+		"svelte": "^3.58.0",
+		"svelte-ace": "1.0.21",
+		"svelte-check": "^3.2.0",
+		"svelte-i18next": "1.2.2",
+		"svelte-material-icons": "3.0.4",
+		"three": "0.150.1",
+		"tippy.js": "6.3.7",
+		"tslib": "^2.5.0",
+		"typescript": "^5.0.4",
+		"vite": "^4.2.1"
+	},
+	"eslintConfig": {
+		"parser": "@typescript-eslint/parser",
+		"root": true,
+		"env": {
+			"browser": true,
+			"commonjs": false,
+			"es2022": true,
+			"jquery": true
+		},
+		"plugins": [
+			"unicorn",
+			"svelte3",
+			"@typescript-eslint",
+			"i18next"
+		],
+		"extends": [
+			"eslint:recommended",
+			"plugin:unicorn/recommended",
+			"plugin:@typescript-eslint/recommended",
+			"plugin:i18next/recommended"
+		],
+		"parserOptions": {
+			"ecmaVersion": "latest",
+			"sourceType": "module",
+			"tsconfigRootDir": ".",
+			"extraFileExtensions": [".svelte"]
+		},
+		"overrides": [
+			{
+				"files": [
+					"*.svelte"
+				],
+				"processor": "svelte3/svelte3"
+			}
+		],
+		"settings": {
+			"svelte3/typescript": true
+		},
+		"ignorePatterns": [
+			"*.min.js",
+			"node_modules",
+			"*.css",
+			"*.old"
+		],
+		"globals": {},
+		"rules": {
+			"indent": [
+				"error",
+				"tab",
+				{
+					"SwitchCase": 1
+				}
+			],
+			"linebreak-style": [
+				"error",
+				"windows"
+			],
+			"quotes": [
+				"warn",
+				"double"
+			],
+			"semi": [
+				"error",
+				"always"
+			],
+			"no-unused-vars": "off",
+			"comma-spacing": "error",
+			"camelcase": "warn",
+			"no-var": "error",
+			"no-warning-comments": [
+				"warn",
+				{
+					"terms": [
+						"TODO:",
+						"FIXME:",
+						"BUG:",
+						"ERROR:"
+					]
+				}
+			],
+			"yoda": "warn",
+			"no-constant-condition": [
+				"error",
+				{
+					"checkLoops": false
+				}
+			],
+			"eqeqeq": [
+				"error",
+				"smart"
+			],
+			"dot-notation": "error",
+			"func-style": [
+				"error",
+				"declaration",
+				{
+					"allowArrowFunctions": true
+				}
+			],
+			"guard-for-in": "error",
+			"multiline-comment-style": [
+				"warn",
+				"bare-block"
+			],
+			"no-alert": "error",
+			"no-confusing-arrow": "error",
+			"no-else-return": "error",
+			"no-lonely-if": "error",
+			"no-await-in-loop": "warn",
+			"no-constant-binary-expression": "error",
+			"no-duplicate-imports": "warn",
+			"no-self-compare": "error",
+			"no-template-curly-in-string": "warn",
+			"no-unmodified-loop-condition": "error",
+			"no-unreachable-loop": "error",
+			"no-use-before-define": "error",
+			"arrow-body-style": [
+				"warn",
+				"as-needed"
+			],
+			"complexity": [
+				"off",
+				2
+			],
+			"max-depth": [
+				"off",
+				4
+			],
+			"consistent-return": "error",
+			"default-case": "error",
+			"default-case-last": "error",
+			"dot-location": [
+				"error",
+				"property"
+			],
+			"no-eq-null": "error",
+			"no-implicit-coercion": "error",
+			"no-magic-numbers": [
+				"error",
+				{
+					"ignore": [
+						0,
+						1,
+						-1
+					],
+					"enforceConst": true,
+					"ignoreArrayIndexes": true,
+					"ignoreDefaultValues": true,
+					"detectObjects": false
+				}
+			],
+			"no-multi-assign": "error",
+			"no-multi-str": "error",
+			"no-nested-ternary": "error",
+			"no-eval": "error",
+			"no-implied-eval": "error",
+			"no-script-url": "error",
+			"no-empty-function": "error",
+			"no-floating-decimal": "error",
+			"no-implicit-globals": "error",
+			"one-var": [
+				"error",
+				"consecutive"
+			],
+			"one-var-declaration-per-line": [
+				"error",
+				"always"
+			],
+			"require-await": "error",
+			"array-bracket-spacing": [
+				"error",
+				"never"
+			],
+			"arrow-spacing": "error",
+			"brace-style": "error",
+			"comma-dangle": "error",
+			"comma-style": "error",
+			"func-call-spacing": "error",
+			"no-multi-spaces": "error",
+			"no-multiple-empty-lines": "error",
+			"no-trailing-spaces": "error",
+			"semi-spacing": [
+				"error",
+				{
+					"before": false,
+					"after": true
+				}
+			],
+			"semi-style": "error",
+			"space-before-blocks": "error",
+			"space-in-parens": [
+				"error",
+				"never"
+			],
+			"space-infix-ops": "error",
+			"unicorn/consistent-function-scoping": "warn",
+			"unicorn/filename-case": [
+				"error",
+				{
+					"case": "camelCase"
+				}
+			],
+			"unicorn/prefer-query-selector": "warn",
+			"unicorn/prefer-dom-node-dataset": "off",
+			"unicorn/prefer-module": "off",
+			"unicorn/numeric-separators-style": "off",
+			"no-restricted-properties": "off"
+		}
+	},
+	"stylelint": {
+		"plugins": [
+			"stylelint-logical-properties",
+			"stylelint-a11y",
+			"stylelint-non-zero-length-expect-unit"
+		],
+		"extends": [
+			"stylelint-config-standard",
+			"stylelint-config-recommended",
+			"stylelint-config-html/svelte",
+			"stylelint-a11y/recommended"
+		],
+		"rules": {
+			"color-hex-case": "upper",
+			"color-hex-length": "long",
+			"color-function-notation": "modern",
+			"indentation": "tab",
+			"rule-empty-line-before": "never",
+			"at-rule-empty-line-before": "never",
+			"alpha-value-notation": "number",
+			"selector-class-pattern": null,
+			"at-rule-no-unknown": [
+				true,
+				{
+					"ignoreAtRules": [
+						"use",
+						"for",
+						"each",
+						"define-mixin",
+						"mixin"
+					]
+				}
+			],
+			"selector-list-comma-newline-after": "always-multi-line",
+			"declaration-block-no-duplicate-properties": [
+				true,
+				{
+					"ignore": [
+						"consecutive-duplicates-with-different-values",
+						"consecutive-duplicates"
+					]
+				}
+			],
+			"stylelint-logical-properties/enforce-logical-properties": "always",
+			"a11y/font-size-is-readable": true,
+			"a11y/no-display-none": true,
+			"a11y/media-prefers-reduced-motion": null,
+			"plugin/non-zero-length-expect-unit": true,
+			"custom-property-pattern": null,
+			"selector-id-pattern": null,
+			"custom-property-empty-line-before": null,
+			"selector-pseudo-class-no-unknown": [
+				true,
+				{
+					"ignorePseudoClasses": [
+						":global"
+					]
+				}
+			]
+		},
+		"ignoreFiles": [
+			"node_modules/**/*",
+			"public/*",
+			"**/*.js",
+			"**/*.ts"
+		]
+	},
+	"postcss": {
+		"plugins": {
+			"postcss-html": {},
+			"postcss-mixins": {},
+			"postcss-discard-comments": {},
+			"postcss-nested": {},
+			"postcss-nested-vars": {}
+		}
+	}
+}

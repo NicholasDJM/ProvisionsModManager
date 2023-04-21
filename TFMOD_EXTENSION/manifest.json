@@ -1,0 +1,44 @@
+{
+	"manifest_version": 3,
+	"name": "__MSG_extensionName__",
+	"version": "0.1",
+	"description": "__MSG_extensionDescription__",
+	"author": "Nicholas Miller",
+	"homepage_url": "https://github.com/NicholasDJM",
+	"default_locale": "en",
+	"host_permissions": [
+		"*://*.gamebanana.com/*",
+		"*://*.mods.tf/*"
+	],
+	"content_scripts": [
+		{
+			"matches": ["*://*.gamebanana.com/*"],
+			"js": ["build/provisions.bundle.js"]
+		},
+		{
+			"matches": ["*://gamebanana.com/*"],
+			"js": ["build/provisions.bundle.js"]
+		},
+		{
+			"matches": ["*://*.mods.tf/*"],
+			"js": ["build/provisions.bundle.js"]
+		}
+	],
+	"background": {
+		"scripts": ["build/background.bundle.js"]
+	},
+	"options_ui":
+	{
+		"page": "settings.html",
+		"browser_style": true
+	},
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "provisions.mod.manager@nicholasmiller"
+		}
+	},
+	"permissions": [
+		"storage",
+		"nativeMessaging"
+	]
+}
