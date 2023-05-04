@@ -1,0 +1,58 @@
+.theme-green {
+	--accentColor: var(--color-green-3);
+	--accentColorAlt: var(--color-chartreuse-2);
+	--backgroundColor: var(--color-gray-2);
+
+	/* textColor: Given backgroundColor, what colour should text be? */
+	--textColor: var(--color-gray-6);
+
+	/* textColorInverse: Always opposite of textColor */
+	--textColorInverse: var(--color-gray-1);
+
+	/* textColorOptimal: Given accentColor, what colour should text be? */
+	--textColorOptimal: var(--color-gray-1);
+}
+@media (prefers-color-scheme: dark) {
+	.theme-green {
+		--accentColor: var(--color-green-4);
+		--accentColorAlt: var(--color-green-5);
+		--backgroundColor: var(--color-gray-6);
+
+		/* textColor: Given backgroundColor, what colour should text be? */
+		--textColor: var(--color-gray-1);
+
+		/* textColorInverse: Always opposite of textColor */
+		--textColorInverse: var(--color-gray-6);
+
+		/* textColorOptimal: Given accentColor, what colour should text be? */
+		--textColorOptimal: var(--color-gray-1);
+	}
+}
+.theme-green.light, .theme-green.palette.light {
+	--accentColor: var(--color-green-3);
+	--accentColorAlt: var(--color-chartreuse-2);
+	--backgroundColor: var(--color-gray-2);
+
+	/* textColor: Given backgroundColor, what colour should text be? */
+	--textColor: var(--color-gray-6);
+
+	/* textColorInverse: Always opposite of textColor */
+	--textColorInverse: var(--color-gray-1);
+
+	/* textColorOptimal: Given accentColor, what colour should text be? */
+	--textColorOptimal: var(--color-gray-1);
+}
+.theme-green.dark, .theme-green.palette.dark {
+	--accentColor: var(--color-green-4);
+	--accentColorAlt: var(--color-green-5);
+	--backgroundColor: var(--color-gray-6);
+
+	/* textColor: Given backgroundColor, what colour should text be? */
+	--textColor: var(--color-gray-1);
+
+	/* textColorInverse: Always opposite of textColor */
+	--textColorInverse: var(--color-gray-6);
+
+	/* textColorOptimal: Given accentColor, what colour should text be? */
+	--textColorOptimal: var(--color-gray-1);
+}

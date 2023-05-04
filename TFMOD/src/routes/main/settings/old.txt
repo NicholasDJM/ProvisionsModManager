@@ -1,0 +1,89 @@
+// TODO: None of this works! I simply wanted a little bar below the selected tab to move between tabs when another tab is selected.
+	// Getting this to work with the correct positioning, and also to work with Right to Left, seems too complicated.
+	// /*	https://stackoverflow.com/questions/442404/retrieve-the-position-x-y-of-an-html-element
+	// 	License: Creative Commons BY-SA 3.0 */
+	// function getOffset(element: HTMLElement) {
+	// 	const rect = element.getBoundingClientRect();
+	// 	return {
+	// 		left: rect.left + window.scrollX,
+	// 		top: rect.top + window.scrollY
+	// 	};
+	// }
+	//
+	// /*https://stackoverflow.com/questions/1480133/how-can-i-get-an-objects-absolute-position-on-the-page-in-javascript*/
+	// /*	TODO: License
+	// 	License: CC BY-SA
+	// */
+	// function cumulativeOffset(element) {
+	// 	let top = 0,
+	// 		left = 0;
+	// 	do {
+	// 		top += element.offsetTop || 0;
+	// 		left += element.offsetLeft || 0;
+	// 		element = element.offsetParent;
+	// 	} while(element);
+	//
+	// 	return {
+	// 		top: top,
+	// 		left: left
+	// 	};
+	// }
+	//
+	// function css(element) {
+	// 	let data = getComputedStyle(document.querySelector(element));
+	// 	//console.log(data);
+	// 	return data;
+	// }
+	// let highlightWidth = "150px",
+	// 	oldX = 0,
+	// 	oldY = 0,
+	// 	navWidth,
+	// 	navHeight;
+	// const fiftyMilliseconds = 1000,
+	// 	timer = setInterval(() => {
+	// 		if (domReady) {
+	// 			const highlightedTab = document.querySelector<HTMLDivElement>(".highlightedTab"),
+	// 				highlight = document.querySelector<HTMLDivElement>(".tabHighlight");
+	// 			if (highlightedTab && highlight) {
+	// 				const x = getOffset(highlightedTab).left,
+	// 					y = getOffset(highlightedTab).top,
+	// 					tab = highlightedTab?.getBoundingClientRect();
+	// 				// FIXME: Does not take into account navBar and navRail positions
+	// 				// BUG: Does not work Right to Left! X position returns absolute position, we need start position
+	// 				highlight.style.insetInlineStart = x - navWidth + "px";
+	// 				highlight.style.insetBlockStart = y - navHeight + Math.round(tab.height) + "px";
+	// 				highlightWidth = tab.width + "px";
+	// 			}
+	// 		}
+	// 	}, fiftyMilliseconds);
+	$: {
+		if (domReady) {
+			//navWidth = css("#navrail").width.split("px")[0];
+			//navWidth = css("#navbar").height.split("px")[0];
+			jq("[data-tab]").each((index, element) => {
+				if (jq(element).attr("data-tab") === $currentSettingsTab) {
+					jq(element).addClass("highlightedTab");
+				} else {
+					jq(element).removeClass("highlightedTab");
+				}
+			});
+		}
+	}
+	// onDestroy(() => {
+	// 	clearInterval(timer);
+	// });
+
+	<!-- style:--highlightSizeWidth={highlightWidth} -->
+	<!-- <div class="tabHighlight" ></div> -->
+
+	/* .tabHighlight {
+		position: absolute;
+		block-size: var(--highlightSize);
+		inline-size: var(--highlightSizeWidth, 150px);
+		inset-block-start: var(--highlightY);
+		inset-inline-start: var(--highlightX);
+		border-block-end: var(--highlightSize) solid var(--accentColor);
+		transition: inset-inline-start var(--transition);
+		border-end-start-radius: 20px;
+		border-end-end-radius: 20px;
+	} */

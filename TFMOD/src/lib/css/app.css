@@ -1,0 +1,140 @@
+@import url("$lib/css/theme-blue.css");
+@import url("$lib/css/theme-green.css");
+@import url("$lib/css/theme-red.css");
+@import url("$lib/css/theme-purple.css");
+@import url("$lib/css/theme-yellow.css");
+:root {
+	--defaultMargin: 0.5rem;
+	--transitionOriginal: 200ms;
+	--transition: var(--transitionOriginal, 200ms);
+	--transitionReducedMotion: var(--transition, 200ms);
+
+	/* Use transitionReducedMotion where ever you want a little bit of flair for users who prefer reduced motion
+		Remember, its reduced motion, not no motion.
+		Example, use this value for fades.
+	*/
+
+	font-family: Roboto, sans-serif;
+	accent-color: var(--accentColor);
+	color: var(--textColor);
+	background-color: var(--backgroundColor);
+	scrollbar-color: var(--accentColor) var(--backgroundColor);
+
+	--color-grey-1: var(--color-gray-1);
+	--color-grey-2: var(--color-gray-2);
+	--color-grey-3: var(--color-gray-3);
+	--color-grey-4: var(--color-gray-4);
+	--color-grey-5: var(--color-gray-5);
+	--color-grey-6: var(--color-gray-6);
+
+	--dark: var(--color-gray-5);
+	--light: var(--color-gray-1);
+
+	--reduceMotion: no;
+}
+.auto {
+	--direction: ltr;
+}
+.system {
+	--isDark: no;
+}
+@media (prefers-color-scheme: dark) {
+	.system {
+		--isDark: yes;
+	}
+}
+@media (prefers-reduced-motion) {
+	:root {
+		--reduceMotion: yes;
+		--transition: 0 !important;
+		--transitionReducedMotion: var(--transitionOriginal) !important;
+	}
+}
+:root.colored *::-webkit-scrollbar {
+	background-color: var(--backgroundColor);
+	box-shadow: inset 0 0 100px 100px rgb(0 0 0/ 0.5);
+}
+:root.colored *::-webkit-scrollbar-thumb {
+	background-color: var(--accentColor);
+	/* box-shadow: inset 0 0 5px 2px rgb(255 255 255 / 0.1); */
+	/* border-radius: 10px; */
+}
+/* stylelint-disable-next-line a11y/selector-pseudo-class-focus -- Not applicable, scrollbar will never be focusable via keyboard. */
+:root.colored *::-webkit-scrollbar-thumb:hover {
+	box-shadow: inset 0 0 5px 2px rgb(255 255 255 / 0.5);
+	transition: var(--transition);
+}
+:root.colored *::-webkit-scrollbar-thumb:active {
+	box-shadow: inset 0 0 100px 100px rgb(0 0 0/ 0.2);
+	transition: var(--transition);
+}
+body {
+	margin-block: 0;
+	margin-inline: 0;
+	overflow: hidden;
+}
+* {
+	box-sizing: border-box;
+	user-select: none;
+}
+a {
+	color: rgb(24 178 250);
+}
+a:link {
+	color: rgb(24 178 250);
+	text-decoration: none;
+}
+a:hover, a:focus {
+	text-decoration: underline;
+}
+.reduceMotion {
+	--transition: 0 !important;
+	--transitionReducedMotion: var(--transitionOriginal, 200ms) !important;
+}
+html.rtl #cornerRtl {
+	opacity: 1 !important;
+}
+html.rtl #corner {
+	opacity: 0 !important;
+}
+html.rtl {
+	direction: rtl;
+}
+.rtl input:checked + .slider::before {
+	transform: translateX(-26px);
+}
+.rtl .menuRTL {
+	transform: scale(-100%);
+}
+.tippy-box[data-theme~="red"] {
+	background-color: var(--color-red-3);
+	&.tippy-box[data-theme~='red'][data-placement^='top'] > .tippy-arrow::before {
+		border-block-start-color: var(--color-red-3);
+	}
+	&.tippy-box[data-theme~='red'][data-placement^='bottom'] > .tippy-arrow::before {
+		border-block-end-color: var(--color-red-3);
+	}
+	&.tippy-box[data-theme~='red'][data-placement^='left'] > .tippy-arrow::before {
+		border-inline-start-color: var(--color-red-3);
+	}
+	&.tippy-box[data-theme~='red'][data-placement^='right'] > .tippy-arrow::before {
+		border-inline-end-color: var(--color-red-3);
+	}
+}
+.target {
+	animation-name: target;
+	animation-duration: 300ms;
+	animation-timing-function: linear;
+	/* stylelint-disable-next-line plugin/non-zero-length-expect-unit -- Not a number that requires a unit. */
+	animation-iteration-count: 6;
+	animation-direction: alternate;
+	animation-fill-mode: none;
+}
+@keyframes target {
+	from {
+		background-color: rgb(255 255 0 / 0);
+	}
+	to {
+		background-color: rgb(255 255 0 / 1);
+	}
+}

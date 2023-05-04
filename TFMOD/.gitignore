@@ -31,3 +31,4 @@ dist-ssr
 !.env.example
 
 /downloads
+/static/images/copyrighted_images

@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { i18n } from "$lib/i18n.js";
-	import { title } from "$lib/title.js";
-	title.set($i18n.t("pageWizardTitle"));
-	import { currentPage } from "$lib/page.js";
+	import { i18n } from "$lib/js/i18n.js";
+	import { title } from "$lib/js/title.js";
+	title.set($i18n.t("page-wizard"));
+	import { currentPage } from "$lib/js/page.js";
 	currentPage.set("wizard");
-	import "$lib/defaultMargin.css";
 </script>
 <main class="defaultMargin">
 	<p>Hello World</p>

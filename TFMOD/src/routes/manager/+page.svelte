@@ -2,6 +2,8 @@
 	import { onDestroy } from "svelte";
 	import { readTextFile, writeBinaryFile, exists, removeFile, BaseDirectory } from "@tauri-apps/api/fs";
 	import { fetch, ResponseType } from "@tauri-apps/api/http";
+	import { readVPKArchive } from "$lib/js/modManager";
+	readVPKArchive("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\tf\\custom\\#####Gamemode Illustrations V0.3.vpk").then(data => console.log(data));
 	let id = "0",
 		lastId = "0",
 		data: any,
@@ -17,13 +19,13 @@
 	const oneSecond = 1000,
 		interval = setInterval(() => {
 			// TODO: get path of tfmod.commands.install.txt
-			exists("D:/FinalProjects/TFMOD_EXTENSION_NATIVEHOST/tfmod.command.install.txt").then(data => {
+			exists("$APPDATA/tfmod.command.install.txt").then(data => {
 				if (data) readTextFile("D:/FinalProjects/TFMOD_EXTENSION_NATIVEHOST/tfmod.command.install.txt").then(contents => {
 					let string = contents.split(",");
 					id = string[0];
 					lastId = string[0];
 					moduleId = string[1];
-					removeFile("D:/FinalProjects/TFMOD_EXTENSION_NATIVEHOST/tfmod.command.install.txt");
+					removeFile("$APPDATA/tfmod.command.install.txt");
 				});
 			});
 			if (id !== "0") {
@@ -83,7 +85,32 @@
 	onDestroy(() => {
 		clearInterval(interval);
 	});
-
+	/* eslint-disable-next-line unicorn/prevent-abbreviations -- Mod works in this context */
+	interface modMetaData {
+		name: string,
+		author: string,
+		description: {
+			short: string
+			long: string
+		},
+		images: {
+			main: {
+				file: string,
+				size: string,
+				alt: string
+			}
+			banner: {
+				file: string,
+				size: string,
+				alt: string
+			}
+		},
+		url: string,
+		hash: string,
+		path: string,
+		hasMetadata: boolean
+	}
+	let mods: Array<modMetaData> = [];
 </script>
 <h1>ID: {lastId}</h1>
 <table>
@@ -101,6 +128,36 @@
 		<tr>
 			{#each Object.values(metaData) as value}
 				<td>{value}</td>
+			{/each}
+		</tr>
+	</tbody>
+</table>
+<h1>Installed Mods</h1>
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Image</th>
+			<th>Short Description</th>
+			<th>Long Description</th>
+			<th>Author</th>
+			<th>Canonical URL</th>
+			<th>Original File Location</th>
+			<th>MD5</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			{#each Object.values(mods) as value}
+				<td>{value.name}</td>
+				<td><img src={value.images.main.file} alt={value.images.main.alt}/></td>
+				<td>{value.description.short}</td>
+				<td>{value.description.long}</td>
+				<td>{value.author}</td>
+				<td>{value.url}</td>
+				<td>{value.path}</td>
+				<td>{value.hash}</td>
+				<td>{value.hasMetadata}</td>
 			{/each}
 		</tr>
 	</tbody>

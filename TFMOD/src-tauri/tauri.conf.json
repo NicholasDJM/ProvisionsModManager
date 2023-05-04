@@ -22,14 +22,15 @@
 			},
 			"fs": {
 				"all": false,
-				"copyFile": false,
-				"createDir": false,
+				"copyFile": true,
+				"createDir": true,
 				"exists": true,
-				"readDir": false,
+				"readDir": true,
 				"readFile": true,
 				"removeDir": false,
 				"removeFile": true,
-				"renameFile": false,
+				"renameFile": true,
+				"writeFile": true,
 				"scope": [
 					"C:/Program Files (x86)/Steam/steamapps/common/Team Fortress 2/**/*",
 					"C:/Program Files (x86)/Steam/steamapps/workshop/content/440/**/*",
@@ -39,19 +40,21 @@
 					"$APPDATA/tfmod.extension.command.current.txt",
 					"$APPDATA/Downloads/*"
 
-				],
-				"writeFile": true
+				]
 			},
 			"process": {
 				"exit" :true
 			},
 			"window": {
+				"all": true,
 				"minimize": true,
 				"maximize": true,
 				"unmaximize": true,
 				"startDragging": true,
 				"setDecorations": true,
-				"create": true
+				"create": true,
+				"setMinSize": true,
+				"setFocus": true
 			},
 			"http": {
 				"all": false,
@@ -101,18 +104,21 @@
 			"csp": null
 		},
 		"updater": {
-			"active": false
+			"active": true,
+			"pubkey": ""
 		},
 		"windows": [
 			{
-				"label": "splashscreen",
-				"center": true,
-				"visible": true,
-				"url": "/splash.html",
-				"title": "Provisions Mod Manager",
-				"decorations": false,
-				"height": 200,
-				"width": 300
+				"label": "intro",
+				"url": "/intro",
+				"title": "Welcome to Provisions Mod Manager",
+				"visible": true
+			},
+			{
+				"label": "manager",
+				"url": "/manager",
+				"title": "Mod Manager System",
+				"visible": true
 			},
 			{
 				"label": "main",
@@ -123,15 +129,10 @@
 				"width": 700,
 				"center": true,
 				"decorations": true,
-				"minWidth": 700,
+				"minWidth": 640,
 				"url": "/main",
-				"visible": false
-			},
-			{
-				"label": "manager",
-				"url": "/manager",
-				"title": "Mod Manager System",
-				"visible": true
+				"visible": true,
+				"focus": true
 			}
 		],
 		"systemTray": {

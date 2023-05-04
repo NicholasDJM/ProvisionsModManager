@@ -5,9 +5,25 @@
 	import jq from "jquery";
 	import FolderOpen from "svelte-material-icons/FolderOpenOutline.svelte";
 	import Save from "svelte-material-icons/ContentSave.svelte";
-	import { appWindow } from "@tauri-apps/api/window";
 	import { confirm } from "@tauri-apps/api/dialog";
-	import KeyboardQwerty from "$lib/Keyboard-Qwerty.svelte";
+	import { appWindow } from "@tauri-apps/api/window";
+	import { onMount, onDestroy } from "svelte";
+	// @ts-expect-error -- Can't do anything about missing types.
+	import { LocalStorage } from "combo-storage";
+	let timer: ReturnType<typeof setInterval>;
+	onMount(() => {
+		const interval = 100;
+		timer = setInterval(async () => {
+			if (LocalStorage.get("window-focus") === appWindow.label) {
+				LocalStorage.set("window-focus", "");
+				await appWindow.setFocus();
+			}
+		}, interval);
+	});
+	onDestroy(() => {
+		clearInterval(timer);
+	});
+	import KeyboardQwerty from "$lib/components/Keyboard-Qwerty.svelte";
 	const windowSize = async () => await appWindow.innerSize();
 	windowSize().then(data => console.log(data));
 	let text = "[\n\t\"Hello World\",\n\t\"This is a JSON Document\"\n]";
@@ -15,7 +31,6 @@
 		buttonSize = "20",
 		size = buttonSize + "px";
 	let editorHeight: string;
-	import { LocalStorage } from "combo-storage";
 	LocalStorage.set("editorKeyboardStyle", "");
 	jq(() => {
 		jq(".menu").css("height", menuBarHeight + "px");
@@ -38,7 +53,7 @@
 	}
 </script>
 <!-- <button on:click={unload}>Close</button> -->
-<div class="menu border-bottom:1px_solid_white" style="background:#272822">
+<div class="menu n" style="background:#272822">
 	<button>File</button>
 	<div class="toolbar">
 		<button><FolderOpen {size}/></button>

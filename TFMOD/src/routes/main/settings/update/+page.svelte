@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { currentSettingsTab } from "$lib/settingsTab.js";
+	import { currentSettingsTab } from "$lib/js/settingsTab.js";
 	currentSettingsTab.set("update");
-	import { updateAvailable } from "$lib/update.js";
+	import { updateAvailable } from "$lib/js/update.js";
 </script>
 <form>
-	<label class="group">
+	<label>
 		Check for updates.
 		<input type="checkbox">
 	</label>
 	<br/>
-	<label class="group">
+	<label>
 		Update Branch
 		<select>
 			<option>Stable</option>
@@ -17,24 +17,20 @@
 		</select>
 	</label>
 </form>
+<br/>
 {#if $updateAvailable}
-	<div class="group">
+	<label>
+		A new version is available!
 		<button>Update</button>
-		<p>A new version is available!</p>
-	</div>
+	</label>
 {:else}
-	<div class="group">
-		<p>No updates available.</p>
-		<div></div>
-	</div>
+	<label>
+		No updates available.
+		<button>Check for Update</button>
+	</label>
 {/if}
-<div class="group">
-	<p>Last checked: <span id="updateTime">Never</span></p>
-	<div></div>
-</div>
-<style>
-	.group {
-		display: grid;
-		grid-template-columns: 1fr auto;
-	}
-</style>
+<br/>
+<label>
+	Last checked
+	<span id="updateTime">Never</span>
+</label>

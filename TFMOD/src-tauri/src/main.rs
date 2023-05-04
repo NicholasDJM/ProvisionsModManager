@@ -17,6 +17,12 @@ async fn close_splashscreen(window: tauri::Window) {
 	}
 	window.get_window("main").unwrap().show().unwrap();
 }
+
+// use registry::{Hive, Security};
+// #[tauri::command]
+// fn get_color() -> String {
+// 	Hive::CurrentUser.open(r"SOFTWARE\Microsoft\Windows\DWM\AccentColor", Security::Read)?.to_string()
+// }
 // use async_trait::async_trait;
 // use ezsockets::ClientConfig;
 // use std::io::BufRead;
@@ -61,8 +67,15 @@ fn main() {
 	// 	handle.text(line);
 	// }
 	tauri::Builder::default()
-		.invoke_handler(tauri::generate_handler![greet])
-		.invoke_handler(tauri::generate_handler![close_splashscreen])
+		.invoke_handler(tauri::generate_handler![greet, close_splashscreen])
+		.setup(|app| {
+			#[cfg(debug_assertions)]
+			{
+				let window = app.get_window("main").unwrap();
+				window.open_devtools();
+			}
+			Ok(())
+		})
 		.run(tauri::generate_context!())
 		.expect("error while building tauri application");
 }

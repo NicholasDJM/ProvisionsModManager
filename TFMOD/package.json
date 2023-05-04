@@ -11,30 +11,36 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"tauri": "tauri",
+		"tbuild": "tauri build --debug",
+		"tbuild:prod": "tauri build",
 		"tdev": "tauri dev",
-		"lint": "eslint ./src/**/*"
+		"lint": "eslint ./src/**/*",
+		"stylelint": "stylelint ./src/**/*"
 	},
 	"dependencies": {
-		"@tauri-apps/api": "^1.2.0"
+		"@tauri-apps/api": "^1.3.0"
 	},
 	"devDependencies": {
 		"@fontsource/roboto": "4.5.8",
 		"@stylify/unplugin": "0.5.31",
-		"@sveltejs/adapter-static": "^2.0.1",
-		"@sveltejs/kit": "^1.15.2",
-		"@tauri-apps/cli": "^1.2.3",
+		"@sveltejs/adapter-static": "^2.0.2",
+		"@sveltejs/kit": "^1.15.10",
+		"@tauri-apps/cli": "^1.3.0",
+		"@types/blueimp-md5": "^2.18.0",
 		"@types/eslint": "^8.37.0",
 		"@types/jquery": "^3.5.16",
+		"@types/markdown-it": "^12.2.3",
 		"@types/simple-peer": "^9.11.5",
 		"@types/sortablejs": "^1.15.1",
 		"@typescript-eslint/eslint-plugin": "5.57.1",
 		"@typescript-eslint/parser": "5.57.1",
 		"ace-diff-pro": "1.0.9",
+		"blueimp-md5": "2.19.0",
 		"blurhash": "2.0.5",
 		"brace": "0.11.1",
 		"combo-storage": "2.1.2",
 		"eslint": "8.38.0",
-		"eslint-plugin-i18next": "6.0.0-6",
+		"eslint-plugin-i18next": "6.0.0-8",
 		"eslint-plugin-import": "2.27.5",
 		"eslint-plugin-node": "11.1.0",
 		"eslint-plugin-promise": "6.1.1",
@@ -43,22 +49,29 @@
 		"i18next": "22.4.14",
 		"i18next-browser-languagedetector": "7.0.1",
 		"i18next-fluent": "2.0.0",
+		"i18next-fluent-backend": "1.0.0",
+		"i18next-http-backend": "2.2.0",
+		"iso-639-1": "2.1.15",
 		"jquery": "3.6.4",
 		"jquery-sortablejs": "1.0.1",
 		"lazysizes": "5.3.2",
 		"magic-regexp": "0.6.3",
+		"markdown-it": "13.0.1",
 		"nanoid": "4.0.2",
 		"normalize.css": "8.0.1",
+		"pkg": "5.8.1",
 		"postcss": "8.4.21",
 		"postcss-discard-comments": "^6.0.0",
 		"postcss-each": "1.1.0",
 		"postcss-for": "2.1.1",
 		"postcss-html": "1.5.0",
 		"postcss-mixins": "^9.0.4",
+		"postcss-modules": "6.0.0",
 		"postcss-nested": "6.0.1",
 		"postcss-nested-vars": "1.0.0",
 		"postcss-subgrid": "1.1.0",
 		"reasonable-colors": "0.4.0",
+		"search-text-highlight": "1.0.7",
 		"simple-peer": "9.11.1",
 		"sortablejs": "1.15.0",
 		"stylelint": "15.4.0",
@@ -67,17 +80,24 @@
 		"stylelint-config-recommended": "11.0.0",
 		"stylelint-config-standard": "32.0.0",
 		"stylelint-logical-properties": "^1.0.0",
+		"stylelint-no-px": "1.0.1",
 		"stylelint-non-zero-length-expect-unit": "1.0.0",
+		"stylelint-rem-over-px": "1.0.0",
 		"svelte": "^3.58.0",
 		"svelte-ace": "1.0.21",
 		"svelte-check": "^3.2.0",
+		"svelte-flags": "0.4.1",
 		"svelte-i18next": "1.2.2",
+		"svelte-markdown": "0.2.3",
 		"svelte-material-icons": "3.0.4",
+		"svelte-typeahead": "4.4.1",
 		"three": "0.150.1",
 		"tippy.js": "6.3.7",
 		"tslib": "^2.5.0",
 		"typescript": "^5.0.4",
-		"vite": "^4.2.1"
+		"uint8arrays": "4.0.3",
+		"vite": "^4.3.4",
+		"vtflib": "1.0.2"
 	},
 	"eslintConfig": {
 		"parser": "@typescript-eslint/parser",
@@ -104,7 +124,9 @@
 			"ecmaVersion": "latest",
 			"sourceType": "module",
 			"tsconfigRootDir": ".",
-			"extraFileExtensions": [".svelte"]
+			"extraFileExtensions": [
+				".svelte"
+			]
 		},
 		"overrides": [
 			{
@@ -285,14 +307,22 @@
 			"unicorn/prefer-dom-node-dataset": "off",
 			"unicorn/prefer-module": "off",
 			"unicorn/numeric-separators-style": "off",
-			"no-restricted-properties": "off"
+			"unicorn/prevent-abbreviations": [
+				"error",
+				{
+					"checkFilenames": false
+				}
+			],
+			"no-restricted-properties": "off",
+			"i18next/no-literal-string": "error"
 		}
 	},
 	"stylelint": {
 		"plugins": [
 			"stylelint-logical-properties",
 			"stylelint-a11y",
-			"stylelint-non-zero-length-expect-unit"
+			"stylelint-non-zero-length-expect-unit",
+			"stylelint-rem-over-px"
 		],
 		"extends": [
 			"stylelint-config-standard",
@@ -300,6 +330,7 @@
 			"stylelint-config-html/svelte",
 			"stylelint-a11y/recommended"
 		],
+		"reportDescriptionlessDisables": true,
 		"rules": {
 			"color-hex-case": "upper",
 			"color-hex-length": "long",
@@ -343,7 +374,17 @@
 				true,
 				{
 					"ignorePseudoClasses": [
-						":global"
+						"global"
+					]
+				}
+			],
+			"media-feature-range-notation": "prefix",
+			"comment-empty-line-before": null,
+			"rem-over-px/rem-over-px": [
+				true,
+				{
+					"ignore": [
+						"1px"
 					]
 				}
 			]
@@ -352,7 +393,8 @@
 			"node_modules/**/*",
 			"public/*",
 			"**/*.js",
-			"**/*.ts"
+			"**/*.ts",
+			"**/*.md"
 		]
 	},
 	"postcss": {

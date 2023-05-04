@@ -1,71 +1,92 @@
 <script lang="ts">
-	import { i18n } from "$lib/i18n.js";
-	import { title } from "$lib/title.js";
-	title.set($i18n.t("pageUtilitiesTitle"));
-	import { currentPage } from "$lib/page.js";
+	import { i18n } from "$lib/js/i18n.js";
+	import { title } from "$lib/js/title.js";
+	title.set($i18n.t("page-utils"));
+	import { currentPage } from "$lib/js/page.js";
 	currentPage.set("utils");
-	import UtilityCard from "$lib/UtilityCard.svelte";
+	import UtilityCard from "$lib/components/UtilityCard.svelte";
 	import { WebviewWindow } from "@tauri-apps/api/window";
 	import { invoke } from "@tauri-apps/api";
-	let webview: Array<any> = [];
-	function openIDE(event: any) {
-		console.log(event);
+	function openIDE(event) {
 		if (event.key === "Enter" || event.type === "click") {
-			//invoke("open_ide");
-			webview[webview.length] = new WebviewWindow("ide", {
+			new WebviewWindow("ide", {
 				url: "/utils/ide/editor",
-				title: "CFG IDE"
-			});
-			webview[webview.length - 1].once("tauri://created", () => {
-				console.log("created window");
-			});
-			webview[webview.length - 1].once("tauri://error", (error:any) => {
-				console.log(error);
-			});
+				title: "CFG Integrated Development Environment"
+			}).setFocus();
 		}
 	}
-	function openPyroland(event: any) {
+	function openCaption(event: any) {
 		if (event.key === "Enter" || event.type === "click") {
-			webview[webview.length] = new WebviewWindow("Pyroland", {
-				url: "/utils/pyroland",
-				title: "Pyroland Compatibility Analyser"
-			});
-			webview[webview.length - 1].once("tauri://created", () => {
-				console.log("created window");
-			});
-			webview[webview.length - 1].once("tauri://error", (error:any) => {
-				console.log(error);
-			});
+			// Do a thing.
 		}
 	}
+	interface Card {
+		title: string,
+		src: string,
+		alt: string,
+		description: string,
+		func?: Function,
+		href?: string
+	}
+	const cards: Array<Card> = [
+		{
+			title: "Pyroland Manager",
+			src: "/images/copyrighted_images/balloonicorn.png",
+			alt: "Pyroland Manager Image",
+			description: "Manage and analyse which maps are eligible for Pyroland",
+			href: "/main/utils/pyroland"
+		},
+		{
+			title: "CFG Editor",
+			src: "/images/test.png",
+			alt: "CFG Editor Image",
+			description: "Create and edit scripts with our IDE",
+			func: openIDE
+		},
+		{
+			title: "Caption Editor",
+			src: "/images/test.png",
+			alt: "Caption Editor Image",
+			description: "Create custom captions that can be emitted via script.",
+			func: openCaption
+		}
+	];
 </script>
 <main>
-	<a href="#a" on:click={openIDE} on:keydown={openIDE}>
-		<UtilityCard
-			title="CFG Editor"
-			src="/images/test.png"
-			alt="CFG Editor"
-			description="Create and edit scripts with our IDE."/>
-	</a>
-	<a href="#a" on:click={openPyroland} on:keydown={openPyroland}>
-		<UtilityCard
-			title="Pyroland Compatibility Analyser"
-			src="/images/test.png"
-			alt="Pyroland Compatibility Analyser"
-			description="Manage which maps are eligible for Pyroland"/>
-	</a>
+	{#each cards as card}
+		{#if card.href}
+			<a href={card.href}>
+				<UtilityCard
+					title={card.title}
+					src={card.src}
+					alt={card.alt}
+					description={card.description}
+				/>
+			</a>
+		{:else if card.func}
+			<a href="#a" on:click={card.func} on:keydown={card.func}>
+				<UtilityCard
+					title={card.title}
+					src={card.src}
+					alt={card.alt}
+					description={card.description}
+				/>
+			</a>
+		{/if}
+	{/each}
 </main>
 <style>
 	main {
-		display: grid;
-		grid-template-columns: auto auto;
-		gap: 30px;
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: center;
+		gap: 15px;
 		margin-inline: var(--defaultMargin);
 		margin-block: var(--defaultMargin);
 		padding-block: calc(var(--defaultMargin) * 2);
 		padding-inline: calc(var(--defaultMargin) * 2);
 	}
-	a {
+	a, a:link, a:visited, a:active {
 		text-decoration: none;
 	}
 </style>

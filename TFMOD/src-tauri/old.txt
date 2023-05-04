@@ -1,0 +1,11 @@
+
+			{
+				"label": "splashscreen",
+				"center": true,
+				"visible": false,
+				"url": "/splash.html",
+				"title": "Provisions Mod Manager",
+				"decorations": false,
+				"height": 200,
+				"width": 300
+			},

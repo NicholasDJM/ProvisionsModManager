@@ -2,9 +2,8 @@
 	import "normalize.css";
 	import "@fontsource/roboto";
 	import "reasonable-colors";
-	import "../../app.css";
-	import "../../stylify.css";
-	import "$lib/theme.js";
+	import "$lib/css/app.css";
+	import "$lib/css/stylify.css";
 </script>
 <div style="height: 100%">
 	<slot/>
