@@ -220,7 +220,7 @@
 			}
 		}
 	}
-	//FIXME: Replace table with display grid. Tables are weird. they follow non of any modern CSS rules.
+	//FIXME: Replace table with display grid. Tables are weird. they follow none of any modern CSS rules.
 </script>
 <main>
 	<h2>Analyser</h2>

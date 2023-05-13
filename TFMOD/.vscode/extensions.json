@@ -11,6 +11,8 @@
 		"vunguyentuan.vscode-postcss",
 		"idered.npm",
 		"serayuzgur.crates",
-		"macabeus.vscode-fluent"
+		"macabeus.vscode-fluent",
+		"nicoespeon.abracadabra",
+		"dzhavat.css-flexbox-cheatsheet"
 	]
 }

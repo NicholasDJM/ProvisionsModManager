@@ -20,16 +20,20 @@ Additionally, you must set the following settings:
 To set these settings: Press CTRL + COMMA (COMMAND + COMMA on MacOS), then search for the setting (Ex: `eslint.validate`), and edit the value.
 
 Additional reccomended extensions are as follows:
- - "Error Lens" VS Code Extension (usernamehw.errorlens)
- - "Todo Tree" VS Code Extension (Gruntfuggly.todo-tree)
+ - "Error Lens" VS Code Extension ([usernamehw.errorlens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens))
+ - "Todo Tree" VS Code Extension ([Gruntfuggly.todo-tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree))
+ - "Abracadabra, refactor this!" VS Code Extension ([nicoespeon.abracadabra](https://marketplace.visualstudio.com/items?itemName=nicoespeon.abracadabra))
+ - "CSS Flexbox Cheatsheet" VS Code Extension ([dzhavat.css-flexbox-cheatsheet](https://marketplace.visualstudio.com/items?itemName=dzhavat.css-flexbox-cheatsheet))
 
 To install VS Code Extensions:
  - In VS Code:
  	1. Press `CTRL + SHIFT + X` or `COMMAND + SHIFT + X` on MacOS
 		- Or, click the Setting Cog in the bottom corner of the window, and click on Extensions.
 		- Or, Press `CTRL + SHIFT + P` or `COMMAND + SHIFT + P` on MacOS, and type in `install` and select `Extensions: Install Extensions`
+		- Or, Press `CTRL + SHIFT + P` or `COMMAND + SHIFT + P` on MacOS, then press backspace, and then type in `ext install`
+		- Or, Open the View menu (`ALT + V` or `COMMAND + V` on MacOS), and click on Extensions.
  	2. Copy and paste the extension ID into the search bar. (Ex: `dbaeumer.vscode-eslint`)
  - On the command line:
 	1. Open a terminal
-		- On Window: Press `WINDOWS + R`, then type `CMD`, then press `ENTER`
+		- On Windows: Press `WINDOWS + R`, then type `CMD`, then press `ENTER`
 	2. Type in `code --install-extension` followed by an Extension ID. (Ex: `code --install-extension dbaeumer.vscode-eslint`)

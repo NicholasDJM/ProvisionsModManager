@@ -219,5 +219,9 @@
 			inset-inline-start: 0;
 			inline-size: 100%;
 		}
+		/* BUG: Cannot nest rule below with rule above. Creates an error while compiling. Probably nothing I can do. Report to Svelte? PostCSS? Vite? */
+		aside.previewOpen .previewContent {
+			padding: var(--defaultMargin);
+		}
 	}
 </style>

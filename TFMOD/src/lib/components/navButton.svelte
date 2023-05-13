@@ -16,10 +16,13 @@
 		dispatch("click");
 	}
 	// Don't know what type tippy is.
+	//@ts-expect-error Don't know what type tippy is.
 	let tip,
 		ready = false;
 	$: {
+		//@ts-expect-error Don't know what type tippy is.
 		if (ready) tip.setContent(text);
+		//@ts-expect-error Don't know what type tippy is.
 		if (ready) showText ? tip.disable() : tip.enable();
 	}
 	onMount(() => {
@@ -32,6 +35,7 @@
 	});
 	onDestroy(() => {
 		if (ready) {
+		//@ts-expect-error Don't know what type tippy is.
 			tip.destroy();
 		}
 	});
@@ -90,7 +94,7 @@
 	.link:hover,.link:focus-visible {
 		background-color: var(--light);
 		color: var(--dark);
-		box-shadow: 0 0 20px 1px var(--light);
+		box-shadow: 0 0 0.8rem 1px var(--light);
 		transition: var(--menuSpeed);
 	}
 	.buttonTextElement {
@@ -111,7 +115,7 @@
 		transition: var(--menuSpeed);
 	}
 	.showText {
-		margin-inline-start: 10px;
+		margin-inline-start: 0.66rem;
 		opacity: 1;
 		transition: opacity var(--transitionReducedMotion), margin-inline-start var(--menuSpeed);
 	}

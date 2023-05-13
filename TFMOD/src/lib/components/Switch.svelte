@@ -36,7 +36,7 @@
 		border-radius: var(--radius);
 		margin-block: auto;
 		margin-inline: auto;
-		transition: background-color var(--transition);
+		transition: background-color var(--transitionReducedMotion);
 		&:focus-within {
 			outline: 2px solid black;
 		}
@@ -45,7 +45,7 @@
 		position: absolute;
 		inline-size: calc(var(--width) / 2);
 		block-size: var(--height);
-		transition: var(--transition);
+		transition: var(--transitionReducedMotion);
 		background-color: var(--color-green-3);
 		&[data-checked="true"] {
 			inline-size: calc(var(--width) + (var(--width) / 2));
@@ -56,7 +56,7 @@
 		position: absolute;
 		inline-size: var(--width);
 		block-size: var(--height);
-		transition: var(--transition);
+		transition: var(--transitionReducedMotion);
 		inset-inline-start: 0;
 		&:checked {
 			inset-inline-start: var(--width);
@@ -67,7 +67,7 @@
 		position: absolute;
 		inline-size: calc(var(--width) + 1px);
 		block-size: calc(var(--height) + 1px);
-		transition: var(--transition);
+		transition: var(--transitionReducedMotion);
 		inset-inline-start: 0;
 		display: flex;
 		justify-content: center;

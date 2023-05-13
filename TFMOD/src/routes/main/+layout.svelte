@@ -167,16 +167,6 @@
 	});
 	let navVisible = true;
 	$: {
-		if (!$isLoading) {
-			// TODO: Move this into navButton.svelte and delay loading until translation is loaded.
-			// jq(".link").each((index, element) => {
-			// 	tooltips[tooltips.length] = tippy(element, {
-			// 		content: jq(element).attr("data-tooltip"),
-			// 		delay: [0, 0],
-			// 		placement: jq(":root").hasClass("rtl") ? "left" : "right"
-			// 	});
-			// });
-		}
 		//TODO: replace jquery with onMount;
 		jq(() => {
 			// BUG: Cannot remove this jquery statement, breaks animation in navrail. Maybe we need onMount?
@@ -623,6 +613,7 @@
 	@media (max-width: 640px) {
 		#navrail:not(.open) {
 			inset-inline-start: calc(var(--navRailComputed) - 20px);
+			/* 20px required for moving at the same amount as corner (It looks weird if it isn't) */
 		}
 		#corner:not(.open) {
 			inset-inline-start: var(--navRailComputed);
