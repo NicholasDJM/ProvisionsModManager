@@ -15,12 +15,16 @@ Enables easy creation of mods through the Mod Creator.
 Will be available for Windows, Linux, and MacOS.
 
 # Bug Reporting
+
 Either create a new issue on the GitHub repository [here](https://github.com/NicholasDJM/ProvisionsModManager/issues/new?title=New%20Issue&template=bug_report.md), or connect to the [Discord Server](https://discord.gg/VXMQKh2D6x) and open a ticket in #support.
 
 # Contributors
+
 [![Contributors](https://contrib.rocks/image?repo=NicholasDJM/ProvisisonsModManager)](https://github.com/NicholasDJM/ProvisisonsModManager/graphs/contributors)
+
 Made with [contrib.rocks](https://contrib.rocks)
 
 # License
+
 See [LICENSE](/LICENSE)
 
