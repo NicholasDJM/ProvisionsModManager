@@ -31,7 +31,7 @@ To install VS Code Extensions:
 		- Or, click the Setting Cog in the bottom corner of the window, and click on Extensions.
 		- Or, Press `CTRL + SHIFT + P` or `COMMAND + SHIFT + P` on MacOS, and type in `install` and select `Extensions: Install Extensions`
 		- Or, Press `CTRL + SHIFT + P` or `COMMAND + SHIFT + P` on MacOS, then press backspace, and then type in `ext install`
-		- Or, Open the View menu (`ALT + V` or `COMMAND + V` on MacOS), and click on Extensions.
+		- Or, Open the View menu (`ALT + V`), and click on Extensions.
  	2. Copy and paste the extension ID into the search bar. (Ex: `dbaeumer.vscode-eslint`)
  - On the command line:
 	1. Open a terminal
