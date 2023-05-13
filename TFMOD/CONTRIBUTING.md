@@ -11,7 +11,7 @@ To contribute to this project, you must have at minimum, all of the below instal
 Additionally, you must set the following settings:
  - For the "ESlint" VS Code Extension:
 	```json
-	eslint.validate: [
+	"eslint.validate": [
 		"javascript",
 		"typescript",
 		"svelte"
