@@ -15,6 +15,8 @@ import fs from "node:fs";
  * @param {string} textDark - Dark mode text colour
  * @param {string} textAccentDark - Given accent colour in dark mode, what colour should text be?
  * @param {string} textInverseDark - Opposite of dark mode text colour
+ * @param {string} BackgroundAlt - A lighter background color
+ * @param {string} BackgroundAltDark - A lighter background color, but dark
  * @returns Text ready to be written to a CSS file.
  */
 function generate(
@@ -30,7 +32,9 @@ function generate(
 	backgroundDark,
 	textDark,
 	textAccentDark,
-	textInverseDark) {
+	textInverseDark,
+	backgroundAlt,
+	backgroundAltDark) {
 	return `.theme-${theme} {
 	--accentColor: var(--color-${accent});
 	--accentColorAlt: var(--color-${accentAlt});
@@ -44,6 +48,9 @@ function generate(
 
 	/* textColorOptimal: Given accentColor, what colour should text be? */
 	--textColorOptimal: var(--color-${textAccent});
+
+	/* textColorOptimal: Given backgroundColor, give a lighter colour. */
+	--backgroundColorAlt: var(--color-${backgroundAlt});
 }
 @media (prefers-color-scheme: dark) {
 	.theme-${theme} {
@@ -59,6 +66,9 @@ function generate(
 
 		/* textColorOptimal: Given accentColor, what colour should text be? */
 		--textColorOptimal: var(--color-${textAccentDark});
+
+		/* textColorOptimal: Given backgroundColor, give a lighter colour. */
+		--backgroundColorAlt: var(--color-${backgroundAltDark});
 	}
 }
 .theme-${theme}.light, .theme-${theme}.palette.light {
@@ -74,6 +84,9 @@ function generate(
 
 	/* textColorOptimal: Given accentColor, what colour should text be? */
 	--textColorOptimal: var(--color-${textAccent});
+
+	/* textColorOptimal: Given backgroundColor, give a lighter colour. */
+	--backgroundColorAlt: var(--color-${backgroundAlt});
 }
 .theme-${theme}.dark, .theme-${theme}.palette.dark {
 	--accentColor: var(--color-${accentDark});
@@ -88,6 +101,9 @@ function generate(
 
 	/* textColorOptimal: Given accentColor, what colour should text be? */
 	--textColorOptimal: var(--color-${textAccentDark});
+
+	/* textColorOptimal: Given backgroundColor, give a lighter colour. */
+	--backgroundColorAlt: var(--color-${backgroundAltDark});
 }`;
 }
 /**
@@ -96,7 +112,7 @@ function generate(
  * @param  {...any} data - String: colours.
  */
 function create(theme, ...data) {
-	fs.writeFile("./src/lib/theme-" + theme + ".css", generate(theme, ...data), error => {
+	fs.writeFile("./src/lib/css/theme-" + theme + ".css", generate(theme, ...data), error => {
 		if (error) console.error(error);
 	});
 }
@@ -114,7 +130,9 @@ create(
 	"gray-6", // Dark Background Colour
 	"gray-1", // Dark Text Colour
 	"gray-1", // Optimal Text Colour on Dark Accent Colour
-	"gray-6" // Inverse Dark Text Colour
+	"gray-6", // Inverse Dark Text Colour
+	"gray-1",
+	"gray-5"
 );
 create(
 	"green", // Name
@@ -129,7 +147,9 @@ create(
 	"gray-6", // Dark Background Colour
 	"gray-1", // Dark Text Colour
 	"gray-1", // Optimal Text Colour on Dark Accent Colour
-	"gray-6" // Inverse Dark Text Colour
+	"gray-6", // Inverse Dark Text Colour
+	"gray-1",
+	"gray-5"
 );
 create(
 	"purple", // Name
@@ -144,7 +164,9 @@ create(
 	"gray-6", // Dark Background Colour
 	"gray-1", // Dark Text Colour
 	"gray-1", // Optimal Text Colour on Dark Accent Colour
-	"gray-6" // Inverse Dark Text Colour
+	"gray-6", // Inverse Dark Text Colour
+	"gray-1",
+	"gray-5"
 );
 create(
 	"red", // Name
@@ -159,7 +181,9 @@ create(
 	"gray-6", // Dark Background Colour
 	"gray-1", // Dark Text Colour
 	"gray-1", // Optimal Text Colour on Dark Accent Colour
-	"gray-6" // Inverse Dark Text Colour
+	"gray-6", // Inverse Dark Text Colour
+	"gray-1",
+	"gray-5"
 );
 create(
 	"yellow", // Name
@@ -174,5 +198,7 @@ create(
 	"gray-6", // Dark Background Colour
 	"gray-1", // Dark Text Colour
 	"gray-5", // Optimal Text Colour on Dark Accent Colour
-	"gray-1" // Inverse Dark Text Colour
+	"gray-1", // Inverse Dark Text Colour
+	"gray-1",
+	"gray-5"
 );

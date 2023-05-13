@@ -1,6 +1,4 @@
 <script lang="ts">
-	import type { event } from "@tauri-apps/api";
-
 	// Enables opening links in an external app.
 	import { open } from "@tauri-apps/api/shell";
 	export let href: string,
@@ -8,9 +6,19 @@
 		program: string | undefined = undefined;
 
 	function link(event: Event) {
-		console.log(event.type);
 		event.preventDefault();
 		open(href, program);
 	}
+
+	function linkKeyboard(event: KeyboardEvent) {
+		if (event.key === "Space" || event.key === "Enter") {
+			event.preventDefault();
+			open(href, program);
+		}
+	}
+	// TODO: Ask permission to open external links, with option to save to localStorage.
 </script>
-<a on:click={link} title={href} data-external={true}><slot/></a>
+<!-- svelte-ignore a11y-missing-attribute -->
+<a on:click={link} on:keydown={linkKeyboard} title={href} {href}>
+	<slot/>
+</a>

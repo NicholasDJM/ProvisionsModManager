@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { i18n } from "$lib/js/i18n.js";
 	import { title } from "$lib/js/title.js";
-	title.set($i18n.t("page-utils"));
+	$: title.set($i18n.t("utils:page-utils"));
 	import { currentPage } from "$lib/js/page.js";
 	currentPage.set("utils");
 	import UtilityCard from "$lib/components/UtilityCard.svelte";

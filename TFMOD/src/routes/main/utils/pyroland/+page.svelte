@@ -2,9 +2,11 @@
 	import { onMount } from "svelte";
 	import HideNavBar from "$lib/components/HideNavBar.svelte";
 	import { title } from "$lib/js/title.js";
-	title.set("Pyroland Manager");
-	import { backButton } from "$lib/js/subpage.js";
+	import { i18n } from "$lib/js/i18n";
+	$: title.set($i18n.t("pyroland:page-pyroland"));
+	import { backButton, backUrl } from "$lib/js/subpage.js";
 	backButton.set(true);
+	backUrl.set(true);
 	// @ts-expect-error Can't do anything about missing types.
 	import { LocalStorage } from "combo-storage";
 	import jq from "jquery";

@@ -1,0 +1,1 @@
+page-pyroland = Pyroland Manager

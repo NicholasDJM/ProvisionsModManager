@@ -14,9 +14,11 @@ Should be version 2
 
 0x08
 Tree Size
+Limited to 4,294,967,295 bytes?
 
 0x0C
 VPK File Size
+Ditto 4,294,967,295?
 
 0x10: 00 00 00 00
 Size of MD5 checksums for external content

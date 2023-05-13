@@ -2,7 +2,8 @@
 	import { createEventDispatcher } from "svelte";
 	interface Option {
 		name: string,
-		text: string
+		text: string,
+		icon?: any
 	}
 	export let options: Array<Option>;
 	const dispatch = createEventDispatcher();
@@ -25,7 +26,10 @@
 <div class="pillbox">
 	{#each options as option}
 		<label class="pill">
-			{option.text}
+			<span class="text">
+			{#if option.icon}
+				<svelte:component this={option.icon}/>
+			{/if}{option.text}</span>
 			<input type="checkbox" on:change={fireEvent} data-pill={option.name}/>
 		</label>
 	{/each}
@@ -72,5 +76,10 @@
 	}
 	.pill:has(input:checked):hover, .pill:has(input:checked):focus-within {
 		box-shadow: inset 0 0 10px 1px white;
+	}
+	.pill .text {
+		display: flex;
+		flex-flow: row nowrap;
+		gap: var(--defaultMargin);
 	}
 </style>

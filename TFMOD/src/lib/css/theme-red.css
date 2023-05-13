@@ -11,6 +11,9 @@
 
 	/* textColorOptimal: Given accentColor, what colour should text be? */
 	--textColorOptimal: var(--color-gray-1);
+
+	/* textColorOptimal: Given backgroundColor, give a lighter colour. */
+	--backgroundColorAlt: var(--color-gray-1);
 }
 @media (prefers-color-scheme: dark) {
 	.theme-red {
@@ -26,6 +29,9 @@
 
 		/* textColorOptimal: Given accentColor, what colour should text be? */
 		--textColorOptimal: var(--color-gray-1);
+
+		/* textColorOptimal: Given backgroundColor, give a lighter colour. */
+		--backgroundColorAlt: var(--color-gray-5);
 	}
 }
 .theme-red.light, .theme-red.palette.light {
@@ -41,6 +47,9 @@
 
 	/* textColorOptimal: Given accentColor, what colour should text be? */
 	--textColorOptimal: var(--color-gray-1);
+
+	/* textColorOptimal: Given backgroundColor, give a lighter colour. */
+	--backgroundColorAlt: var(--color-gray-1);
 }
 .theme-red.dark, .theme-red.palette.dark {
 	--accentColor: var(--color-red-5);
@@ -55,4 +64,7 @@
 
 	/* textColorOptimal: Given accentColor, what colour should text be? */
 	--textColorOptimal: var(--color-gray-1);
+
+	/* textColorOptimal: Given backgroundColor, give a lighter colour. */
+	--backgroundColorAlt: var(--color-gray-5);
 }

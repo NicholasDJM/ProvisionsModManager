@@ -5,7 +5,7 @@ import { writable } from "svelte/store";
 
 function updateStore() {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { subscribe, set, update } = writable(false);
+	const { subscribe, set, update } = writable(true);
 	return {
 		subscribe,
 		set

@@ -14,3 +14,4 @@
 	Window Size Display Time (in milliseconds)
 	<input type="number" on:change={(event) => LocalStorage.set("debug-windowSizeTime", event.target.value)} value={windowSizeTime}>
 </label>
+<a href="/test">Test</a>

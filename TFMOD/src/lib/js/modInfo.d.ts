@@ -11,11 +11,13 @@ export interface ModInfo {
 	srcset?: Array<{
 		path: string,
 		width: string,
-		height: string
+		height: string,
+		alt?: string
 	}>,
 	enabled: boolean,
 	conflicts: number,
 	outdated: boolean,
-	position: number,
-	md5: string
+	position: unique number,
+	md5: string,
+	explicit?: Array<"blood" | "nudity" | "profanity">
 }

@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/filename-case */
 import { writable } from "svelte/store";
 /*	import { keySize } from "$lib/keySize.js"
 	keySize.set("16px"); // Number with CSS measurement suffix

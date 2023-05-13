@@ -1,7 +1,13 @@
 <script lang="ts">
+	import { setContext } from "svelte";
+	import candy from "$lib/json/colorway-candy.json";
+	import { LocalStorage } from "combo-storage";
+	// setContext("colorway", LocalStorage.get("editorKeyboardColorway"));
 	import Key from "./Key.svelte";
-	import { keySize, keySizeH, keySizeW } from "../js/KeySize.js";
+	import { keySize, keySizeH, keySizeW } from "../js/keySize.js";
 	import MSWindows from "svelte-material-icons/MicrosoftWindows.svelte";
+	// TODO: Seperate out generic logic to $lib/js/keyobard.js
+	// TODO: Rename to Keyboard-Qwerty-US.svelte when we create new layouts, like French Canadian.
 	keySize.set("16px");
 	keySizeH.set("40px");
 	keySizeW.set("40px");
@@ -46,6 +52,7 @@
 															// Try "Shift or Alt + Scroll Lock", this changes lock state, but not "Scroll Lock" alone.
 															// LED can be toggled on and off independently of lock state.*/
 	};
+	// TODO: Calculate size of keyboard, and scale down when it overflows
 </script>
 <svelte:document on:keydown={status}></svelte:document>
 <div class="keyboard" style={`--totalSize:${top(true)}`}>
@@ -169,9 +176,10 @@
 
 		direction: ltr; /* Keyboards don't start right to left */
 		position: relative;
-		border: 3px solid grey;
+		border: .1rem solid grey;
 		overflow: auto;
 		block-size: calc(var(--totalSize) + (var(--padding)));
 		inline-size: calc(var(--totalInlineSize, 1111px) + (var(--padding)));
+		scale: min(var(--scale, 100%), 100%);
 	}
 </style>

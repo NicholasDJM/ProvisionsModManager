@@ -11,6 +11,9 @@
 
 	/* textColorOptimal: Given accentColor, what colour should text be? */
 	--textColorOptimal: var(--color-gray-5);
+
+	/* textColorOptimal: Given backgroundColor, give a lighter colour. */
+	--backgroundColorAlt: var(--color-gray-1);
 }
 @media (prefers-color-scheme: dark) {
 	.theme-yellow {
@@ -26,6 +29,9 @@
 
 		/* textColorOptimal: Given accentColor, what colour should text be? */
 		--textColorOptimal: var(--color-gray-5);
+
+		/* textColorOptimal: Given backgroundColor, give a lighter colour. */
+		--backgroundColorAlt: var(--color-gray-5);
 	}
 }
 .theme-yellow.light, .theme-yellow.palette.light {
@@ -41,6 +47,9 @@
 
 	/* textColorOptimal: Given accentColor, what colour should text be? */
 	--textColorOptimal: var(--color-gray-5);
+
+	/* textColorOptimal: Given backgroundColor, give a lighter colour. */
+	--backgroundColorAlt: var(--color-gray-1);
 }
 .theme-yellow.dark, .theme-yellow.palette.dark {
 	--accentColor: var(--color-yellow-2);
@@ -55,4 +64,7 @@
 
 	/* textColorOptimal: Given accentColor, what colour should text be? */
 	--textColorOptimal: var(--color-gray-5);
+
+	/* textColorOptimal: Given backgroundColor, give a lighter colour. */
+	--backgroundColorAlt: var(--color-gray-5);
 }

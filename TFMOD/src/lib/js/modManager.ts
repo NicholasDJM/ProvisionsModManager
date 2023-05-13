@@ -67,34 +67,31 @@ function toNumber(data: Uint8Array): number {
  */
 export function readVPKArchive(vpk: string): Promise<Uint8Array> {
 	let currentByte = 0;
-	const inc = () => {
-			return currentByte += 4;
-		},
-		p: Promise<Uint8Array> = new Promise((resolve, reject) => {
-			readBinaryFile(vpk).then(data => {
-				console.log(byte(0, data));
-				const vpkSig = [52, 18, 170, 85],
-					dataSig = byte(0, data);
-				for (const [index, element] of vpkSig.entries()) {
-					if (element !== dataSig[index]) {
-						reject("File is not a VPK file.");
-					}
+	const inc = () => currentByte += 4;
+	return new Promise((resolve, reject) => {
+		readBinaryFile(vpk).then(data => {
+			console.log(byte(0, data));
+			const vpkSig = [52, 18, 170, 85],
+				dataSig = byte(0, data);
+			for (const [index, element] of vpkSig.entries()) {
+				if (element !== dataSig[index]) {
+					reject("File is not a VPK file.");
 				}
-				const version = byte(inc(), data)[0],
-					treeSize = Uint8Array.from(byte(inc(), data)),
-					treeLength = toNumber(treeSize),
-					dataLength = version === 2 ? toNumber(Uint8Array.from(byte(inc(), data))) : null,
-					dataStart = treeLength + 0;
-				if (!(version === 1 || version === 2)) {
-					reject("Unsupported version");
-				}
-				console.info("Version", version, "Tree Length", treeLength + " bytes", "Data Length", dataLength + " bytes");
-				resolve(data);
-			}).catch(error => {
-				reject(error);
-			});
+			}
+			const version = byte(inc(), data)[0],
+				treeSize = Uint8Array.from(byte(inc(), data)),
+				treeLength = toNumber(treeSize),
+				dataLength = version === 2 ? toNumber(Uint8Array.from(byte(inc(), data))) : null,
+				dataStart = treeLength + 0;
+			if (!(version === 1 || version === 2)) {
+				reject("Unsupported version");
+			}
+			console.info("Version", version, "Tree Length", treeLength + " bytes", "Data Length", dataLength + " bytes");
+			resolve(data);
+		}).catch(error => {
+			reject(error);
 		});
-	return p;
+	});
 }
 
 /** Returns data from a file inside a VPK file.

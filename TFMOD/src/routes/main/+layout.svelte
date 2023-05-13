@@ -13,10 +13,13 @@
 	import { updateAvailable } from "$lib/js/update.js";
 	import { checkUpdate } from "@tauri-apps/api/updater";
 	import { onMount, onDestroy } from "svelte";
-	import { backButton } from "$lib/js/subpage.js";
+	import { backButton, backUrl } from "$lib/js/subpage.js";
 	import { goto, afterNavigate} from "$app/navigation";
 	import { blur, fade } from "svelte/transition";
 	import { invoke } from "@tauri-apps/api/tauri";
+	/* TODO: Switch from "combo-storage" to vanilla JS */
+	// @ts-expect-error Can't do anything about missing types.
+	import { LocalStorage } from "combo-storage";
 	import jq from "jquery";
 	import Cog from "svelte-material-icons/Cog.svelte";
 	import Toolbox from "svelte-material-icons/Toolbox.svelte";
@@ -59,7 +62,7 @@
 		menuOffset = "0px",
 		menuVerticalOffset = "0px",
 		menuTimer: Array<ReturnType<typeof setTimeout>> = [],
-		extensionPrompt = false,
+		extensionPrompt = true,
 		navrailComputed: string,
 		textComputed: string,
 		navrailComputedPadding: string,
@@ -123,13 +126,6 @@
 		navrailComputedPadding = css("#navrail", "padding-inline").slice(0, navrailComputedPaddingPixels),
 		textComputed = css(".link", "font-size"),
 		iconComputed = navButtonIconSize.slice(0, iconComputedPixels);
-		jq(".link").each((index, element) => {
-			tooltips[tooltips.length] = tippy(element, {
-				content: jq(element).attr("data-tooltip"),
-				delay: [0, 0],
-				placement: jq(":root").hasClass("rtl") ? "left" : "right"
-			});
-		});
 		// invoke("close_splashscreen");
 	});
 
@@ -171,19 +167,20 @@
 	});
 	let navVisible = true;
 	$: {
+		if (!$isLoading) {
+			// TODO: Move this into navButton.svelte and delay loading until translation is loaded.
+			// jq(".link").each((index, element) => {
+			// 	tooltips[tooltips.length] = tippy(element, {
+			// 		content: jq(element).attr("data-tooltip"),
+			// 		delay: [0, 0],
+			// 		placement: jq(":root").hasClass("rtl") ? "left" : "right"
+			// 	});
+			// });
+		}
 		//TODO: replace jquery with onMount;
 		jq(() => {
-			if (menuOpen) {
-				menuVerticalOffset = profileSelectorSize;
-				for (const tippy of tooltips) {
-					tippy.disable();
-				}
-			} else {
-				menuVerticalOffset = "0px";
-				for (const tippy of tooltips) {
-					tippy.enable();
-				}
-			}
+			// BUG: Cannot remove this jquery statement, breaks animation in navrail. Maybe we need onMount?
+			menuVerticalOffset = menuOpen ? profileSelectorSize : "0px";
 		});
 		navVisible = $backButton;
 		//TODO: Also set navVisible if screen is too small. This fixes navrail still being focusable via keyboard.
@@ -198,15 +195,27 @@
 	import { base } from "$app/paths";
 	let previousPage: string = base;
 	afterNavigate(({from}) => {
-		previousPage = from?.url?.pathname || previousPage;
+		const url = from?.url?.pathname;
+		console.log(url);
+		if (url) {
+			previousPage = url;
+			LocalStorage.set("previousPage", from?.url?.pathname);
+		} else if (LocalStorage.get("previousPage")) {
+			previousPage = LocalStorage.get("previousPage");
+		} else {
+			previousPage = "/main";
+		}
 	});
 	function goBack() {
 		backButton.set(false);
-		goto(previousPage);
+		if ($backUrl) {
+			goto(previousPage);
+			backUrl.set(false);
+		}
 	}
 	let search = false,
 		searchValue: string;
-	function clearSearch(event) {
+	function clearSearch(event: KeyboardEvent) {
 		if (event.key === "Enter") {
 			searchValue = "";
 			search = false;
@@ -222,12 +231,30 @@
 				text: "Test"
 			}
 		],
-		navDropdownVisible = false;
+		navDropdownVisible = false,
+		translations: Record<string, string>;
+	/* Wrapping translations in a $ statement shouldn't be necessary, but it is.
+		I think it has something to do with Svelte grabbing the value before it's loaded, and then not updating once it is loaded. */
+	$: {
+		translations = {
+			mods: $i18n.t("main:page-mods"),
+			sources: $i18n.t("sources:page-sources"),
+			utils: $i18n.t("utils:page-utils"),
+			troubleshoot: $i18n.t("troubleshoot:page-troubleshoot"),
+			wizard: $i18n.t("wizard:page-wizard"),
+			extension: $i18n.t("common:extension-notice"),
+			update: $i18n.t("common:update-notice"),
+			settings: $i18n.t("settings:page-settings"),
+			profile: $i18n.t("common:profile-selector"),
+			skip: $i18n.t("common:skip-to-content")
+		};
+	}
+
 	// TODO: Fix search placeholder text colour.
 	// TODO: break out search to component, and implent svelte-typehead and search-text-highlight
 </script>
 <a href="#main" class="skip">
-	Skip to content
+	{translations.skip}
 </a>
 <div id="layout" style="--menuOffset: {menuOffset}; --menuVerticalOffset: {menuVerticalOffset}; --navRailSize: {navButtonSize}; --navRailPadding: {navRailPadding}; --buttonSize: {navButtonSize}; --iconSize: {navButtonIconSize}; --navRailComputed:-{navrailComputed}px">
 	<div id="navbar">
@@ -268,7 +295,7 @@
 			<!-- Needed to fix other navrail items' spacing while profileSelector is hidden -->
 		</div>
 		<div class="profileSelector">
-			<label for="profile">Profile</label>
+			<label for="profile">{translations.profile}</label>
 			<select id="profile">
 				<option>Team Fortress 2</option>
 			</select>
@@ -277,7 +304,7 @@
 			<NavButton
 				size={navButtonSize}
 				href="/main"
-				text={$i18n.t("page-mods")}
+				text={translations.mods}
 				dataPage="mods"
 				id={getButtonId()}
 				on:click={closeMenu}
@@ -294,7 +321,7 @@
 			<NavButton
 				size={navButtonSize}
 				href="/main/sources"
-				text={$i18n.t("page-sources")}
+				text={translations.sources}
 				dataPage="sources"
 				id={getButtonId()}
 				{showText}
@@ -311,7 +338,7 @@
 			<NavButton
 				size={navButtonSize}
 				href="/main/utils"
-				text={$i18n.t("page-utils")}
+				text={translations.utils}
 				dataPage="utils"
 				id={getButtonId()}
 				{showText}
@@ -328,7 +355,7 @@
 			<NavButton
 				size={navButtonSize}
 				href="/main/troubleshooting"
-				text={$i18n.t("page-troubleshoot")}
+				text={translations.troubleshoot}
 				dataPage="troubleshoot"
 				id={getButtonId()}
 				{showText}
@@ -345,7 +372,7 @@
 			<NavButton
 				size={navButtonSize}
 				href="/main/wizard"
-				text={$i18n.t("page-wizard")}
+				text={translations.wizard}
 				dataPage="wizard"
 				id={getButtonId()}
 				{showText}
@@ -366,7 +393,7 @@
 				<NavButton
 					size={navButtonSize}
 					href="/main/settings/extension"
-					text={$i18n.t("extension-notice")}
+					text={translations.extension}
 					dataPage = null
 					id={getButtonId()}
 					{showText}
@@ -380,7 +407,7 @@
 				<NavButton
 					size={navButtonSize}
 					href="/main/settings/update"
-					text={$i18n.t("update-notice")}
+					text={translations.update}
 					dataPage = null
 					id={getButtonId()}
 					{showText}
@@ -393,7 +420,7 @@
 			<NavButton
 				size={navButtonSize}
 				href="/main/settings"
-				text={$i18n.t("page-settings")}
+				text={translations.settings}
 				dataPage="settings"
 				id={getButtonId()}
 				{showText}
@@ -405,7 +432,6 @@
 		</div>
 	</div>
 	<span id="corner" class:open="{menuOpen}"></span>
-	<span id="cornerRtl" class:open="{menuOpen}"></span>
 	{#if menuOpen}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div id="closeMenu" on:click={closeMenu} transition:blur={{duration: reducedMotionSpeed}}></div>
@@ -416,21 +442,19 @@
 </div>
 <style>
 	.skip {
-		--size: 10px;
-		--padding: 15px;
+		--size: 2.5rem;
+		--padding: var(--defaultMargin);
 
 		position: fixed;
-		block-size: var(--size);
-		line-height: var(--size);
 		padding-block: var(--padding);
-		padding-inline: var(--defaultMargin);
-		border-end-end-radius: 10px;
+		padding-inline: var(--padding);
+		border-end-end-radius: 1rem;
 		inset-block-start: calc((var(--size) + var(--padding) * 2) * -1);
 		transition: var(--transition);
 		z-index: 100;
 		background-color: var(--accentColor);
 		color: var(--textColorOptimal);
-		&:focus {
+		&:focus-visible {
 			inset-block-start: 0;
 		}
 	}
@@ -465,7 +489,7 @@
 		border-start-start-radius: 10px;
 		border-start-end-radius: 10px;
 		/* stylelint-disable-next-line a11y/no-outline-none -- Background color is changed. So no need for outline. */
-		&:focus {
+		&:focus-visible {
 			outline: 0;
 			border-radius: 10px;
 			background-color:white;
@@ -475,7 +499,7 @@
 	input[type="search"]::placeholder {
 		color: var(--textColorOptimal);
 	}
-	input[type="search"]:focus::placeholder {
+	input[type="search"]:focus-visible::placeholder {
 		color: gray;
 	}
 	input[type="search"].noBump {
@@ -483,7 +507,7 @@
 	}
 	#navbar {
 		user-select: none;
-		z-index: 3;
+		z-index: 90;
 		display: grid;
 		grid-template-columns: auto 1fr auto;
 		gap: 10px;
@@ -498,8 +522,8 @@
 		transition: var(--menuSpeed);
 		margin-block: auto;
 		&>h1 {
-			margin-inline-start: 20px;
-			margin-block: 0;
+			/* margin-inline-start: 20px; */
+			margin-block: auto;
 			color: var(--textColorOptimal);
 			white-space: nowrap;
 			text-overflow: ellipsis;
@@ -511,10 +535,8 @@
 		margin-inline-start: 0;
 	}
 	#navrail {
-		--profileSize: 10px;
-
 		user-select: none;
-		z-index: 2;
+		z-index: 90;
 		position: fixed;
 		display: grid;
 		grid-template-rows: auto auto 1fr auto;
@@ -567,27 +589,14 @@
 		transition: opacity var(--transition);
 	}
 	#corner {
+		--mask: url("data:image/webp;base64,UklGRlwBAABXRUJQVlA4WAoAAAAYAAAAEwAAEwAAVlA4TGAAAAAvE8AEEFDQtg1j/rh3AiGCTWxbjS5h69jhACW0uAAHGEALUvBBi4DNYQL8d68q86yRPGkSg/Ggiwasm2LFcXIJOA82Dj8Xh0BAoCDQrYWIQDMUEkIvU6go5YRP2MSYkAlFWElG1gAAAElJKgAIAAAABgASAQMAAQAAAAEAAAAaAQUAAQAAAFYAAAAbAQUAAQAAAF4AAAAoAQMAAQAAAAIAAAAxAQIAEAAAAGYAAABphwQAAQAAAHYAAAAAAAAA8nYBAOgDAADydgEA6AMAAHBhaW50Lm5ldCA1LjAuMwAFAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAKgBAABAAAAFAAAAAOgBAABAAAAFAAAAAWgBAABAAAAuAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAAA=");
+
 		inline-size: 20px;
-		z-index: 2;
+		z-index: 90;
 		aspect-ratio: 1;
 		/* stylelint-disable-next-line property-no-vendor-prefix -- Non prefix version doesn't work in MS Edge */
-		-webkit-mask-image: url("/images/cornerMask.png");
-		mask-image: url("/images/cornerMask.png");
-		position: fixed;
-		inset-block-start: var(--navBarSize);
-		inset-inline-start: calc(var(--navRailSize) + (var(--navRailPadding) * 2) + var(--menuOffset));
-		background-color: var(--accentColor);
-		transition: inset-inline-start var(--menuSpeed), background-color var(--menuSpeed); /* Don't animate opacity */
-		pointer-events: none;
-	}
-	#cornerRtl {
-		inline-size: 20px;
-		z-index: 2;
-		aspect-ratio: 1;
-		opacity: 0;
-		/* stylelint-disable-next-line property-no-vendor-prefix -- Non prefix version doesn't work in MS Edge */
-		-webkit-mask-image: url("/images/cornerMaskRtl.png");
-		mask-image: url("/images/cornerMaskRtl.png");
+		-webkit-mask-image: var(--mask);
+		mask-image: var(--mask);
 		position: fixed;
 		inset-block-start: var(--navBarSize);
 		inset-inline-start: calc(var(--navRailSize) + (var(--navRailPadding) * 2) + var(--menuOffset));
@@ -596,8 +605,8 @@
 		pointer-events: none;
 	}
 	#closeMenu {
-		z-index: 1;
-		/* backdrop-filter: blur(2px); */
+		z-index: 80;
+		backdrop-filter: blur(1px);
 		background-color: rgb(0 0 0 / 0.5);
 		position: fixed;
 		inline-size: 100%;
@@ -618,9 +627,6 @@
 		#corner:not(.open) {
 			inset-inline-start: var(--navRailComputed);
 		}
-		#cornerRtl:not(.open) {
-			inset-inline-start: var(--navRailComputed);
-		}
 		.profileSelector {
 			transition: 0s;
 		}
@@ -635,9 +641,8 @@
 			margin-inline-start: 0;
 		}
 		#navbar h1 {
-			margin-inline-start: 0 !important;
-			margin-block: auto;
-			font-size: 1.25rem;
+			/* margin-inline-start: 0 !important; */
+			font-size: 1.5rem;
 		}
 	}
 </style>

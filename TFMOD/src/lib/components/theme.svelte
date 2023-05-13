@@ -2,6 +2,8 @@
 	// @ts-expect-error Can't do anything about missing types.
 	import { LocalStorage } from "combo-storage";
 	import { onMount, onDestroy } from "svelte";
+	import { i18n } from "$lib/js/i18n";
+	import { direction } from "$lib/js/direction";
 	import jq from "jquery";
 	import Sun from "svelte-material-icons/WeatherSunny.svelte";
 	import Moon from "svelte-material-icons/WeatherNight.svelte";
@@ -40,15 +42,21 @@
 			setMode();
 		}
 	}
-	function changeDirection() {
-		LocalStorage.set("direction", this.options[this.selectedIndex].dataset.direction);
-	}
+	// function changeDirection() {
+	// 	LocalStorage.set("direction", this.options[this.selectedIndex].dataset.direction);
+	// 	if (this.options[this.selectedIndex].dataset.direction === "auto") {
+	// 		direction.set(true);
+	// 	} else {
+	// 		direction.set(false);
+	// 	}
+	// }
 	function changeMotion() {
 		LocalStorage.set("motion", this.options[this.selectedIndex].dataset.motion);
 	}
 	function changeScroll() {
 		LocalStorage.set("scroll", this.options[this.selectedIndex].dataset.scroll);
 	}
+	// TODO: Remove jquery
 	onMount(() => {
 		theme = LocalStorage.get("theme");
 		fade = "var(--transitionReducedMotion)";
@@ -62,11 +70,11 @@
 		// 		element.selected = true;
 		// 	}
 		// });
-		jq("[data-direction]").each((index, element) => {
-			if (LocalStorage.get("direction") === element.dataset.direction) {
-				element.selected = true;
-			}
-		});
+		// jq("[data-direction]").each((index, element) => {
+		// 	if (LocalStorage.get("direction") === element.dataset.direction) {
+		// 		element.selected = true;
+		// 	}
+		// });
 		jq("[data-motion]").each((index, element) => {
 			if (LocalStorage.get("motion") === element.dataset.motion) {
 				element.selected = true;
@@ -79,7 +87,6 @@
 		});
 	});
 	import { Command } from "@tauri-apps/api/shell";
-	import Key from "./Key.svelte";
 	let systemColours = false;
 	function generateSystemTheme() {
 		const getColours = new Command("$resource/colors");
@@ -87,19 +94,32 @@
 	}
 	//TODO: Modify palette to include color values, hex codes. Simplify to just normal and accent.
 	const size = "25px";
+	let translations: Record<string, string>;
+	$: translations = {
+		theme: $i18n.t("settings:theme"),
+		blue: $i18n.t("settings:theme-blue"),
+		green: $i18n.t("settings:theme-green"),
+		red: $i18n.t("settings:theme-red"),
+		purple: $i18n.t("settings:theme-purple"),
+		yellow: $i18n.t("settings:theme-yellow"),
+		scheme: $i18n.t("settings:color-scheme"),
+		// direction: $i18n.t("settings:text-direction"),
+		motion: $i18n.t("settings:motion"),
+		scrollbar: $i18n.t("settings:scrollbar")
+	};
 </script>
 <div class="palettePreview" style="--fade:{fade}">
 	<label>
-		<span>Theme</span>
+		<span>{translations.theme}</span>
 		<select on:change={change}>
 			{#if systemColours}
 				<option data-theme="theme-system">Follow System</option>
 			{/if}
-			<option data-theme="theme-blue">Blue</option>
-			<option data-theme="theme-green">Green</option>
-			<option data-theme="theme-red">Red</option>
-			<option data-theme="theme-purple">Purple</option>
-			<option data-theme="theme-yellow">Yellow</option>
+			<option data-theme="theme-blue">{translations.blue}</option>
+			<option data-theme="theme-green">{translations.green}</option>
+			<option data-theme="theme-red">{translations.red}</option>
+			<option data-theme="theme-purple">{translations.purple}</option>
+			<option data-theme="theme-yellow">{translations.yellow}</option>
 		</select>
 	</label>
 	<div class="{theme} palette light">
@@ -117,7 +137,7 @@
 		<span class="optimal">Optimal Text</span>
 	</div>
 	<label>
-		Dark Mode
+		{translations.scheme}
 		<!-- <select on:change={changeMode}>
 			<option data-mode="system">Follow System Theme</option>
 			<option data-mode="dark">Dark</option>
@@ -135,23 +155,23 @@
 			</button>
 		</div>
 	</label>
-	<label>
-		Direction
+	<!-- <label>
+		{translations.direction}
 		<select on:change={changeDirection}>
 			<option data-direction="auto">Follow Locale</option>
 			<option data-direction="ltr">Left To Right</option>
 			<option data-direction="rtl">Right to Left</option>
 		</select>
-	</label>
+	</label> -->
 	<label>
-		Reduce Motion
+		{translations.motion}
 		<select on:change={changeMotion}>
 			<option data-motion="normalMotion">Follow System</option>
 			<option data-motion="reduceMotion">Reduce Motion</option>
 		</select>
 	</label>
 	<label>
-		Scrollbar Style
+		{translations.scrollbar}
 		<select on:change={changeScroll}>
 			<option data-scroll="colored">Coloured Scrollbars</option>
 			<option data-scroll="standard">Standard Scrollbars</option>
@@ -162,7 +182,7 @@
 	.palettePreview {
 		display: grid;
 		grid-template-rows: auto auto;
-		gap: 8px;
+		gap: var(--defaultMargin);
 		margin-block-end: 15px;
 	}
 	.palette {

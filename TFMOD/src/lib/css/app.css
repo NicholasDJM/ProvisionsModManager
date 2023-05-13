@@ -32,17 +32,6 @@
 
 	--reduceMotion: no;
 }
-.auto {
-	--direction: ltr;
-}
-.system {
-	--isDark: no;
-}
-@media (prefers-color-scheme: dark) {
-	.system {
-		--isDark: yes;
-	}
-}
 @media (prefers-reduced-motion) {
 	:root {
 		--reduceMotion: yes;
@@ -84,27 +73,24 @@ a:link {
 	color: rgb(24 178 250);
 	text-decoration: none;
 }
-a:hover, a:focus {
+a:hover, a:focus-visible {
 	text-decoration: underline;
 }
 .reduceMotion {
 	--transition: 0 !important;
 	--transitionReducedMotion: var(--transitionOriginal, 200ms) !important;
 }
-html.rtl #cornerRtl {
-	opacity: 1 !important;
+.rtl #corner {
+	transform: scaleX(-100%);
 }
-html.rtl #corner {
-	opacity: 0 !important;
+.rtl .reverse {
+	transform: scaleX(-100%);
 }
-html.rtl {
+.rtl {
 	direction: rtl;
 }
-.rtl input:checked + .slider::before {
-	transform: translateX(-26px);
-}
 .rtl .menuRTL {
-	transform: scale(-100%);
+	transform: scaleX(-100%);
 }
 .tippy-box[data-theme~="red"] {
 	background-color: var(--color-red-3);

@@ -10,6 +10,7 @@
 		"csstools.postcss",
 		"vunguyentuan.vscode-postcss",
 		"idered.npm",
-		"serayuzgur.crates"
+		"serayuzgur.crates",
+		"macabeus.vscode-fluent"
 	]
 }

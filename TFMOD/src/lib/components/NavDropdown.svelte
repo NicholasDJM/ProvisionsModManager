@@ -8,24 +8,26 @@
 	}
 	const dispatch = createEventDispatcher();
 	export let list: Array<DropdownItem>,
-		parent: HTMLElement,
+		parent: string,
 		visible: boolean,
 		dividers: Array<number> = [];
 	function handleClick(event: Event) {
-		dispatch("navDropdown", {id: event.target.dataset.id});
+		const target = event.target as HTMLElement;
+		dispatch("navDropdown", {id: target.dataset.id});
 		visible = false;
 	}
 	function handleKeyboard(event: KeyboardEvent) {
+		const target = event.target as HTMLElement;
 		if (event.key === "Enter" || event.key === "Space") {
-			dispatch("navDropdown", {id: event.target.dataset.id});
+			dispatch("navDropdown", {id: target.dataset.id});
 			visible = false;
 		}
 	}
 	let left: string,
 		top:string;
-	function pos(parent: HTMLElement) {
+	function pos(parent: string) {
 		const element = document.querySelector(parent),
-			rect = element.getBoundingClientRect();
+			rect = element?.getBoundingClientRect() || {left: 0, top: 0, height: 0};
 		// TODO: Critical: Get correct position of button and place menu accordingly;
 		left = String(rect.left);
 		top = String(rect.top + rect.height);

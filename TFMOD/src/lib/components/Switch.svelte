@@ -14,7 +14,7 @@
 	const iconSize = 25,
 		size = iconSize + 10 + "px";
 </script>
-<label class="switch" on:keydown={change} on:mousedown={follow} style={`--width: ${size}; --height: ${size}`}>
+<label class="switch" on:keydown={change} style={`--width: ${size}; --height: ${size}`}>
 	<div class="switchBackground" data-checked={enabled}></div>
 	<div class="check" data-checked={enabled}>
 		<Drag size={iconSize + "px"}/>
@@ -81,7 +81,7 @@
 
 	}
 	/* I would use nesting here, but either PostCSS or Svelte doesn't like it, and doesn't output it correctly. */
-	.switch:hover, .switch:focus {
+	.switch:hover, .switch:focus-visible {
 		& .check {
 			inset-inline-start: calc(var(--width) / var(--hover));
 			&[data-checked="true"] {
@@ -90,7 +90,7 @@
 		}
 	}
 	/* stylelint-disable-next-line no-duplicate-selectors -- Combining this with previous selector actually breaks intended style */
-	.switch:hover, .switch:focus {
+	.switch:hover, .switch:focus-visible {
 		& .switchBackground {
 			inline-size: calc((var(--width) / 2) + (var(--width) / var(--hover)));
 			&[data-checked="true"] {

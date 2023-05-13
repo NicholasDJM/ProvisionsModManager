@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { i18n } from "$lib/js/i18n.js";
 	import { title } from "$lib/js/title.js";
-	title.set($i18n.t("page-sources"));
+	$: title.set($i18n.t("sources:page-sources"));
 	import { currentPage } from "$lib/js/page.js";
 	currentPage.set("sources");
 	import Link from "$lib/components/Link.svelte";

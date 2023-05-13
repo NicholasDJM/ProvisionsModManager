@@ -1,5 +1,9 @@
+<script context="module">
+	import "tippy.js/dist/tippy.css";
+</script>
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, onMount, onDestroy } from "svelte";
+	import tippy from "tippy.js";
 	export let href: string,
 		text: string,
 		dataPage: string | undefined,
@@ -11,6 +15,26 @@
 	function onclick() {
 		dispatch("click");
 	}
+	// Don't know what type tippy is.
+	let tip,
+		ready = false;
+	$: {
+		if (ready) tip.setContent(text);
+		if (ready) showText ? tip.disable() : tip.enable();
+	}
+	onMount(() => {
+		tip = tippy("#" + id, {
+			content: text,
+			placement: "right"
+		});
+		tip = tip[0];
+		ready = true;
+	});
+	onDestroy(() => {
+		if (ready) {
+			tip.destroy();
+		}
+	});
 </script>
 
 <a {href} class="link" style="--size:{size}" class:highlight={highlight === dataPage} data-tooltip={text} {id} on:click={onclick}>

@@ -4,7 +4,7 @@ const refreshSpeed = 100,
 	data: Record<string, string> = {
 		"theme": "theme-blue",
 		"mode": "system",
-		"direction": "auto",
+		// "direction": "auto",
 		"motion": "normalMotion",
 		"scroll": "colored"
 	};
@@ -16,7 +16,7 @@ function init(key:string) {
 }
 init("theme");
 init("mode");
-init("direction");
+// init("direction");
 init("motion");
 init("scroll");
 

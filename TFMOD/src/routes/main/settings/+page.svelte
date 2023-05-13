@@ -4,6 +4,10 @@
 	import { currentSettingsTab } from "$lib/js/settingsTab.js";
 	currentSettingsTab.set("main");
 	import Theme from "$lib/components/theme.svelte";
+	let translations: Record<string, string>;
+	$: translations = {
+		theme: $i18n.t("settings:theme")
+	};
 	onMount(() => {
 		for (const [, element] of document.querySelectorAll("details").entries()) {
 			element.open = true;
@@ -16,15 +20,19 @@
 	function langFr() {
 		$i18n.changeLanguage("fr");
 	}
+	function langAr() {
+		$i18n.changeLanguage("ar");
+	}
 </script>
 <details>
-	<summary><span class="themePreview">Theme</span></summary>
+	<summary><span class="themePreview">{translations.theme}</span></summary>
 	<div class="contents">
 		<Theme/>
 	</div>
 </details>
 <button on:click={lang}>En</button>
 <button on:click={langFr}>Fr</button>
+<button on:click={langAr}>Ar</button>
 <p>{$i18n.language}</p>
 <style>
 	summary {

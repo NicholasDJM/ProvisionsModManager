@@ -9,3 +9,15 @@
 				"height": 200,
 				"width": 300
 			},
+			{
+				"label": "intro",
+				"url": "/intro",
+				"title": "Welcome to Provisions Mod Manager",
+				"visible": true
+			},
+			{
+				"label": "manager",
+				"url": "/manager",
+				"title": "Mod Manager System",
+				"visible": true
+			},

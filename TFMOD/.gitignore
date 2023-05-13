@@ -32,3 +32,5 @@ dist-ssr
 
 /downloads
 /static/images/copyrighted_images
+/old
+/src/routes/test

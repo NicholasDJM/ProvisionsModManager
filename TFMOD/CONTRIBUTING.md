@@ -4,6 +4,7 @@ To contribute to this project, you must have at minimum, all of the below instal
  - "Stylelint Plus" Extension ([hex-ci.stylelint-plus](https://marketplace.visualstudio.com/items?itemName=hex-ci.stylelint-plus))
  - "Svelte" Extension ([svelte.svelte-vscode](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode))
  - "Tauri" Extension ([tauri-apps.tauri-vscode](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode))
+ - "Fluent" Extension ([macabeus.vscode-fluent](https://marketplace.visualstudio.com/items?itemName=macabeus.vscode-fluent))
  - [NodeJs](https://nodejs.org)
  - [Rust](https://rust-lang.org)
 

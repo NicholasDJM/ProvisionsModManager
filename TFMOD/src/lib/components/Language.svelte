@@ -21,18 +21,18 @@
 	onMount(() => {
 		if (LocalStorage.get("intro") === null) {
 			const delay = 3000;
-			timer = setInterval(() => {
-				switch ($i18n.language) {
-					case "en": {
-						$i18n.changeLanguage("fr");
-						break;
-					}
-					default: {
-						$i18n.changeLanguage("en");
-					}
-				}
-				welcome = $i18n.t("intro:welcome");
-			}, delay);
+			// timer = setInterval(() => {
+			// 	switch ($i18n.language) {
+			// 		case "en": {
+			// 			$i18n.changeLanguage("fr");
+			// 			break;
+			// 		}
+			// 		default: {
+			// 			$i18n.changeLanguage("en");
+			// 		}
+			// 	}
+			// 	welcome = $i18n.t("intro:welcome");
+			// }, delay);
 		}
 	});
 	const fadeTime = 500;
@@ -40,10 +40,10 @@
 		if (welcome !== oldWelcome) {
 			fade = true;
 			const delay = fadeTime;
-			//setTimeout(() => {
-				//oldWelcome = welcome;
-				//fade = false;
-			//}, delay);
+			setTimeout(() => {
+				oldWelcome = welcome;
+				fade = false;
+			}, delay);
 		}
 	}
 	onDestroy(() => {

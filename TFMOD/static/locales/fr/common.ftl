@@ -1,2 +1,6 @@
-# Do not translate. Required in every language or app won't load.
-load = done
+
+# UI
+skip-to-content = Aller au contenu
+update-notice = Mise à jour disponible
+extension-notice = Installer l'extension
+profile-selector = Profil

@@ -4,82 +4,220 @@
 <script lang="ts">
 	import { i18n } from "$lib/js/i18n.js";
 	import { title } from "$lib/js/title.js";
-	title.set($i18n.t("page-mods"));
+	$: title.set($i18n.t("main:page-mods"));
 	import { currentPage } from "$lib/js/page.js";
 	currentPage.set("mods");
+	import { backButton } from "$lib/js/subpage";
+	import Enabled from "svelte-material-icons/FileCheckOutline.svelte";
+	import Disabled from "svelte-material-icons/FileRemoveOutline.svelte";
+	import Conflicts from "svelte-material-icons/FileAlertOutline.svelte";
+	import Outdated from "svelte-material-icons/FileCancelOutline.svelte";
 	import Pills from "$lib/components/Pills.svelte";
-	import { compact } from "$lib/js/modCompact";
+	import HideNavBar from "$lib/components/HideNavBar.svelte";
+	import type {ModInfo} from "$lib/js/modInfo";
+	/* eslint-disable unicorn/prevent-abbreviations */
+	import Mod from "$lib/components/Mod.svelte";
+	import Gallery from "$lib/components/Gallery.svelte";
+	import { onMount, onDestroy } from "svelte";
 	//import { dropdown, feedback } from "$lib/navDropdown.js";
-	const options = [
+	interface Options {
+		name: string,
+		text: string,
+		/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Don't know what the type is supposed to be. */
+		icon?: any
+	}
+	const options: Array<Options> = [
 		{
 			name: "enabled",
-			text: "Enabled"
+			text: "Enabled",
+			icon: Enabled
 		},
 		{
 			name: "disabled",
-			text: "Disabled"
+			text: "Disabled",
+			icon: Disabled
 		},
 		{
 			name: "conflicts",
-			text: "Conflicts"
+			text: "Conflicts",
+			icon: Conflicts
 		},
 		{
 			name: "outdated",
-			text: "Incompatible"
+			text: "Incompatible",
+			icon: Outdated
 		}
 	];
+	let filter = {
+		all: true,
+		enabled: false,
+		disabled: false,
+		conflicts: false,
+		outdated: false
+	};
 	function handlePillEvent(event: Event) {
 		//console.log("Clicked %c\"" + event.detail.name + "\"%c with a state of %c" + event.detail.state, "color:lightgreen", "color:white", "color:skyblue");
+		filter[event.detail.name] = event.detail.state;
+		//console.log(event.detail.name, filter[event.detail.name]);
+		filter.enabled || filter.disabled || filter.conflicts || filter.outdated ? filter.all = false : filter.all = true;
+		// console.table(filter);
 	}
-	import type {ModInfo} from "$lib/js/modInfo";
-	let mods: Array<ModInfo> = [
-		{
-			name: "Hello World",
-			description: [
-				{
-					lang: "es",
-					text: "Hola"
-				},
-				{
-					lang: "en",
-					text: "Hello"
-				},
-				{
-					lang: "fr",
-					text: "Bonjour"
-				}
-			],
-			src: "/images/test.png",
-			alt: "Test",
-			position: 1,
-			md5: "123",
-			enabled: true,
-			outdated: false,
-			conflicts: 0
+	/* TODO: Handle combinations of selected pills. Right now, selected pills only show all of their type
+	// Eventually, I want the results to be combined.
+	// Ex: If enabled and conflicts are enabled, only show mods that are both enabled and have Conflicts;
+	//		It should not show any disabled mods with conflicts.
+	*/
+	let mods: Array<ModInfo> =
+		[
+			{
+				name: "Hello World",
+				description: [
+					{
+						lang: "es",
+						text: "Hola"
+					},
+					{
+						lang: "en",
+						text: "Hello89hase4ghuiauieh4 uioah89huuiopha89puihsd 89pi89p 89hjaw 89pihjouef3 89pa h8i9ja h8i9pwph8i9 h89p fh89ppawe h8i9pa ph8i9 8i9pw 8i9pou8i9 ah8i9oh89iw h8i9op aiosdjmn rg89ha97ue8ih4gau8i9eh48ri9 a4wh89 tawe 94u8htu8i9pahu8i9pw 4eu89a 9hu8iwhu8i9pat wp9ehu8io tph9u8iaew4ui9 hhuiop"
+					},
+					{
+						lang: "fr",
+						text: "Bonjour"
+					}
+				],
+				src: "/images/test.png",
+				alt: "Test",
+				position: 1,
+				md5: "123",
+				enabled: true,
+				outdated: false,
+				conflicts: 0
+			},
+			{
+				name: "Hello World",
+				src: "/images/test.png",
+				alt: "Test",
+				position: 2,
+				md5: "123",
+				enabled: false,
+				outdated: false,
+				conflicts: 30,
+				explicit: ["blood", "nudity"]
+			}
+		],
+		selectedMod = "",
+		open = false,
+		mini = false,
+		miniTimer: ReturnType<typeof setInterval>;
+	const miniTimerDelay = 100;
+	function handleClick(event: CustomEvent<{id: string}>) {
+		selectedMod = event.detail.id;
+		if (mini) {
+			open = true;
 		}
-	];
-	/* eslint-disable unicorn/prevent-abbreviations */
-	import Mod from "$lib/components/Mod.svelte";
+		console.log(open);
+	}
+	onMount(() => {
+		miniTimer = setInterval(() => {
+			/* eslint-disable-next-line no-magic-numbers -- It's pixels*/
+			mini = window.innerWidth < 1000;
+			if (open && mini) {
+				backButton.set(true);
+			} else {
+				backButton.set(false);
+			}
+			// TODO: Back button should differentiate between going back in nav history and simply changing a variable. Second store?
+		}, miniTimerDelay);
+	});
+	onDestroy(() => {
+		clearInterval(miniTimer);
+	});
+	$: open = $backButton;
 </script>
-<main class="defaultMargin">
-	<button on:click={() => compact.set(!$compact)}>{$compact ? "Compact" : "Comfortable"}</button>
-	<Pills {options} on:pill={handlePillEvent}/>
-	<div class="mods">
-		{#each mods as mod (mod.md5)}
-			<Mod info={mod} lang={$i18n.language}/>
-		{/each}
-	</div>
-</main>
+<div class="container">
+	<main class="defaultMargin" inert={open}>
+		<!-- <button on:click={() => compact.set(!$compact)}>{$compact ? "Compact" : "Comfortable"}</button> -->
+		<Pills {options} on:pill={handlePillEvent}/>
+		<div class="mods">
+			{#each mods as mod (mod.position)}
+				{#if filter.all ||
+					((filter.enabled && mod.enabled) ||
+					(filter.disabled && !mod.enabled) ||
+					(filter.conflicts && mod.conflicts) ||
+					(filter.outdated && mod.outdated))
+				}
+					<Mod info={mod} on:mod={handleClick}/>
+				{/if}
+			{/each}
+		</div>
+	</main>
+	<aside id="preview" class:previewOpen={open} inert={!open && mini}>
+		{#if open && mini}
+			<HideNavBar/>
+		{/if}
+		<Gallery>
+			<img src="/images/testLarge.png" alt="Test"/>
+			<img src="/images/testLarge.png" alt="Test"/>
+			<img src="/images/testLarge.png" alt="Test"/>
+			<img src="/images/testLarge.png" alt="Test"/>
+			<img src="/images/testLarge.png" alt="Test"/>
+			<img src="/images/testLarge.png" alt="Test"/>
+			<img src="/images/testLarge.png" alt="Test"/>
+			<img src="/images/testLarge.png" alt="Test"/>
+		</Gallery>
+		<div class="previewContent">
+			<h1>Hello</h1>
+		</div>
+	</aside>
+</div>
 <style>
 	main {
 		display: flex;
 		flex-flow: row wrap;
-		gap: 15px;
+		align-content: flex-start;
+		gap: 1rem;
+		overflow-y: auto;
 	}
 	.mods {
 		display: flex;
 		flex-flow: column wrap;
-		gap: 8px;
+		gap: var(--defaultMargin);
 		inline-size: 100%;
+	}
+	.container {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		block-size: 100%;
+	}
+	aside {
+		overflow-x: hidden;
+		inline-size: 0;
+		/* TODO: Slide in from inline-end when open, and vice-versa when closed */
+	}
+	@media (min-width: 1000px) {
+		.container {
+			grid-template-columns: 50% 50%;
+		}
+		aside {
+			border-inline-start: 1px solid rgb(127 127 127 / 0.5);
+			inline-size: auto;
+		}
+		.previewContent {
+			padding: var(--defaultMargin);
+		}
+	}
+	@media (max-width: 1000px) {
+		.container:has(aside.previewOpen) {
+			grid-template-columns: auto 100%;
+		}
+		.container:has(aside.previewOpen) main {
+			inline-size: 0;
+			padding: 0;
+		}
+		aside.previewOpen {
+			position: absolute;
+			inset-inline-start: 0;
+			inline-size: 100%;
+		}
 	}
 </style>
