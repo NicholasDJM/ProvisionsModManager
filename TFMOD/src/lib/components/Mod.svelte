@@ -10,7 +10,7 @@
 	import Down from "svelte-material-icons/ChevronDown.svelte";
 	import Top from "svelte-material-icons/ChevronDoubleUp.svelte";
 	import Bottom from "svelte-material-icons/ChevronDoubleDown.svelte";
-	import Download from "svelte-material-icons/FileDownload.svelte";
+	import Download from "svelte-material-icons/Download.svelte";
 	import { LocalStorage } from "combo-storage";
 	import { i18n } from "$lib/js/i18n";
 	import type { ModInfo } from "$lib/js/modInfo";
