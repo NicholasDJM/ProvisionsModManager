@@ -191,9 +191,10 @@
 				hasMap = true;
 			}
 		}
+		const bsp = ".bsp";
 		if (value.length > 0) {
-			if (value.slice(-4) !== ".bsp") {
-				value = value + ".bsp";
+			if (value.slice(bsp.length * -1) !== bsp) {
+				value = value + bsp;
 			}
 			if (hasMap) {
 				error("Map already is in list");
@@ -327,24 +328,20 @@
 		backdrop-filter: blur(2px);
 	}
 	.highlight:hover, .highlight:focus-within {
-		background-color: var(--accentColorAlt);
-		box-shadow: 0 0 20px 1px var(--accentColorAlt);
-		border-radius: var(--corner);
+		background-color: var(--accentColor);
+		box-shadow: 0 0 0.8rem 1px var(--accentColor);
+		/* border-radius: var(--corner); */
+		color: var(--textColorOptimal);
+		accent-color: var(--accentColorAlt);
 	}
-
-	/* @media (prefers-color-scheme:dark) {
-		.highlight:hover,.highlight:focus-within {
-			color: var(--textColor);
-		}
-	} */
 	button {
-		background-color: white;
 		border-radius: var(--corner);
 		border: 0;
-		&:hover:not(:disabled),&:focus:not(:disabled) {
+		box-shadow: 0 0 1px 1px rgb(127 127 127 / 0.5);
+		&:hover:not(:disabled),&:focus-visible:not(:disabled) {
 			background-color: var(--accentColor);
 			color: var(--textColorOptimal);
-			box-shadow: 0 0 6px 1px var(--accentColor);
+			box-shadow: 0 0 0.5rem 1px var(--accentColor);
 		}
 	}
 </style>

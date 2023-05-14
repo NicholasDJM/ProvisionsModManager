@@ -1,4 +1,6 @@
 .theme-green {
+	color-scheme: light;
+
 	--accentColor: var(--color-green-3);
 	--accentColorAlt: var(--color-chartreuse-2);
 	--backgroundColor: var(--color-gray-2);
@@ -17,6 +19,8 @@
 }
 @media (prefers-color-scheme: dark) {
 	.theme-green {
+		color-scheme: dark;
+
 		--accentColor: var(--color-green-4);
 		--accentColorAlt: var(--color-green-5);
 		--backgroundColor: var(--color-gray-6);
@@ -35,6 +39,8 @@
 	}
 }
 .theme-green.light, .theme-green.palette.light {
+	color-scheme: light;
+
 	--accentColor: var(--color-green-3);
 	--accentColorAlt: var(--color-chartreuse-2);
 	--backgroundColor: var(--color-gray-2);
@@ -52,6 +58,8 @@
 	--backgroundColorAlt: var(--color-gray-1);
 }
 .theme-green.dark, .theme-green.palette.dark {
+	color-scheme: dark;
+
 	--accentColor: var(--color-green-4);
 	--accentColorAlt: var(--color-green-5);
 	--backgroundColor: var(--color-gray-6);

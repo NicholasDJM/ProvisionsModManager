@@ -27,9 +27,8 @@
 		background-color: var(--backgroundColor);
 		transition: background-color var(--transition), color var(--transition);
 		&:hover, &:focus-visible {
-			background-color: var(--accentColor);
-			box-shadow: inset 0 0 .25rem .1rem rgb(255 255 255 / 0.5);
-			outline: none;
+			background-color: var(--accentColorAlt);
+			box-shadow: inset 0 0 .25rem .1rem var(--accentColor);
 			color: var(--textColorOptimal);
 		}
 	}

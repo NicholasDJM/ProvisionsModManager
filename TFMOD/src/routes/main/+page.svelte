@@ -13,20 +13,24 @@
 	import Conflicts from "svelte-material-icons/FileAlertOutline.svelte";
 	import Outdated from "svelte-material-icons/FileCancelOutline.svelte";
 	import Pills from "$lib/components/Pills.svelte";
+	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
+	import type { PillEvent } from "$lib/components/Pills.svelte";
 	import HideNavBar from "$lib/components/HideNavBar.svelte";
 	import type {ModInfo} from "$lib/js/modInfo";
 	/* eslint-disable unicorn/prevent-abbreviations */
 	import Mod from "$lib/components/Mod.svelte";
+	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
+	import type { ModEvent, MoveEvent } from "$lib/components/Mod.svelte";
 	import Gallery from "$lib/components/Gallery.svelte";
 	import { onMount, onDestroy } from "svelte";
 	//import { dropdown, feedback } from "$lib/navDropdown.js";
 	interface Options {
 		name: string,
 		text: string,
-		/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Don't know what the type is supposed to be. */
+		/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Don't know what the type is supposed to be. It's a Component */
 		icon?: any
 	}
-	const options: Array<Options> = [
+	const filterOptions: Array<Options> = [
 		{
 			name: "enabled",
 			text: "Enabled",
@@ -48,14 +52,14 @@
 			icon: Outdated
 		}
 	];
-	let filter = {
+	let filter: Record<string, boolean> = {
 		all: true,
 		enabled: false,
 		disabled: false,
 		conflicts: false,
 		outdated: false
 	};
-	function handlePillEvent(event: Event) {
+	function handlePillEvent(event: PillEvent) {
 		//console.log("Clicked %c\"" + event.detail.name + "\"%c with a state of %c" + event.detail.state, "color:lightgreen", "color:white", "color:skyblue");
 		filter[event.detail.name] = event.detail.state;
 		//console.log(event.detail.name, filter[event.detail.name]);
@@ -91,7 +95,9 @@
 				md5: "123",
 				enabled: true,
 				outdated: false,
-				conflicts: 0
+				conflicts: 0,
+				update: false,
+				version: "1.0.5"
 			},
 			{
 				name: "Hello World",
@@ -102,7 +108,8 @@
 				enabled: false,
 				outdated: false,
 				conflicts: 30,
-				explicit: ["blood", "nudity"]
+				explicit: ["blood", "nudity"],
+				update: true
 			}
 		],
 		selectedMod = "",
@@ -133,11 +140,12 @@
 		clearInterval(miniTimer);
 	});
 	$: open = $backButton;
+	// TODO: If mod has no thumbnail, resize text size to max
 </script>
 <div class="container">
 	<main class="defaultMargin" inert={open}>
 		<!-- <button on:click={() => compact.set(!$compact)}>{$compact ? "Compact" : "Comfortable"}</button> -->
-		<Pills {options} on:pill={handlePillEvent}/>
+		<Pills options={filterOptions} on:pill={handlePillEvent}/>
 		<div class="mods">
 			{#each mods as mod (mod.position)}
 				{#if filter.all ||

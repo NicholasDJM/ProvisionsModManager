@@ -7,16 +7,19 @@
 	import UtilityCard from "$lib/components/UtilityCard.svelte";
 	import { WebviewWindow } from "@tauri-apps/api/window";
 	import { invoke } from "@tauri-apps/api";
-	function openIDE(event) {
-		if (event.key === "Enter" || event.type === "click") {
+	function openIDE(event: KeyboardEvent | MouseEvent) {
+		if ((event instanceof KeyboardEvent && event.key === "Enter") || event instanceof MouseEvent) {
 			new WebviewWindow("ide", {
 				url: "/utils/ide/editor",
 				title: "CFG Integrated Development Environment"
 			}).setFocus();
 		}
 	}
-	function openCaption(event: any) {
-		if (event.key === "Enter" || event.type === "click") {
+	function openCaption(event: KeyboardEvent | MouseEvent) {
+		if (event instanceof KeyboardEvent && event.key === "Enter") {
+			// Do a thing.
+		}
+		if (event instanceof MouseEvent) {
 			// Do a thing.
 		}
 	}

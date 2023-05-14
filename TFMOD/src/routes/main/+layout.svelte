@@ -28,8 +28,7 @@
 	import MenuOpen from "svelte-material-icons/MenuOpen.svelte";
 	import File from "svelte-material-icons/File.svelte";
 	import FileOutline from "svelte-material-icons/FileOutline.svelte";
-	import FileDownload from "svelte-material-icons/FileDownload.svelte";
-	import FileDownloadOutline from "svelte-material-icons/FileDownloadOutline.svelte";
+	import Web from "svelte-material-icons/Web.svelte";
 	import Options from "svelte-material-icons/DotsVertical.svelte";
 	import Update from "svelte-material-icons/Download.svelte";
 	import Extension from "svelte-material-icons/PuzzlePlus.svelte";
@@ -41,11 +40,9 @@
 	import FilePlusOutline from "svelte-material-icons/FilePlusOutline.svelte";
 	import Search from "svelte-material-icons/Magnify.svelte";
 	import Clear from "svelte-material-icons/Close.svelte";
-	import tippy from "tippy.js";
-	import "tippy.js/dist/tippy.css";
 	import NavDropdown from "$lib/components/NavDropdown.svelte";
 	//https://stackoverflow.com/questions/7444451/how-to-get-the-actual-rendered-font-when-its-not-defined-in-css
-	function css(selector: string, property: string) {
+	function css(selector: string, property: string): string {
 		return window.getComputedStyle(document.querySelector(selector)).getPropertyValue(property);
 	}
 
@@ -56,7 +53,7 @@
 		// Menu speed set in app.css as --transition
 		navRailMinimum = 250, // In px
 		profileSelectorSize = "85px";
-	let menuSpeed:number,
+	let menuSpeed: number,
 		reducedMotionSpeed: number,
 		menuOpen = false,
 		menuOffset = "0px",
@@ -107,18 +104,16 @@
 	//console.log("Text Width: " + displayTextWidth("This is demo text!", "italic 19pt verdana")); //
 
 	// TODO: Remove jquery.
-	function getLongestString(selector: string): HTMLElement {
-		let selectedElement: HTMLElement;
-		jq<HTMLElement>(selector).each((index, element) => {
-			const text = jq<HTMLElement>(element).text();
-			if (text.length > jq<HTMLElement>(selectedElement).text().length) {
-				selectedElement = element;
+	function getLongestString(selector: string): string {
+		let text = "";
+		if (document.querySelectorAll(selector).length > 0) {
+			for (const [, element] of document.querySelectorAll(selector).entries()) {
+				if (element.textContent && element.textContent.length > text.length) text = element.textContent;
 			}
-		});
-		return selectedElement;
+		}
+		return text;
 	}
-
-	jq(() => {
+	onMount(() => {
 		const navrailComputedPixels: number = css("#navrail", "inline-size").search("px"),
 			navrailComputedPaddingPixels: number = css("#navrail", "padding-inline").search("px"),
 			iconComputedPixels: number = navButtonIconSize.search("px");
@@ -128,12 +123,11 @@
 		iconComputed = navButtonIconSize.slice(0, iconComputedPixels);
 		// invoke("close_splashscreen");
 	});
-
 	function toggleMenu() {
 		menuOpen = !menuOpen;
 		if (menuOpen) {
 			try {
-				let data = (Number(iconComputed) + Number(displayTextWidth(jq(getLongestString(".link")).text(), textComputed + " Roboto")));
+				let data = (Number(iconComputed) + Number(displayTextWidth(getLongestString(".link"), textComputed + " Roboto")));
 				if (data < navRailMinimum) data = navRailMinimum;
 				menuOffset = data + "px";
 			} catch {
@@ -239,7 +233,6 @@
 			skip: $i18n.t("common:skip-to-content")
 		};
 	}
-
 	// TODO: Fix search placeholder text colour.
 	// TODO: break out search to component, and implent svelte-typehead and search-text-highlight
 </script>
@@ -247,7 +240,7 @@
 	{translations.skip}
 </a>
 <div id="layout" style="--menuOffset: {menuOffset}; --menuVerticalOffset: {menuVerticalOffset}; --navRailSize: {navButtonSize}; --navRailPadding: {navRailPadding}; --buttonSize: {navButtonSize}; --iconSize: {navButtonIconSize}; --navRailComputed:-{navrailComputed}px">
-	<div id="navbar">
+	<nav id="navbar">
 		{#if !$backButton}
 			<button aria-label="Menu Toggle" class="btn menuRTL" on:click={toggleMenu}>
 				{#if menuOpen}
@@ -277,8 +270,8 @@
 			<button id="navDropdownButton" aria-label="Options Dropdown" class="btn" on:click={() => navDropdownVisible = !navDropdownVisible}><Options size={buttonSize}/></button>
 			<NavDropdown {list} parent={"#navDropdownButton"} bind:visible={navDropdownVisible} dividers={[0]}/>
 		</div>
-	</div>
-	<div id="navrail" class:open="{menuOpen}" inert={navVisible}>
+	</nav>
+	<nav id="navrail" class:open="{menuOpen}" inert={navVisible}>
 		<!-- FIXME: setting display:none is causing some layout shift problems, rebuild with a static element that is resized, then add selector as child, that then can be hidden -->
 		<!-- 	We need to use display:none as select seems to be able to interfere with selection of other elements, even if height is 0 -->
 		<div class="profileSelectorSpacer">
@@ -318,11 +311,8 @@
 				highlight={$currentPage}
 				on:click={closeMenu}
 			>
-				<svelte:fragment slot="highlight">
-						<FileDownloadOutline size={navButtonIconSize}/>
-				</svelte:fragment>
 				<svelte:fragment>
-						<FileDownload size={navButtonIconSize}/>
+						<Web size={navButtonIconSize}/>
 				</svelte:fragment>
 			</NavButton>
 			<NavButton
@@ -420,7 +410,7 @@
 				<Cog size={navButtonIconSize}/>
 			</NavButton>
 		</div>
-	</div>
+	</nav>
 	<span id="corner" class:open="{menuOpen}"></span>
 	{#if menuOpen}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -466,7 +456,7 @@
 		&:hover,&:focus-visible {
 			background-color: white;
 			color: black;
-			box-shadow: 0 0 20px 1px white;
+			box-shadow: 0 0 0.66rem 1px white;
 		}
 	}
 	input[type="search"] {

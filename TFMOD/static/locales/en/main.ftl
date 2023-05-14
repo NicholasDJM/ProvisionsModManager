@@ -10,6 +10,8 @@ pill-outdated = Incompatible
 mod-file = Location: {$path}
 mod-conflicts = Conflicts: {$count}
 mod-no-description = No description available.
+mod-update-available = Update
+mod-version = Version: {$version}
 
 explicit-warning = This mod may contain sensitive material:
 explicit-button = I understand

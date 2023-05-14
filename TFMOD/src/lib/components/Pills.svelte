@@ -1,12 +1,15 @@
+<script lang="ts" context="module">
+	export type PillEvent = CustomEvent<{name: string, state: boolean}>;
+</script>
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, SvelteComponent } from "svelte";
 	interface Option {
 		name: string,
 		text: string,
-		icon?: any
+		icon?: SvelteComponent
 	}
 	export let options: Array<Option>;
-	const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher<{pill: {name: string, state: boolean}}>();
 	function fireEvent(event: Event) {
 		// Start borrowed code
 		/* 	https://stackoverflow.com/questions/57700163/what-typescript-type-is-a-change-event-in-angular
@@ -14,11 +17,13 @@
 		*/
 		const input = event.target as HTMLInputElement;
 		// End borrowed code.
-		dispatch("pill", {name: input.dataset.pill, state: input.checked});
+		if (input.dataset.pill && input.checked) {
+			dispatch("pill", {name: input.dataset.pill, state: input.checked});
+		}
 	}
 	function reset() {
 		for (const [, element] of document.querySelectorAll<HTMLInputElement>("[data-pill]").entries()) {
-			if (element.checked) dispatch("pill", {name: element.dataset.pill, state: false});
+			if (element.checked && element.dataset.pill) dispatch("pill", {name: element.dataset.pill, state: false});
 			element.checked = false;
 		}
 	}

@@ -1,4 +1,5 @@
 import fs from "node:fs";
+// TODO: Create Optimal text colours for Alt Accent and Alt Background
 // Theme generator assumes access to reasonableColors
 /**
  * Generates text for a CSS theme file.
@@ -36,6 +37,8 @@ function generate(
 	backgroundAlt,
 	backgroundAltDark) {
 	return `.theme-${theme} {
+	color-scheme: light;
+
 	--accentColor: var(--color-${accent});
 	--accentColorAlt: var(--color-${accentAlt});
 	--backgroundColor: var(--color-${background});
@@ -54,6 +57,8 @@ function generate(
 }
 @media (prefers-color-scheme: dark) {
 	.theme-${theme} {
+		color-scheme: dark;
+
 		--accentColor: var(--color-${accentDark});
 		--accentColorAlt: var(--color-${accentAltDark});
 		--backgroundColor: var(--color-${backgroundDark});
@@ -72,6 +77,8 @@ function generate(
 	}
 }
 .theme-${theme}.light, .theme-${theme}.palette.light {
+	color-scheme: light;
+
 	--accentColor: var(--color-${accent});
 	--accentColorAlt: var(--color-${accentAlt});
 	--backgroundColor: var(--color-${background});
@@ -89,6 +96,8 @@ function generate(
 	--backgroundColorAlt: var(--color-${backgroundAlt});
 }
 .theme-${theme}.dark, .theme-${theme}.palette.dark {
+	color-scheme: dark;
+
 	--accentColor: var(--color-${accentDark});
 	--accentColorAlt: var(--color-${accentAltDark});
 	--backgroundColor: var(--color-${backgroundDark});

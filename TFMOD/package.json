@@ -321,7 +321,7 @@
       "unicorn/prefer-module": "off",
       "unicorn/numeric-separators-style": "off",
       "unicorn/prevent-abbreviations": [
-        "error",
+        "warn",
         {
           "checkFilenames": false
         }

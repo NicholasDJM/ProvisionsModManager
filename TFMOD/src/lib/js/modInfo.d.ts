@@ -1,3 +1,4 @@
+// TODO: Rewrite to loosely match metadata.d.ts
 // eslint-disable-next-line unicorn/prevent-abbreviations -- Makes sense in this context. Mod = Modification.
 export interface ModInfo {
 	name: string,
@@ -19,5 +20,7 @@ export interface ModInfo {
 	outdated: boolean,
 	position: unique number,
 	md5: string,
-	explicit?: Array<"blood" | "nudity" | "profanity">
+	explicit?: Array<"blood" | "nudity" | "profanity">,
+	update: boolean,
+	version?: `${number}.${number}.${number}`
 }

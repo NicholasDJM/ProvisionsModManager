@@ -1,4 +1,6 @@
 .theme-red {
+	color-scheme: light;
+
 	--accentColor: var(--color-red-3);
 	--accentColorAlt: var(--color-raspberry-2);
 	--backgroundColor: var(--color-gray-2);
@@ -17,6 +19,8 @@
 }
 @media (prefers-color-scheme: dark) {
 	.theme-red {
+		color-scheme: dark;
+
 		--accentColor: var(--color-red-5);
 		--accentColorAlt: var(--color-red-4);
 		--backgroundColor: var(--color-gray-6);
@@ -35,6 +39,8 @@
 	}
 }
 .theme-red.light, .theme-red.palette.light {
+	color-scheme: light;
+
 	--accentColor: var(--color-red-3);
 	--accentColorAlt: var(--color-raspberry-2);
 	--backgroundColor: var(--color-gray-2);
@@ -52,6 +58,8 @@
 	--backgroundColorAlt: var(--color-gray-1);
 }
 .theme-red.dark, .theme-red.palette.dark {
+	color-scheme: dark;
+
 	--accentColor: var(--color-red-5);
 	--accentColorAlt: var(--color-red-4);
 	--backgroundColor: var(--color-gray-6);

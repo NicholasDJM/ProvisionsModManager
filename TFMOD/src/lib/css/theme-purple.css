@@ -1,4 +1,6 @@
 .theme-purple {
+	color-scheme: light;
+
 	--accentColor: var(--color-purple-3);
 	--accentColorAlt: var(--color-violet-2);
 	--backgroundColor: var(--color-gray-2);
@@ -17,6 +19,8 @@
 }
 @media (prefers-color-scheme: dark) {
 	.theme-purple {
+		color-scheme: dark;
+
 		--accentColor: var(--color-purple-4);
 		--accentColorAlt: var(--color-purple-5);
 		--backgroundColor: var(--color-gray-6);
@@ -35,6 +39,8 @@
 	}
 }
 .theme-purple.light, .theme-purple.palette.light {
+	color-scheme: light;
+
 	--accentColor: var(--color-purple-3);
 	--accentColorAlt: var(--color-violet-2);
 	--backgroundColor: var(--color-gray-2);
@@ -52,6 +58,8 @@
 	--backgroundColorAlt: var(--color-gray-1);
 }
 .theme-purple.dark, .theme-purple.palette.dark {
+	color-scheme: dark;
+
 	--accentColor: var(--color-purple-4);
 	--accentColorAlt: var(--color-purple-5);
 	--backgroundColor: var(--color-gray-6);
