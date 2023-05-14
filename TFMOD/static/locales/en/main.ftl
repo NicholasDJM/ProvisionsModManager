@@ -7,6 +7,7 @@ pill-conflicts = Conflicts
 pill-outdated = Incompatible
 
 ## Mod Info
+mod-author = by {$author}
 mod-file = Location: {$path}
 mod-conflicts = Conflicts: {$count}
 mod-no-description = No description available.

@@ -1,7 +1,12 @@
 <script lang="ts">
+	import { appWindow } from "@tauri-apps/api/window";
 	import { onMount } from "svelte";
 	import Left from "svelte-material-icons/ChevronLeft.svelte";
 	import Right from "svelte-material-icons/ChevronRight.svelte";
+	import Fullscreen from "svelte-material-icons/Fullscreen.svelte";
+	import FullscreenExit from "svelte-material-icons/FullscreenExit.svelte";
+	import { Swipe } from "svelte-swipe";
+	export let fullscreen = false;
 	interface Images {
 		src: string,
 		alt: string,
@@ -32,20 +37,48 @@
 			event.preventDefault();
 			carousel.scrollLeft += event.deltaY;
 		});
+		addEventListener("fullscreenchange", () => {
+			if (document.fullscreenElement === null) {
+				appWindow.setFullscreen(false);
+				document.exitFullscreen();
+				fullscreen = false;
+			}
+		});
 	});
+	function toggleFullscreen() {
+		if (fullscreen) {
+			appWindow.setFullscreen(false);
+			document.exitFullscreen();
+			fullscreen = false;
+		} else {
+			appWindow.setFullscreen(true);
+			document.querySelector(".galleryContainer")?.requestFullscreen({navigationUI: "hide"}).then(result => {
+				fullscreen = true;
+			}).catch(error => {
+				console.error(error);
+			});
+		}
+	}
 	/* TODO: Redo this. Don't use <slot/>. Require array of images, model files, or HUD files
 		Finish creating carousel.
 		Make carousel buttons actually buttons. (Can't focus via tab currently)
 	*/
 	const size = "2rem";
 </script>
-<div class="container">
-	<main class="gallery">
-		<button><Left {size}/></button>
+<div class="galleryContainer">
+	<main class="gallery" class:full={fullscreen}>
+		<button class="button"><Left {size}/></button>
 		<div class="content">
 			<slot/>
 		</div>
-		<button><Right {size}/></button>
+		<button class="button"><Right {size}/></button>
+		<button id="fullscreenToggle" on:click={toggleFullscreen}>
+			{#if fullscreen}
+				<FullscreenExit {size}/>
+			{:else}
+				<Fullscreen {size}/>
+			{/if}
+		</button>
 	</main>
 	<aside class="carousel">
 		{#each images as image}
@@ -55,7 +88,7 @@
 	</aside>
 </div>
 <style>
-	.container {
+	.galleryContainer {
 		display: flex;
 		flex-flow: column nowrap;
 	}
@@ -64,6 +97,16 @@
 		background-color: black;
 		display: flex;
 		justify-content: center;
+	}
+	.gallery.full .content {
+		inline-size: 100%;
+	}
+	.gallery.full {
+		block-size: 100%;
+	}
+	:global(.gallery.full .content > *) {
+		margin-inline: auto;
+		block-size: 100%;
 	}
 	.gallery > button {
 		--radius: 50rem;
@@ -78,6 +121,9 @@
 		border-radius: 100%;
 		opacity: 0;
 		cursor: pointer;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		&:hover, &:focus-visible {
 			background-color: var(--accentColor);
 			color: var(--textColorOptimal);
@@ -85,13 +131,21 @@
 	}
 	.gallery:hover > button, .gallery:focus-within > button {
 		opacity: 1;
-		box-shadow: inset 0 0 .25rem .1rem rgb(255 255 255 / 0.5);
+		/* box-shadow: inset 0 0 .25rem .1rem rgb(255 255 255 / 0.5); */
 	}
 	.gallery > button:nth-of-type(1) {
 		inset-inline-start: 1rem;
 	}
-	.gallery > button:nth-last-of-type(1) {
+	.gallery > button:nth-last-of-type(2) {
 		inset-inline-end: 1rem;
+	}
+	#fullscreenToggle {
+		inset-inline-end: 1rem;
+		inset-block-start: unset;
+		inset-block-end: 1rem;
+		block-size: 2.5rem;
+		inline-size: 2.5rem;
+		transform: translateY(0%);
 	}
 	.carousel {
 		--size: 6rem;

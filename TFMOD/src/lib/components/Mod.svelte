@@ -50,6 +50,7 @@
 		translations: Record<string, string>;
 	$: {
 		translations = {
+			author: $i18n.t("main:mod-author", {"name": info.name, "author": info.author}),
 			blood: $i18n.t("main:explicit-tag-blood"),
 			nudity: $i18n.t("main:explicit-tag-nudity"),
 			profanity: $i18n.t("main:explicit-tag-profanity"),
@@ -81,8 +82,13 @@
 		{/if}
 		<a href="#preview" class="content" on:click={handleClick} inert={censor}>
 			<div class="text">
-				<h1>{info.name}</h1>
-				<div class="description">
+				<h1>
+					{info.name}
+					{#if info.author}
+						<span class="author">{translations.author}</span>
+					{/if}
+				</h1>
+				<p class="description">
 					{#if info.description}
 						{#each info.description as text, index}
 							{#if info.description[index].lang === lang}
@@ -92,7 +98,7 @@
 					{:else}
 						{translations.description}
 					{/if}
-				</div>
+				</p>
 			</div>
 			<div class="blur">
 				<picture class:grayscale={!info.enabled}>
@@ -150,13 +156,18 @@
 		overflow: hidden;
 		background-color: var(--backgroundColorAlt);
 		padding-inline-start: var(--defaultMargin);
-		max-block-size: 140px;
+		max-block-size: 128px;
 	}
 	h1 {
-		margin-block-start: var(--defaultMargin);
+		margin-block-start: 0;
 		margin-block-end: 0;
 		display: block;
 		inline-size: 100%;
+	}
+	h1 .author {
+		font-size: 16pt;
+		font-weight: 400;
+		opacity: 0.9;
 	}
 	img {
 		--mask: linear-gradient(270deg, rgb(0 0 0 / 1) 80%, rgb(0 0 0 / 0) 99%, rgb(0 0 0 / 0) 100%);
@@ -184,18 +195,18 @@
 		/* opacity: 0.6; */
 	}
 	.text {
+		margin-block: var(--defaultMargin);
 		display: grid;
 		grid-template-rows: auto 1fr;
 		inline-size: 100%;
+		overflow: hidden;
 	}
 	.description {
-		inline-size: 100%;
-		display: block;
-		overflow-wrap: break-word;
+		/* overflow-wrap: break-word; */
 		text-overflow: ellipsis;
+		/* word-break: break-all; */
 		overflow: hidden;
-		word-break: break-all;
-		/* block-size: 60px; */
+		margin-block: 0;
 	}
 	.controls {
 		display: grid;

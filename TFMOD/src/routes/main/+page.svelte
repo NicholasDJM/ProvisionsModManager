@@ -24,6 +24,7 @@
 	import Gallery from "$lib/components/Gallery.svelte";
 	import { onMount, onDestroy } from "svelte";
 	//import { dropdown, feedback } from "$lib/navDropdown.js";
+	let fullscreen = false;
 	interface Options {
 		name: string,
 		text: string,
@@ -75,6 +76,7 @@
 		[
 			{
 				name: "Hello World",
+				author: "Nicholas Miller",
 				description: [
 					{
 						lang: "es",
@@ -163,7 +165,7 @@
 		{#if open && mini}
 			<HideNavBar/>
 		{/if}
-		<Gallery>
+		<Gallery bind:fullscreen={fullscreen}>
 			<img src="/images/testLarge.png" alt="Test"/>
 			<img src="/images/testLarge.png" alt="Test"/>
 			<img src="/images/testLarge.png" alt="Test"/>
@@ -173,9 +175,11 @@
 			<img src="/images/testLarge.png" alt="Test"/>
 			<img src="/images/testLarge.png" alt="Test"/>
 		</Gallery>
-		<div class="previewContent">
-			<h1>Hello</h1>
-		</div>
+		{#if !fullscreen}
+			<div class="previewContent">
+				<h1>Hello</h1>
+			</div>
+		{/if}
 	</aside>
 </div>
 <style>
