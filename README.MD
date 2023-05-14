@@ -12,6 +12,7 @@ Mod manager for Team Fortress 2.
 - Handles downloading, updating and installation of VPK files. Provides one-click installation on supported websites like GameBanana.
 - Includes utilities for managing other aspects of the game, like editing CFG scripts, managing which maps are eligible for Pyroland, and more.
 - Enables easy creation of mods through the Mod Creator.
+
 Will be available for Windows, Linux, and MacOS.
 
 # Bug Reporting
