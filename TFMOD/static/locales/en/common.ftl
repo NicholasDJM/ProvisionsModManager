@@ -1,3 +1,6 @@
+-app-name = Provisions Mod Manager
+app-page = {-app-name} - {$page}
+
 ## Games
 game-tf2 = Team Fortress 2
 game-tf2c = Team Fortress 2 Classic
@@ -9,7 +12,7 @@ skip-to-content = Skip to Content
 update-notice = Update Available
 extension-notice = Install Web Extension
 profile-selector = Profile
-
+search = Search
 
 ## Errors
 e404 = Page not found

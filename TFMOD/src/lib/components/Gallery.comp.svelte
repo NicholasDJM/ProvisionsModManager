@@ -68,8 +68,8 @@
 		};
 </script>
 <div class="galleryContainer">
-	<main class="gallery" class:full={fullscreen}>
-		<button class="button"><Left {size}/></button>
+	<div class="gallery" class:full={fullscreen}>
+		<button aria-label="Previous Image" class="button"><Left {size}/></button>
 		<div class="content">
 			<Swipe bind:active_item={selected} {...config}>
 				{#each images as item}
@@ -79,15 +79,15 @@
 				{/each}
 			</Swipe>
 		</div>
-		<button class="button"><Right {size}/></button>
-		<button id="fullscreenToggle" on:click={toggleFullscreen}>
+		<button aria-label="Next Image" class="button"><Right {size}/></button>
+		<button aria-label="Toggle Fullscreen" id="fullscreenToggle" on:click={toggleFullscreen}>
 			{#if fullscreen}
 				<FullscreenExit {size}/>
 			{:else}
 				<Fullscreen {size}/>
 			{/if}
 		</button>
-	</main>
+	</div>
 	<aside class="carousel">
 		{#each images as image}
 			<img src={image.src} alt={image.alt} class="carouselButton" class:selected={image.selected} class:grayscale={!image.selected} loading="lazy"/>

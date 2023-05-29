@@ -5,6 +5,6 @@
 	import { currentPage } from "$lib/js/page.js";
 	currentPage.set("wizard");
 </script>
-<main class="defaultMargin">
+<div class="defaultMargin">
 	<p>Hello World</p>
-</main>
+</div>

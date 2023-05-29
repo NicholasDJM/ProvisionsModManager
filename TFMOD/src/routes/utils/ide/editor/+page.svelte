@@ -64,13 +64,13 @@
 	<aside style="background:#272822">
 		<p>text</p>
 	</aside>
-	<main style="height:100%">
+	<div style="height:100%">
 		<div class="editor">
 			<AceEditor lang="source-cfg" theme="monokai" value={text} on:input={object => {
 				text = object.details; console.log(object.details);
 			}} width="100%" height="100%"/>
 		</div>
-	</main>
+	</div>
 </div>
 <details>
 	<summary>Key Bind Finder</summary>

@@ -5,7 +5,7 @@
 	import { currentPage } from "$lib/js/page.js";
 	currentPage.set("settings");
 	import { currentSettingsTab } from "$lib/js/settingsTab.js";
-	import TabBar from "$lib/components/TabBar.svelte";
+	import TabBar from "$lib/components/TabBar.comp.svelte";
 	import { dev } from "$app/environment";
 	interface Tab {
 		text: string,
@@ -29,9 +29,9 @@
 
 </script>
 <TabBar currentTab={$currentSettingsTab} {tabs}/>
-<main class="defaultMargin settings">
+<div class="defaultMargin settings">
 	<slot/>
-</main>
+</div>
 <style lang="postcss">
 	:global(.settings label) {
 		display:grid; grid-template-columns:1fr auto;

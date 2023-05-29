@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import HideNavBar from "$lib/components/HideNavBar.svelte";
+	import HideNavBar from "$lib/components/HideNavBar.comp.svelte";
 	import { title } from "$lib/js/title.js";
 	import { i18n } from "$lib/js/i18n";
 	$: title.set($i18n.t("pyroland:page-pyroland"));
@@ -226,7 +226,7 @@
 	//FIXME: Replace table with display grid. Tables are weird. they follow none of any modern CSS rules.
 	//TODO: Update dialog to suggest all available maps in a dropdown or search bar?
 </script>
-<main>
+<div class="main">
 	<h2>Analyser</h2>
 		<p>Not implemented...</p>
 	<h2>Pyroland Maps</h2>
@@ -257,7 +257,8 @@
 			{/each}
 		</tbody>
 	</table>
-</main>
+	</table>
+</div>
 {#if showOverlay}
 	<div class="overlay"></div>
 {/if}
@@ -280,7 +281,7 @@
 	:root {
 		--corner: 3px;
 	}
-	main {
+	.main {
 		margin-inline: var(--defaultMargin);
 		margin-block-end: var(--defaultMargin);
 		margin-block-start: var(--defaultMargin);

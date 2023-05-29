@@ -19,3 +19,13 @@ explicit-button = I understand
 explicit-tag-blood = Blood
 explicit-tag-nudity = Nudity
 explicit-tag-profanity = Profanity
+
+position = Position
+position-move-up = Move up one
+position-move-down = Move down one
+position-move-top = Move to top
+position-move-bottom = Move to bottom
+
+switch-enabled = Enabled
+switch-disabled = Disabled
+switch-toggle = Toggle mod active status

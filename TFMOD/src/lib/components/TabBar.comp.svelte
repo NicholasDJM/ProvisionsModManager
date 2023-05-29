@@ -36,7 +36,6 @@
 	.tabBar {
 		inline-size: 100%;
 		display: flex;
-		box-sizing: border-box;
 		flex-flow: row wrap;
 		position: relative;
 	}
@@ -45,7 +44,6 @@
 		text-align: center;
 		display: block;
 		position: relative;
-		box-sizing: border-box;
 		padding-inline: 5px;
 		border-block-end: var(--highlightSize) solid rgb(127 127 127 / 0.25);
 		color: var(--textColor);

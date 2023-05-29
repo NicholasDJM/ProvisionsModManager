@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { dev } from "$app/environment";
-	import ScreenSize from "$lib/components/Screen.svelte";
+	import ScreenSize from "$lib/components/Screen.comp.svelte";
 	import { getCurrent, PhysicalSize } from "@tauri-apps/api/window";
 	import { onMount, onDestroy } from "svelte";
 	import { i18n } from "$lib/js/i18n";

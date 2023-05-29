@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" context="module">
 	import "normalize.css";
 	import "@fontsource/roboto";
 	import "reasonable-colors";
@@ -10,14 +10,10 @@
 	import { currentPage } from "$lib/js/page.js";
 	import { updateAvailable } from "$lib/js/update.js";
 	import { checkUpdate } from "@tauri-apps/api/updater";
-	import { onMount, onDestroy, setContext } from "svelte";
+	import { onMount, onDestroy } from "svelte";
 	import { backButton, backUrl } from "$lib/js/subpage.js";
 	import { goto, afterNavigate} from "$app/navigation";
-	import { blur, fade } from "svelte/transition";
-	import { invoke } from "@tauri-apps/api/tauri";
-	// TODO: Switch from "combo-storage" to vanilla JS
-	// @ts-expect-error Can't do anything about missing types.
-	import { LocalStorage } from "combo-storage";
+	import { blur } from "svelte/transition";
 	import jq from "jquery";
 	// TODO: Remove all uses of jQuery from entire project.
 	import Cog from "svelte-material-icons/Cog.svelte";
@@ -31,7 +27,7 @@
 	import Options from "svelte-material-icons/DotsVertical.svelte";
 	import Update from "svelte-material-icons/Download.svelte";
 	import Extension from "svelte-material-icons/PuzzlePlus.svelte";
-	import NavButton from "$lib/components/navButton.svelte";
+	import NavButton from "$lib/components/navButton.comp.svelte";
 	import Back from "svelte-material-icons/ArrowLeft.svelte";
 	import Lightbulb from "svelte-material-icons/Lightbulb.svelte";
 	import LightbulbOutline from "svelte-material-icons/LightbulbOutline.svelte";
@@ -39,7 +35,9 @@
 	import FilePlusOutline from "svelte-material-icons/FilePlusOutline.svelte";
 	import Search from "svelte-material-icons/Magnify.svelte";
 	import Clear from "svelte-material-icons/Close.svelte";
-	import NavDropdown from "$lib/components/NavDropdown.svelte";
+	import NavDropdown from "$lib/components/NavDropdown.comp.svelte";
+</script>
+<script lang="ts">
 
 	//https://stackoverflow.com/questions/7444451/how-to-get-the-actual-rendered-font-when-its-not-defined-in-css
 	function css(selector: string, property: string): string {
@@ -138,7 +136,6 @@
 		textComputed = css(".link", "font-size"),
 		iconComputed = navButtonIconSize.slice(0, iconComputedPixels);
 		// invoke("close_splashscreen");
-		//setContext("buttonSize", navButtonSize);
 	});
 	function toggleMenu() {
 		menuOpen = !menuOpen;
@@ -180,11 +177,11 @@
 	let navVisible = true;
 	$: {
 		//TODO: replace jquery with onMount;
-		// jq(() => {
-			/* BUG: Cannot remove this jquery statement, breaks animation in navrail. Maybe we need onMount?
+		jq(() => {
+			/* BUG: Cannot remove this jquery statement, breaks animation in navrail.
 			*/
 			menuVerticalOffset = menuOpen ? profileSelectorSize : "0"; // Fires twice?
-		// });
+		});
 	}
 	navVisible = $backButton;
 	let buttonIds = 1;
@@ -200,9 +197,10 @@
 		console.log(url);
 		if (url) {
 			previousPage = url;
-			LocalStorage.set("previousPage", from?.url?.pathname);
-		} else if (LocalStorage.get("previousPage")) {
-			previousPage = LocalStorage.get("previousPage");
+			localStorage.setItem("previousPage", from?.url?.pathname);
+		} else if (localStorage.getItem("previousPage")) {
+			// @ts-expect-error PreviousPage won't ever be set as null due to above if statement.
+			previousPage = localStorage.getItem("previousPage");
 		} else {
 			previousPage = "/main";
 		}
@@ -251,17 +249,18 @@
 			tf2: $i18n.t("game-tf2"),
 			tf2c: $i18n.t("game-tf2c"),
 			of: $i18n.t("game-of"),
-			pf2: $i18n.t("game-pf2")
+			pf2: $i18n.t("game-pf2"),
+			search: $i18n.t("search")
 		};
 	}
-	// TODO: Fix search placeholder text colour.
-	// TODO: break out search to component, and implent svelte-typehead and search-text-highlight
+	/* TODO: Fix search placeholder text colour.
+	// TODO: break out search to component, and implent svelte-typehead and search-text-highlight */
 </script>
 <a href="#main" class="skip">
 	{translations.skip}
 </a>
 <div id="layout" style="--menuOffset: {menuOffset}; --menuVerticalOffset: {menuVerticalOffset}; --navRailSize: {navButtonSize}; --navRailPadding: {navRailPadding}; --buttonSize: {navButtonSize}; --iconSize: {navButtonIconSize}; --navRailComputed:-{navrailComputed}px">
-	<nav id="navbar">
+	<header id="navbar">
 		{#if !$backButton}
 			<button aria-label="Menu Toggle" class="btn menuRTL" on:click={toggleMenu}>
 				{#if menuOpen}
@@ -276,22 +275,29 @@
 			</button>
 		{/if}
 		{#if search}
-			<input type="search" bind:value={searchValue} class:noBump={$backButton} placeholder="Search">
+			<search class="search" class:noBump={$backButton}>
+				<form name="app-search" role="search">
+					<label aria-label={translations.search}>
+						<!-- <span>{translations.search}</span> -->
+						<input type="search" bind:value={searchValue} placeholder={translations.search}>
+					</label>
+				</form>
+			</search>
 		{:else}
 			<h1 class:noBump={$backButton}>{$title}</h1>
 		{/if}
 		<div style="display:grid; gap:0.5rem; grid-template-columns:auto auto;">
 			{#if search}
-				<button class="btn" on:click={() => {
+				<button aria-label="Hide Searchbox" class="btn" on:click={() => {
 					searchValue = ""; search = false;
 				}} on:keydown={clearSearch}><Clear size={buttonSize}/></button>
 			{:else}
-				<button class="btn" on:click={() => search = true}><Search size={buttonSize}/></button>
+				<button aria-label="Show Searchbox" class="btn" on:click={() => search = true}><Search size={buttonSize}/></button>
 			{/if}
 			<button id="navDropdownButton" aria-label="Options Dropdown" class="btn" on:click={() => navDropdownVisible = !navDropdownVisible}><Options size={buttonSize}/></button>
 			<NavDropdown {list} parent={"#navDropdownButton"} bind:visible={navDropdownVisible} dividers={[0]}/>
 		</div>
-	</nav>
+	</header>
 	<nav id="navrail" class:open="{menuOpen}" inert={navVisible}>
 		<!-- FIXME: setting display:none is causing some layout shift problems, rebuild with a static element that is resized, then add selector as child, that then can be hidden -->
 		<!-- 	We need to use display:none as select seems to be able to interfere with selection of other elements, even if height is 0 -->
@@ -343,20 +349,20 @@
 					icon: FilePlus,
 					highlight: FilePlusOutline
 				}
-			] as btn}
-				{#if btn.highlight}
-					<NavButton size={navButtonSize} href={btn.href} dataPage={btn.page} text={translations[btn.text]} id={getButtonId()} on:click={closeMenu} {showText} highlight={$currentPage}>
+			] as button}
+				{#if button.highlight}
+					<NavButton size={navButtonSize} href={button.href} dataPage={button.page} text={translations[button.text]} id={getButtonId()} on:click={closeMenu} {showText} highlight={$currentPage}>
 						<svelte:fragment slot="highlight">
-							<svelte:component this={btn.highlight} size={navButtonIconSize}></svelte:component>
+							<svelte:component this={button.highlight} size={navButtonIconSize}></svelte:component>
 						</svelte:fragment>
 						<svelte:fragment>
-							<svelte:component this={btn.icon} size={navButtonIconSize}></svelte:component>
+							<svelte:component this={button.icon} size={navButtonIconSize}></svelte:component>
 						</svelte:fragment>
 					</NavButton>
 				{:else}
-					<NavButton size={navButtonSize} href={btn.href} dataPage={btn.page} text={translations[btn.text]} id={getButtonId()} on:click={closeMenu} {showText} highlight={$currentPage}>
+					<NavButton size={navButtonSize} href={button.href} dataPage={button.page} text={translations[button.text]} id={getButtonId()} on:click={closeMenu} {showText} highlight={$currentPage}>
 						<svelte:fragment>
-							<svelte:component this={btn.icon} size={navButtonIconSize}></svelte:component>
+							<svelte:component this={button.icon} size={navButtonIconSize}></svelte:component>
 						</svelte:fragment>
 					</NavButton>
 				{/if}
@@ -437,30 +443,49 @@
 		syntax: "<time>";
 		inherits: true;
 	}
-	@property --navBarSize {
+	@property --navRailSize {
 		syntax: "<length>";
-		initial-value: 60px;
 		inherits: true;
 	}
-	@property --cornerSize {
+	@property --navRailPadding {
 		syntax: "<length>";
-		initial-value: 20px;
 		inherits: true;
 	}
+	@property --menuOffset {
+		syntax: "<length>";
+		inherits: true;
+	}
+	@property --menuVerticalOffset {
+		syntax: "<length>";
+		inherits: true;
+	}
+	@property --navRailComputed {
+		syntax: "<position>";
+		inherits: true;
+	}
+	$navBarSize: 60px;
+	$cornerSize: 20px;
+	$cornerMask: url("data:image/webp;base64,UklGRlwBAABXRUJQVlA4WAoAAAAYAAAAEwAAEwAAVlA4TGAAAAAvE8AEEFDQtg1j/rh3AiGCTWxbjS5h69jhACW0uAAHGEALUvBBi4DNYQL8d68q86yRPGkSg/Ggiwasm2LFcXIJOA82Dj8Xh0BAoCDQrYWIQDMUEkIvU6go5YRP2MSYkAlFWElG1gAAAElJKgAIAAAABgASAQMAAQAAAAEAAAAaAQUAAQAAAFYAAAAbAQUAAQAAAF4AAAAoAQMAAQAAAAIAAAAxAQIAEAAAAGYAAABphwQAAQAAAHYAAAAAAAAA8nYBAOgDAADydgEA6AMAAHBhaW50Lm5ldCA1LjAuMwAFAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAKgBAABAAAAFAAAAAOgBAABAAAAFAAAAAWgBAABAAAAuAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAAA=");
+	/* stylelint-disable plugin/non-zero-length-expect-unit -- Z-index values are unitless. */
+	$skipIndex: 100;
+	$navbarIndex: 90;
+	$navrailIndex: 90;
+	$blurIndex: 80;
+	/* stylelint-enable plugin/non-zero-length-expect-unit */
 	:root {
 		transition: var(--transition);
 	}
 	.skip {
-		--size: 2.5rem;
-		--padding: var(--defaultMargin);
+		$size: 2.5rem;
+		$padding: var(--defaultMargin);
 
 		position: fixed;
-		padding-block: var(--padding);
-		padding-inline: var(--padding);
+		padding-block: $padding;
+		padding-inline: $padding;
 		border-end-end-radius: 1rem;
-		inset-block-start: calc((var(--size) + var(--padding) * 2) * -1);
+		inset-block-start: calc(($size + $padding * 2) * -1);
 		transition: var(--transition);
-		z-index: 100;
+		z-index: $skipIndex;
 		background-color: var(--accentColor);
 		color: var(--textColorOptimal);
 		&:focus-visible {
@@ -483,37 +508,55 @@
 			box-shadow: 0 0 0.66rem 1px white;
 		}
 	}
-	input[type="search"] {
-		margin-inline-start: var(--cornerSize);
+	.search form {
+		block-size:100%;
+	}
+	.search label {
+		/* display: grid; */
+		/* grid-template-columns: auto 1fr; */
+		block-size:100%;
+		span {
+			display: flex;
+			align-items: center;
+		}
+	}
+	.search {
+		color: var(--textColorOptimal);
+		block-size:100%;
+		margin-inline-start: $cornerSize;
+	}
+	.search input[type="search"] {
 		background:transparent;
 		border:none;
 		border-block-end: 0.15rem solid var(--textColorOptimal);
 		color:var(--textColorOptimal);
 		padding-inline: 0.5rem;
 		transition: margin-inline-start var(--transition);
+		block-size:100%;
+		display:block;
+		inline-size: 100%;
 		&:focus-visible {
 			border-radius: 0.5rem;
 			background-color:white;
 			color:black;
 		}
 	}
-	input[type="search"]::placeholder {
+	.search input[type="search"]::placeholder {
 		color: var(--textColorOptimal);
 	}
-	input[type="search"]:focus-visible::placeholder {
+	.search input[type="search"]:focus-visible::placeholder {
 		color: gray;
 	}
-	input[type="search"].noBump {
+	.search.noBump {
 		margin-inline-start: 0;
 	}
 	#navbar {
-		user-select: none;
-		z-index: 90;
+		z-index: $navbarIndex;
 		display: grid;
 		grid-template-columns: auto 1fr auto;
 		gap: 1rem;
-		position: fixed;
-		block-size: var(--navBarSize);
+		position: sticky;
+		block-size: $navBarSize;
 		inline-size: 100%;
 		padding-inline: 0.9rem;
 		padding-block: var(--defaultMargin);
@@ -537,18 +580,18 @@
 	}
 	#navrail {
 		user-select: none;
-		z-index: 90;
+		z-index: $navrailIndex;
 		position: fixed;
 		display: grid;
 		grid-template-rows: auto auto 1fr auto;
 		background-color: var(--accentColor);
 		inline-size: calc(var(--navRailSize) + (var(--navRailPadding) * 2) + var(--menuOffset));
 		max-inline-size: 100%; /* I want the max size to be slightly less than 100%, but it screws up the #corner positioning. Look into 'css attr' */
-		inset-block-start: var(--navBarSize);
+		inset-block-start: $navBarSize;
 		inset-inline-start: 0;
-		padding-block-start: var(--cornerSize);
+		padding-block-start: $cornerSize;
 		padding-block-end: 0.5rem;
-		block-size: calc(100% - var(--navBarSize));
+		block-size: calc(100% - $navBarSize);
 		padding-inline: var(--navRailPadding, var(--defaultMargin));
 		transition: inline-size var(--menuSpeed), inset-inline-start var(--menuSpeed), background-color var(--menuSpeed);
 		overflow-y: auto;
@@ -570,11 +613,11 @@
 		transition: block-size var(--transition);
 	}
 	.profileSelector select {
-		--size: calc(var(--profileSelectorSize, 55px) - 10px);
+		$size: calc(var(--profileSelectorSize, 55px) - 10px);
 
 		inline-size: 100%;
-		border-radius: var(--size);
-		block-size: var(--size);
+		border-radius: $size;
+		block-size: $size;
 		&:hover,&:focus-visible {
 			box-shadow: 0 0 1rem 1px white;
 		}
@@ -590,23 +633,19 @@
 		transition: opacity var(--transition), block-size var(--transition);
 	}
 	#corner {
-		--mask: url("data:image/webp;base64,UklGRlwBAABXRUJQVlA4WAoAAAAYAAAAEwAAEwAAVlA4TGAAAAAvE8AEEFDQtg1j/rh3AiGCTWxbjS5h69jhACW0uAAHGEALUvBBi4DNYQL8d68q86yRPGkSg/Ggiwasm2LFcXIJOA82Dj8Xh0BAoCDQrYWIQDMUEkIvU6go5YRP2MSYkAlFWElG1gAAAElJKgAIAAAABgASAQMAAQAAAAEAAAAaAQUAAQAAAFYAAAAbAQUAAQAAAF4AAAAoAQMAAQAAAAIAAAAxAQIAEAAAAGYAAABphwQAAQAAAHYAAAAAAAAA8nYBAOgDAADydgEA6AMAAHBhaW50Lm5ldCA1LjAuMwAFAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAKgBAABAAAAFAAAAAOgBAABAAAAFAAAAAWgBAABAAAAuAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAAA=");
-
-		inline-size: var(--cornerSize);
-		z-index: 90;
+		inline-size: $cornerSize;
+		z-index: $navrailIndex;
 		aspect-ratio: 1;
-		/* stylelint-disable-next-line property-no-vendor-prefix -- Non prefix version doesn't work in MS Edge */
-		-webkit-mask-image: var(--mask);
-		mask-image: var(--mask);
+		mask-image: $cornerMask;
 		position: fixed;
-		inset-block-start: var(--navBarSize);
+		inset-block-start: $navBarSize;
 		inset-inline-start: calc(var(--navRailSize) + (var(--navRailPadding) * 2) + var(--menuOffset));
 		background-color: var(--accentColor);
 		transition: inset-inline-start var(--menuSpeed), background-color var(--menuSpeed); /* Don't animate opacity */
 		pointer-events: none;
 	}
 	#closeMenu {
-		z-index: 80;
+		z-index: $blurIndex;
 		backdrop-filter: blur(1px);
 		background-color: rgb(0 0 0 / 0.5);
 		position: fixed;
@@ -615,15 +654,15 @@
 		inset: 0;
 	}
 	main.content {
-		margin-block-start: calc(var(--navBarSize));
+		/* margin-block-start: calc($navBarSize); */
 		margin-inline-start: calc(var(--navRailSize) + (var(--navRailPadding) * 2));
 		/* transition: var(--transition); */
-		block-size: calc(100vh - var(--navBarSize));
+		block-size: calc(100vh - $navBarSize);
 		overflow-y: auto;
 	}
-	@media (max-width: 640px) {
+	@below sm {
 		#navrail:not(.open) {
-			inset-inline-start: calc(var(--navRailComputed) - var(--cornerSize));
+			inset-inline-start: calc(var(--navRailComputed) - $cornerSize);
 			/* 20px required for moving at the same amount as corner (It looks weird if it isn't) */
 		}
 		#corner:not(.open) {
@@ -635,7 +674,7 @@
 		main.content {
 			margin-inline-start: 0;
 		}
-		input[type="search"] {
+		.search {
 			margin-inline-start: 0;
 		}
 		#navbar h1 {

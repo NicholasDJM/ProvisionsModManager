@@ -4,7 +4,7 @@
 	$: title.set($i18n.t("sources:page-sources"));
 	import { currentPage } from "$lib/js/page.js";
 	currentPage.set("sources");
-	import Link from "$lib/components/Link.svelte";
+	import Link from "$lib/components/Link.comp.svelte";
 	let translations: Record<string, string>;
 	$: translations = {
 		tf2: $i18n.t("game-tf2"),
@@ -13,7 +13,7 @@
 		pf2: $i18n.t("game-pf2")
 	};
 </script>
-<main class="defaultMargin">
+<div class="defaultMargin main">
 	<div>
 		<Link href="https://steampowered.com/app/440">
 			<h1><img class="logo" alt={translations.tf2} src="/images/copyrighted_images/tf2.png" width="512" height="128"/></h1>
@@ -39,7 +39,7 @@
 	</div>
 	<div>
 		<Link href="https://openfortress.fun">
-			<h1><img class="logo" alt={translations.of} src="/images/copyrighted_images/of.png" width="2089" height="384"/></h1>
+			<h1><img class="logo of-logo" alt={translations.of} src="/images/copyrighted_images/of.png" width="2089" height="384"/></h1>
 		</Link>
 		<ul>
 			<li>
@@ -57,50 +57,65 @@
 			</li>
 		</ul>
 	</div>
-</main>
+</div>
 <style lang="postcss">
 	@property --defaultMargin {
 		syntax: "<length>";
 	}
-	@property --dark {
+	@property --backgroundColorAlt {
 		syntax: "<color>";
 	}
-	main {
+	@property --textColor {
+		syntax: "<color>";
+	}
+	.main {
 		display: flex;
 		flex-flow: row wrap;
 		gap: var(--defaultMargin);
 		justify-content: center;
 		padding-inline: 2.5rem;
 	}
-	main > div {
+	.main > div {
 		border-radius: var(--defaultMargin);
 		border: 1px solid gray;
 		padding-inline: var(--defaultMargin);
 		padding-block: var(--defaultMargin);
 		flex-grow: 1;
-		background-color: var(--dark);
+		background-color: var(--backgroundColorAlt);
+		color: var(--textColor);
 	}
-	main h1 {
+	.main h1 {
 		margin-block-start: 0;
 		min-block-size: 5.5rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
-	main img.logo {
+	.main img.logo {
 		inline-size: 16rem;
 		margin-block: auto;
 		block-size: auto;
 	}
+	/* stylelint-disable-next-line rem-over-px/rem-over-px, color-hex-case -- rem-over-px: This is how the drop shadow is defined on openfortress.com. color-hex-case: This works apparently. */
+	$ofDropShadow: drop-shadow(4px 4px 0 #574168c0);
 	/* stylelint-disable-next-line a11y/selector-pseudo-class-focus -- Handled in next rule. */
 	:global(a:hover) {
 		& img.logo {
 			filter: brightness(125%);
+		}
+		& img.of-logo {
+			filter: brightness(125%) $ofDropShadow;
 		}
 	}
 	:global(a:focus-visible) {
 		& img.logo {
 			filter: brightness(125%);
 		}
+		& img.of-logo {
+			filter: brightness(125%) $ofDropShadow;
+		}
+	}
+	.of-logo {
+		filter: $ofDropShadow;
 	}
 </style>

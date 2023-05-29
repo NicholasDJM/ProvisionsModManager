@@ -4,7 +4,7 @@
 	$: title.set($i18n.t("utils:page-utils"));
 	import { currentPage } from "$lib/js/page.js";
 	currentPage.set("utils");
-	import UtilityCard from "$lib/components/UtilityCard.svelte";
+	import UtilityCard from "$lib/components/UtilityCard.comp.svelte";
 	import { WebviewWindow } from "@tauri-apps/api/window";
 	import { invoke } from "@tauri-apps/api";
 	function openIDE(event: KeyboardEvent | MouseEvent) {
@@ -55,7 +55,7 @@
 		}
 	];
 </script>
-<main>
+<div class="main">
 	{#each cards as card}
 		{#if card.href}
 			<a href={card.href}>
@@ -77,9 +77,9 @@
 			</a>
 		{/if}
 	{/each}
-</main>
+</div>
 <style lang="postcss">
-	main {
+	.main {
 		display: flex;
 		flex-flow: row wrap;
 		justify-content: center;

@@ -8,6 +8,6 @@
 	import brokenSound from "$lib/guides/en/CorruptedSound.md?raw";
 	// TODO: replace svelte markdown with markdown-it, so we can dynamically load guides based on language.
 </script>
-<main class="defaultMargin">
+<div class="defaultMargin">
 	<SvelteMarkdown source={brokenSound}/>
-</main>
+</div>

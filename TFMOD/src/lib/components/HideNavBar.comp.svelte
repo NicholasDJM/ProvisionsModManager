@@ -1,5 +1,10 @@
+<!-- eslint-disable @intlify/svelte/no-raw-text -- Not text. -->
 <svelte:head>
 	<style lang="postcss">
+		@property --navRailComputed {
+			inherits: true;
+			syntax: "<position>";
+		}
 		#navrail:not(.open) {
 			inset-inline-start: calc(var(--navRailComputed) - 20px) !important;
 		}

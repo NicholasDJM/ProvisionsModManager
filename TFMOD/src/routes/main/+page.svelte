@@ -1,6 +1,4 @@
-<svelte:head>
-	<title>Mods - Provisions Mod Manager</title>
-</svelte:head>
+
 <script lang="ts">
 	import { i18n } from "$lib/js/i18n.js";
 	import { title } from "$lib/js/title.js";
@@ -12,21 +10,22 @@
 	import Disabled from "svelte-material-icons/FileRemoveOutline.svelte";
 	import Conflicts from "svelte-material-icons/FileAlertOutline.svelte";
 	import Outdated from "svelte-material-icons/FileCancelOutline.svelte";
-	import Pills from "$lib/components/Pills.svelte";
+	import Pills from "$lib/components/Pills.comp.svelte";
 	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
-	import type { PillEvent } from "$lib/components/Pills.svelte";
-	import HideNavBar from "$lib/components/HideNavBar.svelte";
+	import type { PillEvent } from "$lib/components/Pills.comp.svelte";
+	import HideNavBar from "$lib/components/HideNavBar.comp.svelte";
 	import type {ModInfo} from "$lib/js/modInfo";
 	/* eslint-disable unicorn/prevent-abbreviations */
-	import Mod from "$lib/components/Mod.svelte";
+	import Mod from "$lib/components/Mod.comp.svelte";
 	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
-	import type { ModEvent, MoveEvent } from "$lib/components/Mod.svelte";
-	import Gallery from "$lib/components/Gallery.svelte";
+	import type { ModEvent, MoveEvent } from "$lib/components/Mod.comp.svelte";
+	import Gallery from "$lib/components/Gallery.comp.svelte";
 	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
-	import type { Images } from "$lib/components/Gallery.svelte";
+	import type { Images } from "$lib/components/Gallery.comp.svelte";
 	import { onMount, onDestroy } from "svelte";
 	//import { dropdown, feedback } from "$lib/navDropdown.js";
-	let fullscreen = false;
+	let fullscreen = false,
+		translations: Record<string, string>;
 	interface Options {
 		name: string,
 		text: string,
@@ -141,6 +140,8 @@
 		}
 		console.log(open);
 	}
+	let pageTitle: string;
+	$: pageTitle = $i18n.t("app-page", $title);
 	onMount(() => {
 		miniTimer = setInterval(() => {
 			/* eslint-disable-next-line no-magic-numbers -- It's pixels*/
@@ -161,10 +162,16 @@
 	// If currently viewing the gallery in fullscreen, don't reset the view to mods panel. (When fullscreen innerWidth is more than 1000)
 	$: keepOpen = fullscreen;
 	$: open = keepOpen ? true : $backButton;
+	$: translations = {
+		page: pageTitle
+	};
 	// TODO: If mod has no thumbnail, resize text size to max
 </script>
+<svelte:head>
+	<title>{translations.page}</title>
+</svelte:head>
 <div class="container">
-	<main class="defaultMargin" inert={open}>
+	<div class="defaultMargin main" inert={open}>
 		<!-- <button on:click={() => compact.set(!$compact)}>{$compact ? "Compact" : "Comfortable"}</button> -->
 		<Pills options={filterOptions} on:pill={handlePillEvent}/>
 		<div class="mods">
@@ -179,8 +186,8 @@
 				{/if}
 			{/each}
 		</div>
-	</main>
-	<aside id="preview" class:previewOpen={open} inert={!open && mini}>
+	</div>
+	<aside id="preview" class:previewOpen={open} inert={!open && mini} aria-label="Mod Information">
 		{#if (open && mini) || keepOpen}
 			<HideNavBar/>
 		{/if}
@@ -193,7 +200,7 @@
 	</aside>
 </div>
 <style lang="postcss">
-	main {
+	.main {
 		display: flex;
 		flex-flow: row wrap;
 		align-content: flex-start;
@@ -216,9 +223,7 @@
 		inline-size: 0;
 		/* TODO: Slide in from inline-end when open, and vice-versa when closed */
 	}
-	@custom-media --max-width (max-width: 1200px);
-	@custom-media --min-width (min-width: 1200px);
-	@media (--min-width) {
+	@above lg {
 		.container {
 			grid-template-columns: 50% 50%;
 		}
@@ -230,11 +235,11 @@
 			padding: var(--defaultMargin);
 		}
 	}
-	@media (--max-width) {
+	@below lg {
 		.container:has(aside.previewOpen) {
 			grid-template-columns: auto 100%;
 		}
-		.container:has(aside.previewOpen) main {
+		.container:has(aside.previewOpen) .main {
 			inline-size: 0;
 			padding: 0;
 		}

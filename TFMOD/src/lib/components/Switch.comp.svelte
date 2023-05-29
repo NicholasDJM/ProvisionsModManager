@@ -16,8 +16,9 @@
 		size = iconSize + 10 + "px";
 	let translations: Record<string, string>;
 	$: translations = {
-		on: $i18n.t("enabled"),
-		off: $i18n.t("disabled")
+		on: $i18n.t("main:switch-enabled"),
+		off: $i18n.t("main:switch-disabled"),
+		toggle: $i18n.t("main:switch-toggle")
 	};
 </script>
 <label class="switch" on:keydown={change} style={`--width: ${size}; --height: ${size}`} title={enabled ? translations.on : translations.off}>
@@ -25,7 +26,7 @@
 	<div class="check" data-checked={enabled}>
 		<Drag size={iconSize + "px"}/>
 	</div>
-	<input type="checkbox" bind:checked={enabled}/>
+	<input aria-label={translations.toggle} type="checkbox" bind:checked={enabled}/>
 </label>
 <style lang="postcss">
 	.switch {

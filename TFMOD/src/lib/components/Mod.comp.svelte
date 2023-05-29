@@ -4,8 +4,8 @@
 </script>
 <script lang="ts">
 	import { onMount, onDestroy, createEventDispatcher } from "svelte";
-	import Switch from "$lib/components/Switch.svelte";
-	import Group from "$lib/components/Group.svelte";
+	import Switch from "$lib/components/Switch.comp.svelte";
+	import Group from "$lib/components/Group.comp.svelte";
 	import Up from "svelte-material-icons/ChevronUp.svelte";
 	import Down from "svelte-material-icons/ChevronDown.svelte";
 	import Top from "svelte-material-icons/ChevronDoubleUp.svelte";
@@ -57,11 +57,16 @@
 			conflicts: $i18n.t("main:mod-conflicts", {"count": info.conflicts}),
 			description: $i18n.t("main:mod-no-description"),
 			update: $i18n.t("main:mod-update-available"),
-			version: $i18n.t("main:mod-version", {"version": info.version})
+			version: $i18n.t("main:mod-version", {"version": info.version}),
+			moveUp: $i18n.t("main:position-move-up"),
+			moveDown: $i18n.t("main:position-move-down"),
+			moveTop: $i18n.t("main:position-move-top"),
+			moveBottom: $i18n.t("main:position-move-bottom"),
+			position: $i18n.t("main:position")
 		};
 	}
 </script>
-<main>
+<div class="main">
 	<div class="censorContainer">
 		{#if info.explicit && censor}
 			<div class="censor">
@@ -90,9 +95,9 @@
 				</h1>
 				<p class="description">
 					{#if info.description}
-						{#each info.description as text, index}
-							{#if info.description[index].lang === lang}
-								{info.description[index].text}
+						{#each info.description as data}
+							{#if data.lang === lang}
+								{data.text}
 							{/if}
 						{/each}
 					{:else}
@@ -121,20 +126,20 @@
 			<span class="controlsText">{translations.version}</span>
 		{/if}
 		<Group>
-			<button data-id="moveToTop" on:click={handleMove}><Top/></button>
-			<button data-id="moveToBottom"><Bottom/></button>
-			<input type="number" value={info.position} min="1"/>
-			<button data-id="moveUpOne"><Up/></button>
-			<button data-id="moveDownOne"><Down/></button>
+			<button aria-label={translations.moveTop} data-id="moveToTop" on:click={handleMove}><Top/></button>
+			<button aria-label={translations.moveBottom} data-id="moveToBottom"><Bottom/></button>
+			<input aria-label={translations.position} type="number" value={info.position} min="1"/>
+			<button aria-label={translations.moveUp} data-id="moveUpOne"><Up/></button>
+			<button aria-label={translations.moveDown} data-id="moveDownOne"><Down/></button>
 		</Group>
 	</div>
-</main>
+</div>
 <style lang="postcss">
 	a {
 		color: var(--textColor);
 		text-decoration: none;
 	}
-	main {
+	.main {
 		display: grid;
 		position: relative;
 		grid-template-rows: 1fr auto;
@@ -190,7 +195,7 @@
 	.blur {
 		transition: var(--transitionReducedMotion);
 	}
-	main:hover .blur, main:focus-visible .blur {
+	.main:hover .blur, .main:focus-visible .blur {
 		filter: blur(.25rem);
 		/* opacity: 0.6; */
 	}

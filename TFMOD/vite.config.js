@@ -1,28 +1,6 @@
 import { defineConfig } from "vite";
 import { sveltekit } from "@sveltejs/kit/vite";
-import { stylifyVite } from "@stylify/unplugin";
 import { MagicRegExpTransformPlugin } from "magic-regexp/transform";
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars -- Really cool, but crashes build process */
-import progress from "vite-plugin-progress";
-
-/* Decided against using stylify. It doesn't support stylelint, and actually deletes work.
-	When building the application, stylify is called twice, first, it's successfully mangles source files, and generates a matching css file.
-	On its second call, it finds no applicable styles in the source files (due to the selectors being already mangled.),
-		and deletes everything in the already generated css file.
-
-	Also, it becomes un-maintainable after a point when all the rules are on a single line (Also looks ugly).
-*/
-const stylifyPlugin = stylifyVite({
-	bundles: [
-		{
-			outputFile: "./src/lib/stylify.css",
-			files: [
-				"./src/**/*.svelte"
-			]
-		}
-	]
-});
-
 /* global process */
 
 // https://vitejs.dev/config/

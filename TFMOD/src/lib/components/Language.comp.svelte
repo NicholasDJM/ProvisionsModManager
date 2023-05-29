@@ -66,7 +66,7 @@
 		}
 	};
 </script>
-<main class="defaultMargin" >
+<div class="defaultMargin main">
 	{#if !$isLoading}
 		<h1 id="welcome" class:fade-out={fade} class:fade-in={!fade}  style:--fadeTime={fadeTime + "ms"}>{oldWelcome}</h1>
 	<label id="search">
@@ -83,9 +83,9 @@
 		{/each}
 	</ul>
 	{/if}
-</main>
+</div>
 <style lang="postcss">
-	main {
+	.main {
 		display: flex;
 		flex-flow: column wrap;
 	}

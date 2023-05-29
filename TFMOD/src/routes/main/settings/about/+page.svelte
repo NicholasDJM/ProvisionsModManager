@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Link from "$lib/components/Link.svelte";
+    import Link from "$lib/components/Link.comp.svelte";
     import { currentSettingsTab } from "$lib/js/settingsTab.js";
     currentSettingsTab.set("about");
 </script>

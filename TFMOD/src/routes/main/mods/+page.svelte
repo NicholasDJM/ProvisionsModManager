@@ -2,12 +2,12 @@
 	import { backButton } from "$lib/js/subpage.js";
 	backButton.set(true);
 	const id = new URL(document.location).searchParams.get("id");
-	import HideNavBar from "$lib/components/HideNavBar.svelte";
+	import HideNavBar from "$lib/components/HideNavBar.comp.svelte";
 	// TODO: Inline this page into /main/+page.svelte, and at certain window sizes, introduce a reading pane
 </script>
-<main class="defaultMargin">
+<div class="defaultMargin">
 	<h1>Hello</h1>
 	<p>World</p>
 	<code>{id}</code>
-</main>
+</div>
 <HideNavBar/>

@@ -3,7 +3,7 @@
 	import { i18n } from "$lib/js/i18n.js";
 	import { currentSettingsTab } from "$lib/js/settingsTab.js";
 	currentSettingsTab.set("main");
-	import Theme from "$lib/components/theme.svelte";
+	import Theme from "$lib/components/Theme.comp.svelte";
 	let translations: Record<string, string>;
 	$: translations = {
 		theme: $i18n.t("settings:theme")

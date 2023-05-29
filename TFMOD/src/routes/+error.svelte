@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import { title } from "$lib/js/title.js";
-	import Link from "$lib/components/Link.svelte";
+	import Link from "$lib/components/Link.comp.svelte";
 	import "@fontsource/roboto";
 	title.set(`Error ${$page.status}`);
 	import { currentPage } from "$lib/js/page.js";
