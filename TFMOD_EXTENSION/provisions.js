@@ -21,23 +21,22 @@ function set(name, data) {
 }
 log("Loading...");
 
-//https://stackoverflow.com/questions/4793604/how-to-insert-an-element-after-another-element-in-javascript-without-using-a-lib
-Element.prototype.appendAfter = element => {
-	element.parentNode.insertBefore(this, element.nextSibling);
-};
-
 let ids = [];
 function getIds() {
 	for (const [index, element] of document.querySelectorAll(".DownloadOptions").entries()) {
 		for (let index_ = 0; index_ < element.children.length; index_++) {
-			if (element.children[index_].getAttribute("href")) {
-				ids[ids.length] = element.children[index_];
+			const element_ = element.children[index_];
+			if (element_.getAttribute("href") && element_.dataset.provisions === undefined) {
+				ids[ids.length] = element_;
+				element_.dataset.provisions = true;
+				// If we have already added a button, don't add it again, thus we add provisions = true to each matching element's dataset.
 			}
 		}
 	}
 	log(ids);
 	for (const [index, element] of ids.entries()) {
 		if (element.getAttribute("href").includes("https://")) {
+			// create an element matching the style of other buttons on GameBanana
 			const anchor = document.createElement("a"),
 				span = document.createElement("span"),
 				small = document.createElement("small");
@@ -53,7 +52,11 @@ function getIds() {
 				console.log("Mod Page ID:", modificationId);
 				set("message", {type:"install", id:downloadId, modId:modificationId});
 			});
+			anchor.dataset.provisions = true;
 			element.parentNode.insertBefore(anchor, element);
+		}
+		if (element.getAttribute("href").includes("modboy://")) {
+			element.remove();
 		}
 	}
 }

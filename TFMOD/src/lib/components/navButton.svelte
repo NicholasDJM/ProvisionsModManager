@@ -1,13 +1,13 @@
-<script context="module">
+<script context="module" lang="ts">
+	import { createEventDispatcher, onMount, onDestroy, getContext } from "svelte";
+	import tippy from "tippy.js";
 	import "tippy.js/dist/tippy.css";
 </script>
 <script lang="ts">
-	import { createEventDispatcher, onMount, onDestroy } from "svelte";
-	import tippy from "tippy.js";
 	export let href: string,
 		text: string,
 		dataPage: string | undefined,
-		size: string,
+		size = "45px",
 		id: string,
 		highlight: string | null,
 		showText = false;
@@ -55,7 +55,28 @@
 		</span>
 	<div class="buttonTextElement" class:showText class:highlight={highlight === dataPage}>{text}</div>
 </a>
-<style>
+<style lang="postcss">
+	@property --textColorOptimal {
+		syntax: "<color>";
+	}
+	@property --light {
+		syntax: "<color>";
+	}
+	@property --dark {
+		syntax: "<color>";
+	}
+	@property --transition {
+		syntax: "<time>";
+	}
+	@property --transitionReducedMotion {
+		syntax: "<time>";
+	}
+	@property --size {
+		syntax: "<length>";
+	}
+	@property --menuSpeed {
+		syntax: "<time>";
+	}
 	.icon {
 		display:flex;
 		align-items: center;

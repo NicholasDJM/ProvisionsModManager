@@ -107,7 +107,7 @@
 							<source srcset={image.path} width={image.width} height={image.height}/>
 						{/each}
 					{/if}
-					<img alt={info.alt} src={info.src}/>
+					<img alt={info.alt} src={info.src} loading="lazy"/>
 				</picture>
 			</div>
 		</a>
@@ -129,7 +129,7 @@
 		</Group>
 	</div>
 </main>
-<style>
+<style lang="postcss">
 	a {
 		color: var(--textColor);
 		text-decoration: none;

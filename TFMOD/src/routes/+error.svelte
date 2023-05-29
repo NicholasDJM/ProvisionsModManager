@@ -28,7 +28,7 @@
 		<button on:click={reload}>Reload</button>
 	</div>
 </div>
-<style>
+<style lang="postcss">
 	:root{
 		font-family: Roboto, sans-serif;
 		display: flex;

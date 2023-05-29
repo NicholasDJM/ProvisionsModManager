@@ -1,10 +1,12 @@
+// NOTE: This metadata currently only applies to Team Fortress 2 mods only, not to Team Fortress 2 Classic mods, Open Fortress mods, or Pre Fortress 2 mods.
 import type { LanguageCode } from "iso-639-1";
 type Languages = Record<LanguageCode, string>;
 type Url = `http${"s" | ""}://${string}.${string}`;
-type JsonExtension = `json${"5" | ""}`
-type JsonUrl = `${Url}.${JsonExtension}`
+type JsonExtension = `json${"5" | ""}`;
+type JsonUrl = `${Url}.${JsonExtension}`;
 interface Image {
 	file: string,
+	url?: Url,
 	alt: Languages
 }
 interface Images {
@@ -33,25 +35,121 @@ interface Options {
 type AddonPath = `${string}.vpk`
 type SematicVersion = `${number}.${number}.${number}`
 type ValidFileExtensions = "vpk" | "zip" | "rar" | "7z"
-export interface Metadata {
-	id: string
+interface Type {
+	type: "item" | "map" | "texture" | "sound" | "hud" | "script" | "bik",
+	pure?: boolean
+}
+type Scout = "scout" | "scunt" | "Jeremy";
+type Soldier = "soldier" | "Jane Doe";
+type Pyro = "pyro" | "w+m1";
+type Demo = "demo" | "demoman" | "sticky spammer" | "one-eyed bloody monster" | "Tavish Finnegan DeGroot";
+type Heavy = "heavy" | "heavy weapons guy" | "pootis" | "Misha" | "Mikhail";
+type Engineer = "engineer" | "engi" | "Dell Conagher";
+type Medic = "medic" | "Ludwig";
+type Sniper = "sniper" | "lucksman" | "Mundy" | "Mun-dee";
+type Spy = "spy" | "mentlegen";
+type Class = Scout | Soldier | Pyro | Demo | Heavy | Engineer | Medic | Sniper | Spy | "all";
+interface ItemType extends Type {
+	type: "item",
+	paint?: boolean,
+	warpaint?: boolean,
+	team?: boolean,
+	class: Array<Class> | Class,
+	subModel?: boolean
+}
+interface MapType {
+	type: "map",
+	plugins?: Array<URL>,
+	MLMesh?: boolean
+}
+/*
+	Plugins: Array of URLs that should resolve to SourceMod plugins the map requires to function. Would be synced to a server.
+		Would require a plugin on the server to manage these additional plugins.
+	MLMesh: Reserved for future use. Machine learning navigation mesh
+	Future TODO: Create SourceMod plugin that learns from player actions and movements to give more human-like TFBots.
+*/
+interface TextureType extends Type {
+	type: "texture",
+	sound?: boolean,
+	subTexture?: boolean,
+	color?: {
+		red: string,
+		blue: string
+	}
+}
+interface SoundType extends Type {
+	type: "sound",
+	combine: boolean,
+	// Combine: should we combine with other sound files rather than overwriting?
+	combineType: "base" | "other"
+	// Type determines priority and how to combine sounds.
+	// "base" acts as a base, which other sounds will be combined onto.
+	// "other" means sounds should be layered onto a base.
+	// "base" mods will conflict with each other, as will "other" mods.
+	// However, multiple "other" mods can exist along side a single "base" mod for the same sound.
+}
+interface HudConfig {
+	name: string,
+	element?: string,
+	enable?: boolean,
+	color?: string,
+	position?: string
+	misc?: Record<string, string>
+}
+interface HudType extends Type {
+	type: "hud",
+	config: Array<HudConfig>
+}
+interface ScriptType extends Type {
+	type: "script",
+	wait?: boolean,
+	noWait: Array<string>,
+	install?: Array<string>,
+	class: Class,
+	entry: string
+}
+/*
+	install: List of commands to be added to autoexec.cfg. Some commands are banned, and will not be added.
+		Commands after any semicolon will be ignored.
+		For example, anything that lags the game, or causes unwanted action, like quit, or unbindall.
+			Exec command is banned.
+	class: Install for a single class only?
+	entry: Which script should be injected to autoexec or a class config? This will add an "exec ENTRY_SCRIPT",
+		where ENTRY is the path to the script, to the end of the relevent CFG file.
+	wait: Does any of the scripts rely on the wait command?
+	noWait: List of paths of scripts that are wait safe.
+		If there is no wait safe scripts, players may be unable to use your scripts on servers that disable wait via sv_allow_wait_command
+*/
+interface BikType extends Type {
+	type: "bik"
+}
+type Types = ItemType | MapType | TextureType | SoundType | HudType | ScriptType | BikType
+interface Version {
+	metadataVersion: 1
+}
+export interface Metadata extends Version {
+	id: string // While it can't be validated here, ID must be lowercase letters from A-Z and periods, and must start with a letter.
 	name?: Languages,
 	author?: Array<string> | string,
-	version?: SematicVersion
+	version?: SematicVersion,
+	license?: string,
 	description?: Languages,
 	instructions?: Languages,
 	canonicalUrl?: `${Url}.${ValidFileExtensions}`,
 	updateUrl?: JsonUrl,
 	images?: Images,
 	md5: Array<string>,
-	explicit?: Array<"blood" | "nudity" | "profanity">,
+	explicit?: Array<"blood" | "nudity" | "profanity" | "epilepsy">,
 	options?: Options,
 	addons?: Array<Array<AddonPath> | AddonPath>,
 	dependencies?: Array<Url>,
-	peers?: Array<string>
+	peers?: Array<string>,
+	type: Types
+	holiday: Array<"smissmiss" | "scream fortress" | "tf birthday" | "tf2 birthday" | "april fools" | "full moon"> // Should only be holidays that TF2 is programmed to recognize.
 }
 export type MetadataName = `metadata.${JsonExtension}`
 export type UpdateMetadataName = `latest.${JsonExtension}`
+// TODO: Rework update JSON to include URLs of each individual file, so we can fetch missing or outdated files.
 interface UpdateMetadataItem {
 	url: JsonUrl,
 	version: SematicVersion,
@@ -73,7 +171,7 @@ export interface UpdateMetadata {
 		author: Username123,
 		description: {
 			en: "This is a fancy description.",
-			fr: "Une description fantaisiste"
+			fr: "Une description fantaisiste."
 		},
 		// No other installation instructions. So instructions is not defined.
 		canonicalUrl: "https://raw.githubusercontent.com/username123/example-project/main/mod.vpk",

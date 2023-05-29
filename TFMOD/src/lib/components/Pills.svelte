@@ -42,7 +42,7 @@
 		Reset
 	</button>
 </div>
-<style>
+<style lang="postcss">
 	.pillbox {
 		display: flex;
 		flex-flow: row wrap;

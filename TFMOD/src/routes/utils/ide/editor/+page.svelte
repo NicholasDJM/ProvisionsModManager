@@ -67,8 +67,8 @@
 	<main style="height:100%">
 		<div class="editor">
 			<AceEditor lang="source-cfg" theme="monokai" value={text} on:input={object => {
-text = object.details; console.log(object.details);
-}} width="100%" height="100%"/>
+				text = object.details; console.log(object.details);
+			}} width="100%" height="100%"/>
 		</div>
 	</main>
 </div>
@@ -76,7 +76,7 @@ text = object.details; console.log(object.details);
 	<summary>Key Bind Finder</summary>
 	<KeyboardQwerty/>
 </details>
-<style>
+<style lang="postcss">
 	:root {
 		block-size: 100%;
 	}

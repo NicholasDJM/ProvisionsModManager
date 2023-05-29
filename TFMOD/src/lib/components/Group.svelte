@@ -14,7 +14,7 @@
 <div class="group" id="group" style:--count={count} style:--height={height}>
 	<slot/>
 </div>
-<style>
+<style lang="postcss">
 	.group {
 		display:grid;
 		grid-template-columns: repeat(var(--count, 1), auto);

@@ -1,3 +1,10 @@
+<script lang="ts" context="module">
+	export interface Images {
+		src: string,
+		alt: string,
+		selected: boolean
+	}
+</script>
 <script lang="ts">
 	import { appWindow } from "@tauri-apps/api/window";
 	import { onMount } from "svelte";
@@ -5,32 +12,25 @@
 	import Right from "svelte-material-icons/ChevronRight.svelte";
 	import Fullscreen from "svelte-material-icons/Fullscreen.svelte";
 	import FullscreenExit from "svelte-material-icons/FullscreenExit.svelte";
-	import { Swipe } from "svelte-swipe";
-	export let fullscreen = false;
-	interface Images {
-		src: string,
-		alt: string,
-		selected: boolean,
-		element: HTMLElement,
-		id: number
-	}
-	let selected = 0,
-		images: Array<Images> = [];
+	import { Swipe, SwipeItem } from "svelte-swipe";
+	export let fullscreen = false,
+		images: Array<Images>;
+	let selected = 0;
 	onMount(() => {
 		for (const [index, element] of document.querySelectorAll<HTMLElement>(".gallery .content *").entries()) {
 			// console.log(element.nodeName);
-			if (element.nodeName.toLowerCase() === "img") {
-				const image = element as HTMLImageElement;
-				images[images.length] = {
-					src: image.src,
-					selected: selected === index,
-					element: image,
-					alt: "Hello",
-					id: index
-				};
-				// console.log(selected, index);
-				image.style.display = selected === index ? "block" : "none";
-			}
+			// if (element.nodeName.toLowerCase() === "img") {
+			// 	const image = element as HTMLImageElement;
+			// 	images[images.length] = {
+			// 		src: image.src,
+			// 		selected: selected === index,
+			// 		element: image,
+			// 		alt: "Hello",
+			// 		id: index
+			// 	};
+			// 	// console.log(selected, index);
+			// 	image.style.display = selected === index ? "block" : "none";
+			// }
 		}
 		const carousel = document.querySelector(".carousel");
 		carousel?.addEventListener("wheel", (event: Event) => {
@@ -38,18 +38,17 @@
 			carousel.scrollLeft += event.deltaY;
 		});
 		addEventListener("fullscreenchange", () => {
-			if (document.fullscreenElement === null) {
+			if (document.fullscreenElement === null && fullscreen) {
 				appWindow.setFullscreen(false);
-				document.exitFullscreen();
 				fullscreen = false;
 			}
 		});
 	});
 	function toggleFullscreen() {
 		if (fullscreen) {
+			fullscreen = false;
 			appWindow.setFullscreen(false);
 			document.exitFullscreen();
-			fullscreen = false;
 		} else {
 			appWindow.setFullscreen(true);
 			document.querySelector(".galleryContainer")?.requestFullscreen({navigationUI: "hide"}).then(result => {
@@ -63,13 +62,22 @@
 		Finish creating carousel.
 		Make carousel buttons actually buttons. (Can't focus via tab currently)
 	*/
-	const size = "2rem";
+	const size = "2rem",
+		config = {
+			"showIndicators": true
+		};
 </script>
 <div class="galleryContainer">
 	<main class="gallery" class:full={fullscreen}>
 		<button class="button"><Left {size}/></button>
 		<div class="content">
-			<slot/>
+			<Swipe bind:active_item={selected} {...config}>
+				{#each images as item}
+					<SwipeItem>
+						<img src={item.src} alt={item.alt} loading="lazy">
+					</SwipeItem>
+				{/each}
+			</Swipe>
 		</div>
 		<button class="button"><Right {size}/></button>
 		<button id="fullscreenToggle" on:click={toggleFullscreen}>
@@ -82,12 +90,12 @@
 	</main>
 	<aside class="carousel">
 		{#each images as image}
-			<img src={image.src} alt={image.alt} class="carouselButton" class:selected={image.selected} class:grayscale={!image.selected} />
+			<img src={image.src} alt={image.alt} class="carouselButton" class:selected={image.selected} class:grayscale={!image.selected} loading="lazy"/>
 		{/each}
 		<span></span>
 	</aside>
 </div>
-<style>
+<style lang="postcss">
 	.galleryContainer {
 		display: flex;
 		flex-flow: column nowrap;
@@ -97,6 +105,15 @@
 		background-color: black;
 		display: flex;
 		justify-content: center;
+		block-size: 400px;
+		max-block-size: 100%;
+	}
+	:global(.swipe-handler) {
+		width: 100%;
+	}
+	.content {
+		block-size: 100%;
+		inline-size: 100%;
 	}
 	.gallery.full .content {
 		inline-size: 100%;
@@ -131,6 +148,7 @@
 	}
 	.gallery:hover > button, .gallery:focus-within > button {
 		opacity: 1;
+		z-index: 10;
 		/* box-shadow: inset 0 0 .25rem .1rem rgb(255 255 255 / 0.5); */
 	}
 	.gallery > button:nth-of-type(1) {

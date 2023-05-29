@@ -7,14 +7,14 @@
 </script>
 <div class="card">
 	<div class="img">
-		<img {src} {alt} width="256px" height="256px"/>
+		<img {src} {alt} width="256px" height="256px" loading="lazy"/>
 	</div>
 	<div class="text">
 		<span class="title">{title}</span>
 		<p class="description">{description}</p>
 	</div>
 </div>
-<style>
+<style lang="postcss">
 	.description {
 		overflow: hidden;
 		text-overflow: ellipsis;

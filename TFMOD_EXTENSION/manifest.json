@@ -6,17 +6,9 @@
 	"author": "Nicholas Miller",
 	"homepage_url": "https://github.com/NicholasDJM",
 	"default_locale": "en",
-	"host_permissions": [
-		"*://*.gamebanana.com/*",
-		"*://*.mods.tf/*"
-	],
 	"content_scripts": [
 		{
 			"matches": ["*://*.gamebanana.com/*"],
-			"js": ["build/provisions.bundle.js"]
-		},
-		{
-			"matches": ["*://gamebanana.com/*"],
 			"js": ["build/provisions.bundle.js"]
 		},
 		{

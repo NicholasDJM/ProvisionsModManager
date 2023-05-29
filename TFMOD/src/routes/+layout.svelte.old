@@ -78,7 +78,7 @@
 	</div>
 </nav>
 <span class="background:var(--test)"></span>
-<style>
+<style lang="postcss">
 	button {
 		background-color: rgb(0 0 0 / 0);
 		border: 0;

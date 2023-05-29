@@ -1,4 +1,3 @@
-<svelte:head><meta class="fade"/></svelte:head>
 <script lang="ts">
 	import "normalize.css";
 	import "@fontsource/roboto";
@@ -6,21 +5,21 @@
 	import "$lib/css/app.css";
 	import "$lib/css/stylify.css";
 	import "$lib/css/defaultMargin.css";
-	import { isLoading } from "svelte-i18next";
 	import { i18n } from "$lib/js/i18n";
 	import { title } from "$lib/js/title.js";
 	import { currentPage } from "$lib/js/page.js";
 	import { updateAvailable } from "$lib/js/update.js";
 	import { checkUpdate } from "@tauri-apps/api/updater";
-	import { onMount, onDestroy } from "svelte";
+	import { onMount, onDestroy, setContext } from "svelte";
 	import { backButton, backUrl } from "$lib/js/subpage.js";
 	import { goto, afterNavigate} from "$app/navigation";
 	import { blur, fade } from "svelte/transition";
 	import { invoke } from "@tauri-apps/api/tauri";
-	/* TODO: Switch from "combo-storage" to vanilla JS */
+	// TODO: Switch from "combo-storage" to vanilla JS
 	// @ts-expect-error Can't do anything about missing types.
 	import { LocalStorage } from "combo-storage";
 	import jq from "jquery";
+	// TODO: Remove all uses of jQuery from entire project.
 	import Cog from "svelte-material-icons/Cog.svelte";
 	import Toolbox from "svelte-material-icons/Toolbox.svelte";
 	import ToolboxOutline from "svelte-material-icons/ToolboxOutline.svelte";
@@ -41,9 +40,14 @@
 	import Search from "svelte-material-icons/Magnify.svelte";
 	import Clear from "svelte-material-icons/Close.svelte";
 	import NavDropdown from "$lib/components/NavDropdown.svelte";
+
 	//https://stackoverflow.com/questions/7444451/how-to-get-the-actual-rendered-font-when-its-not-defined-in-css
 	function css(selector: string, property: string): string {
-		return window.getComputedStyle(document.querySelector(selector)).getPropertyValue(property);
+		const element = document.querySelector(selector);
+		if (element) {
+			return window.getComputedStyle(element).getPropertyValue(property);
+		}
+		return "";
 	}
 
 	const buttonSize = "25px",
@@ -64,10 +68,10 @@
 		textComputed: string,
 		navrailComputedPadding: string,
 		iconComputed: string,
-		tooltips: any[] = [],
-		showText = false;
+		showText = false,
+		profileSelectorFade = false;
 	function clearTimers() {
-		for (const [index, value] of menuTimer.entries()) {
+		for (const [index] of menuTimer.entries()) {
 			clearTimeout(menuTimer[index]);
 		}
 		menuTimer = [];
@@ -75,21 +79,31 @@
 	function menuText(display: boolean) {
 		clearTimers();
 		// TODO: Instead of display:none on profileSelector, inert plus visibility:hidden?
+		const profile = document.querySelector<HTMLElement>(".profileSelector"),
+			spacer = document.querySelector<HTMLElement>(".profileSelectorSpacer");
 		if (display) {
-			document.querySelector<HTMLElement>(".profileSelector").style.display = "block";
-			document.querySelector<HTMLElement>(".profileSelectorSpacer").style.display = "none";
+			if (profile) {
+				profile.style.display = "block";
+			}
+			if (spacer) {
+				spacer.style.display = "none";
+			}
 			menuTimer[menuTimer.length] = setTimeout(() => {
-				document.querySelector<HTMLElement>(".profileSelector").classList.add("fade");
+				profileSelectorFade = true;
 			}, menuSpeed);
 			menuTimer[menuTimer.length] = setTimeout(() => {
 				showText = true;
 			}, reducedMotionSpeed);
 		} else {
 			menuTimer[menuTimer.length] = setTimeout(() => {
-				document.querySelector<HTMLElement>(".profileSelectorSpacer").style.display = "block";
-				document.querySelector<HTMLElement>(".profileSelector").style.display = "none";
+				if (spacer) {
+					spacer.style.display = "block";
+				}
+				if (profile) {
+					profile.style.display = "none";
+				}
 			}, menuSpeed);
-			document.querySelector<HTMLElement>(".profileSelector").classList.remove("fade");
+			profileSelectorFade = false;
 			showText = false;
 		}
 	}
@@ -98,8 +112,10 @@
 	   TODO: Unknown license */
 	function displayTextWidth(text: string, font: string): number {
 		const context = document.createElement("canvas").getContext("2d");
-		context.font = font;
-		return Math.floor(context.measureText(text).width);
+		if (context) {
+			context.font = font;
+		}
+		return Math.floor(context?.measureText(text).width || 0);
 	}
 	//console.log("Text Width: " + displayTextWidth("This is demo text!", "italic 19pt verdana")); //
 
@@ -122,6 +138,7 @@
 		textComputed = css(".link", "font-size"),
 		iconComputed = navButtonIconSize.slice(0, iconComputedPixels);
 		// invoke("close_splashscreen");
+		//setContext("buttonSize", navButtonSize);
 	});
 	function toggleMenu() {
 		menuOpen = !menuOpen;
@@ -146,6 +163,7 @@
 	}
 	const oneSecond = 1000;
 	setInterval(() => {
+		// TODO: Move transition to a store, then set on root via top +layout.svelte
 		menuSpeed = Number.parseFloat(css(":root", "--transition").split("ms")[0].split("s")[0].split("m")[0].split("h")[0]); //In ms
 		jq(":root").css("--menuSpeed", menuSpeed + "ms");
 		reducedMotionSpeed = Number.parseFloat(css(":root", "--transitionReducedMotion").split("ms")[0].split("s")[0].split("m")[0].split("h")[0]); //In ms
@@ -162,14 +180,13 @@
 	let navVisible = true;
 	$: {
 		//TODO: replace jquery with onMount;
-		jq(() => {
-			// BUG: Cannot remove this jquery statement, breaks animation in navrail. Maybe we need onMount?
-			menuVerticalOffset = menuOpen ? profileSelectorSize : "0px";
-		});
-		navVisible = $backButton;
-		//TODO: Also set navVisible if screen is too small. This fixes navrail still being focusable via keyboard.
-		// Check css variable? "--small:yes"?
+		// jq(() => {
+			/* BUG: Cannot remove this jquery statement, breaks animation in navrail. Maybe we need onMount?
+			*/
+			menuVerticalOffset = menuOpen ? profileSelectorSize : "0"; // Fires twice?
+		// });
 	}
+	navVisible = $backButton;
 	let buttonIds = 1;
 	const getButtonId = () => {
 		const data = "navButton" + buttonIds;
@@ -226,11 +243,15 @@
 			utils: $i18n.t("utils:page-utils"),
 			troubleshoot: $i18n.t("troubleshoot:page-troubleshoot"),
 			wizard: $i18n.t("wizard:page-wizard"),
-			extension: $i18n.t("common:extension-notice"),
-			update: $i18n.t("common:update-notice"),
+			extension: $i18n.t("extension-notice"),
+			update: $i18n.t("update-notice"),
 			settings: $i18n.t("settings:page-settings"),
-			profile: $i18n.t("common:profile-selector"),
-			skip: $i18n.t("common:skip-to-content")
+			profile: $i18n.t("profile-selector"),
+			skip: $i18n.t("skip-to-content"),
+			tf2: $i18n.t("game-tf2"),
+			tf2c: $i18n.t("game-tf2c"),
+			of: $i18n.t("game-of"),
+			pf2: $i18n.t("game-pf2")
 		};
 	}
 	// TODO: Fix search placeholder text colour.
@@ -259,7 +280,7 @@
 		{:else}
 			<h1 class:noBump={$backButton}>{$title}</h1>
 		{/if}
-		<div style="display:grid; gap:5px; grid-template-columns:auto auto;">
+		<div style="display:grid; gap:0.5rem; grid-template-columns:auto auto;">
 			{#if search}
 				<button class="btn" on:click={() => {
 					searchValue = ""; search = false;
@@ -277,101 +298,74 @@
 		<div class="profileSelectorSpacer">
 			<!-- Needed to fix other navrail items' spacing while profileSelector is hidden -->
 		</div>
-		<div class="profileSelector">
+		<div class="profileSelector" class:fade={profileSelectorFade}>
 			<label for="profile">{translations.profile}</label>
 			<select id="profile">
-				<option>Team Fortress 2</option>
+				<option>{translations.tf2}</option>
+				<option>{translations.tf2c}</option>
+				<option>{translations.of}</option>
+				<option>{translations.pf2}</option>
 			</select>
 		</div>
 		<div class="navButtons primaryNavButtons">
-			<NavButton
-				size={navButtonSize}
-				href="/main"
-				text={translations.mods}
-				dataPage="mods"
-				id={getButtonId()}
-				on:click={closeMenu}
-				{showText}
-				highlight={$currentPage}
-			>
-				<svelte:fragment slot="highlight">
-						<FileOutline size={navButtonIconSize}/>
-				</svelte:fragment>
-				<svelte:fragment>
-					<File size={navButtonIconSize}/>
-				</svelte:fragment>
-			</NavButton>
-			<NavButton
-				size={navButtonSize}
-				href="/main/sources"
-				text={translations.sources}
-				dataPage="sources"
-				id={getButtonId()}
-				{showText}
-				highlight={$currentPage}
-				on:click={closeMenu}
-			>
-				<svelte:fragment>
-						<Web size={navButtonIconSize}/>
-				</svelte:fragment>
-			</NavButton>
-			<NavButton
-				size={navButtonSize}
-				href="/main/utils"
-				text={translations.utils}
-				dataPage="utils"
-				id={getButtonId()}
-				{showText}
-				highlight={$currentPage}
-				on:click={closeMenu}
-			>
-				<svelte:fragment slot="highlight">
-						<ToolboxOutline size={navButtonIconSize}/>
-				</svelte:fragment>
-				<svelte:fragment>
-						<Toolbox size={navButtonIconSize}/>
-				</svelte:fragment>
-			</NavButton>
-			<NavButton
-				size={navButtonSize}
-				href="/main/troubleshooting"
-				text={translations.troubleshoot}
-				dataPage="troubleshoot"
-				id={getButtonId()}
-				{showText}
-				highlight={$currentPage}
-				on:click={closeMenu}
-			>
-				<svelte:fragment slot="highlight">
-						<LightbulbOutline size={navButtonIconSize}/>
-				</svelte:fragment>
-				<svelte:fragment>
-						<Lightbulb size={navButtonIconSize}/>
-				</svelte:fragment>
-			</NavButton>
-			<NavButton
-				size={navButtonSize}
-				href="/main/wizard"
-				text={translations.wizard}
-				dataPage="wizard"
-				id={getButtonId()}
-				{showText}
-				highlight={$currentPage}
-				on:click={closeMenu}
-			>
-				<svelte:fragment slot="highlight">
-						<FilePlusOutline size={navButtonIconSize}/>
-				</svelte:fragment>
-				<svelte:fragment>
-						<FilePlus size={navButtonIconSize}/>
-				</svelte:fragment>
-			</NavButton>
+			{#each [
+				{
+					href: "/main",
+					page: "mods",
+					text: "mods",
+					icon: File,
+					highlight: FileOutline
+				},
+				{
+					href: "/main/sources",
+					page: "sources",
+					text: "sources",
+					icon: Web
+				},
+				{
+					href: "/main/utils",
+					page: "utils",
+					text: "utils",
+					icon: Toolbox,
+					highlight: ToolboxOutline
+				},
+				{
+					href: "/main/troubleshooting",
+					page: "troubleshoot",
+					text: "troubleshoot",
+					icon: Lightbulb,
+					highlight: LightbulbOutline
+				},
+				{
+					href: "/main/wizard",
+					page: "wizard",
+					text: "wizard",
+					icon: FilePlus,
+					highlight: FilePlusOutline
+				}
+			] as btn}
+				{#if btn.highlight}
+					<NavButton size={navButtonSize} href={btn.href} dataPage={btn.page} text={translations[btn.text]} id={getButtonId()} on:click={closeMenu} {showText} highlight={$currentPage}>
+						<svelte:fragment slot="highlight">
+							<svelte:component this={btn.highlight} size={navButtonIconSize}></svelte:component>
+						</svelte:fragment>
+						<svelte:fragment>
+							<svelte:component this={btn.icon} size={navButtonIconSize}></svelte:component>
+						</svelte:fragment>
+					</NavButton>
+				{:else}
+					<NavButton size={navButtonSize} href={btn.href} dataPage={btn.page} text={translations[btn.text]} id={getButtonId()} on:click={closeMenu} {showText} highlight={$currentPage}>
+						<svelte:fragment>
+							<svelte:component this={btn.icon} size={navButtonIconSize}></svelte:component>
+						</svelte:fragment>
+					</NavButton>
+				{/if}
+			{/each}
 		</div>
 		<span></span>
 		<div class="navButtons">
 			{#if extensionPrompt}
 				<NavButton
-					size={navButtonSize}
 					href="/main/settings/extension"
 					text={translations.extension}
 					dataPage = null
@@ -385,7 +379,6 @@
 			{/if}
 			{#if $updateAvailable}
 				<NavButton
-					size={navButtonSize}
 					href="/main/settings/update"
 					text={translations.update}
 					dataPage = null
@@ -398,7 +391,6 @@
 				</NavButton>
 			{/if}
 			<NavButton
-				size={navButtonSize}
 				href="/main/settings"
 				text={translations.settings}
 				dataPage="settings"
@@ -420,7 +412,44 @@
 		<slot />
 	</main>
 </div>
-<style>
+<style lang="postcss">
+	@property --transition {
+		syntax: "<time>";
+		inherits: true;
+	}
+	@property --defaultMargin {
+		syntax: "<length>";
+		inherits: true;
+	}
+	@property --accentColor {
+		syntax: "<color>";
+		inherits: true;
+	}
+	@property --textColor {
+		syntax: "<color>";
+		inherits: true;
+	}
+	@property --textColorOptimal {
+		syntax: "<color>";
+		inherits: true;
+	}
+	@property --menuSpeed {
+		syntax: "<time>";
+		inherits: true;
+	}
+	@property --navBarSize {
+		syntax: "<length>";
+		initial-value: 60px;
+		inherits: true;
+	}
+	@property --cornerSize {
+		syntax: "<length>";
+		initial-value: 20px;
+		inherits: true;
+	}
+	:root {
+		transition: var(--transition);
+	}
 	.skip {
 		--size: 2.5rem;
 		--padding: var(--defaultMargin);
@@ -437,11 +466,6 @@
 		&:focus-visible {
 			inset-block-start: 0;
 		}
-	}
-	:root {
-		--navBarSize: 60px;
-
-		transition: var(--transition);
 	}
 	.btn {
 		display: flex;
@@ -460,18 +484,15 @@
 		}
 	}
 	input[type="search"] {
-		margin-inline-start: 20px;
+		margin-inline-start: var(--cornerSize);
 		background:transparent;
 		border:none;
-		border-block-end:2px solid var(--textColorOptimal);
+		border-block-end: 0.15rem solid var(--textColorOptimal);
 		color:var(--textColorOptimal);
+		padding-inline: 0.5rem;
 		transition: margin-inline-start var(--transition);
-		border-start-start-radius: 10px;
-		border-start-end-radius: 10px;
-		/* stylelint-disable-next-line a11y/no-outline-none -- Background color is changed. So no need for outline. */
 		&:focus-visible {
-			outline: 0;
-			border-radius: 10px;
+			border-radius: 0.5rem;
 			background-color:white;
 			color:black;
 		}
@@ -490,12 +511,12 @@
 		z-index: 90;
 		display: grid;
 		grid-template-columns: auto 1fr auto;
-		gap: 10px;
+		gap: 1rem;
 		position: fixed;
 		block-size: var(--navBarSize);
 		inline-size: 100%;
-		padding-inline: 14px;
-		padding-block: 10px;
+		padding-inline: 0.9rem;
+		padding-block: var(--defaultMargin);
 		text-align:center;
 		background-color: var(--accentColor);
 		inset-block-start: 0;
@@ -525,8 +546,8 @@
 		max-inline-size: 100%; /* I want the max size to be slightly less than 100%, but it screws up the #corner positioning. Look into 'css attr' */
 		inset-block-start: var(--navBarSize);
 		inset-inline-start: 0;
-		padding-block-start: 20px;
-		padding-block-end: 5px;
+		padding-block-start: var(--cornerSize);
+		padding-block-end: 0.5rem;
 		block-size: calc(100% - var(--navBarSize));
 		padding-inline: var(--navRailPadding, var(--defaultMargin));
 		transition: inline-size var(--menuSpeed), inset-inline-start var(--menuSpeed), background-color var(--menuSpeed);
@@ -555,7 +576,7 @@
 		border-radius: var(--size);
 		block-size: var(--size);
 		&:hover,&:focus-visible {
-			box-shadow: 0 0 20px 1px white;
+			box-shadow: 0 0 1rem 1px white;
 		}
 	}
 	.profileSelector label {
@@ -566,12 +587,12 @@
 	}
 	.fade {
 		opacity: 1;
-		transition: opacity var(--transition);
+		transition: opacity var(--transition), block-size var(--transition);
 	}
 	#corner {
 		--mask: url("data:image/webp;base64,UklGRlwBAABXRUJQVlA4WAoAAAAYAAAAEwAAEwAAVlA4TGAAAAAvE8AEEFDQtg1j/rh3AiGCTWxbjS5h69jhACW0uAAHGEALUvBBi4DNYQL8d68q86yRPGkSg/Ggiwasm2LFcXIJOA82Dj8Xh0BAoCDQrYWIQDMUEkIvU6go5YRP2MSYkAlFWElG1gAAAElJKgAIAAAABgASAQMAAQAAAAEAAAAaAQUAAQAAAFYAAAAbAQUAAQAAAF4AAAAoAQMAAQAAAAIAAAAxAQIAEAAAAGYAAABphwQAAQAAAHYAAAAAAAAA8nYBAOgDAADydgEA6AMAAHBhaW50Lm5ldCA1LjAuMwAFAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAKgBAABAAAAFAAAAAOgBAABAAAAFAAAAAWgBAABAAAAuAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAAA=");
 
-		inline-size: 20px;
+		inline-size: var(--cornerSize);
 		z-index: 90;
 		aspect-ratio: 1;
 		/* stylelint-disable-next-line property-no-vendor-prefix -- Non prefix version doesn't work in MS Edge */
@@ -602,7 +623,7 @@
 	}
 	@media (max-width: 640px) {
 		#navrail:not(.open) {
-			inset-inline-start: calc(var(--navRailComputed) - 20px);
+			inset-inline-start: calc(var(--navRailComputed) - var(--cornerSize));
 			/* 20px required for moving at the same amount as corner (It looks weird if it isn't) */
 		}
 		#corner:not(.open) {
@@ -610,10 +631,6 @@
 		}
 		.profileSelector {
 			transition: 0s;
-		}
-		.fade {
-			opacity: 1;
-			transition: opacity var(--transition);
 		}
 		main.content {
 			margin-inline-start: 0;

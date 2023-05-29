@@ -38,7 +38,7 @@
 		</div>
 	{/if}
 </div>
-<style>
+<style lang="postcss">
 	.screenSize {
 		position: fixed;
 		z-index: 1000;

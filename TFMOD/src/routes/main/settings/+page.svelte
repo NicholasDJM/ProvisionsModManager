@@ -34,7 +34,7 @@
 <button on:click={langFr}>Fr</button>
 <button on:click={langAr}>Ar</button>
 <p>{$i18n.language}</p>
-<style>
+<style lang="postcss">
 	summary {
 		cursor: pointer;
 		/* text-align: center; */

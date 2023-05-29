@@ -1,0 +1,51 @@
+{
+    "cSpell.words": [
+        "balloonicorn",
+        "Pyroland",
+        "stylify",
+        "tauri",
+        "unmaximize",
+        "unplugin",
+        "Vite"
+    ],
+    "files.exclude": {
+        "**/logs": true,
+        "**/*.log": true,
+        "**/npm-debug.log*": true,
+        "**/yarn-debug.log*": true,
+        "**/yarn-error.log*": true,
+        "**/pnpm-debug.log*": true,
+        "**/lerna-debug.log*": true,
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/dist-ssr": true,
+        "**/*.local": true,
+        ".vscode/*": true,
+        ".vscode/extensions.json": true,
+        "**/.idea": true,
+        "**/.DS_Store": true,
+        "**/*.suo": true,
+        "**/*.ntvs*": true,
+        "**/*.njsproj": true,
+        "**/*.sln": true,
+        "**/*.sw?": true,
+        "build": true,
+        ".svelte-kit": true,
+        "package": true,
+        "**/.env": true,
+        "**/.env.*": true,
+        "**/.env.example": true,
+        "src-tauri/target/": true
+    },
+    "workspace.isHidden": true,
+    "gutterpreview.sourceFolder": "static",
+    "todo-tree.tree.scanMode": "workspace",
+    "cSpell.enableFiletypes": [
+        "fluent"
+    ],
+	"eslint.validate": [
+		"javascript",
+		"typescript",
+		"svelte"
+	]
+}

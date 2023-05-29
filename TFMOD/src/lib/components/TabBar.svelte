@@ -29,7 +29,7 @@
 	</a>
 	{/each}
 </div>
-<style>
+<style lang="postcss">
 	:root {
 		--highlightSize: 3px;
 	}

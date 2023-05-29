@@ -55,7 +55,7 @@
 		{/each}
 	</div>
 {/if}
-<style>
+<style lang="postcss">
 	li {
 		list-style-type: none;
 	}

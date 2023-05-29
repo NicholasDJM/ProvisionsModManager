@@ -1,5 +1,5 @@
 <svelte:head>
-	<style>
+	<style lang="postcss">
 		#navrail:not(.open) {
 			inset-inline-start: calc(var(--navRailComputed) - 20px) !important;
 		}

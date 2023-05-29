@@ -41,8 +41,9 @@
 			"B:\\SteamLibrary"
 		],
 		messageMaps = "No maps in list.";
+	type Map = [string, boolean]
 	let showOverlay = false,
-		maps: any[] = [],
+		maps: Array<Map> = [],
 		message: string = messageMaps,
 		saved = true,
 		mapsOriginal: any[] = [],
@@ -111,9 +112,10 @@
 						}
 						maps = result;
 						LocalStorage.set("maps", result);
-						/* Had to set map data to localStorage
+						/* BUG: Had to set map data to localStorage
 						   because Svelte kept updating mapsOriginal,
-						   even though it's only set here and only once. like it was a Reactive variable. It's not. */
+						   even though it's only set here and only once. like it was a reactive variable. It's not
+						*/
 					} else {
 						throw ["Invalid data", data];
 					}
@@ -162,7 +164,7 @@
 		}
 	}
 	function reset() {
-		loadMaps();
+		//loadMaps();
 		maps = LocalStorage.get("maps");
 		saved = true;
 	}
@@ -222,6 +224,7 @@
 		}
 	}
 	//FIXME: Replace table with display grid. Tables are weird. they follow none of any modern CSS rules.
+	//TODO: Update dialog to suggest all available maps in a dropdown or search bar?
 </script>
 <main>
 	<h2>Analyser</h2>
@@ -273,7 +276,7 @@
 	</form>
 </dialog>
 <HideNavBar/>
-<style>
+<style lang="postcss">
 	:root {
 		--corner: 3px;
 	}

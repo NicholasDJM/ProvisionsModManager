@@ -178,7 +178,7 @@
 		</select>
 	</label>
 </div>
-<style>
+<style lang="postcss">
 	.palettePreview {
 		display: grid;
 		grid-template-rows: auto auto;
@@ -187,7 +187,7 @@
 	}
 	.palette {
 		display: flex;
-		justify-content: end;
+		justify-content: flex-end;
 		gap: 5px;
 	}
 	.palette * {

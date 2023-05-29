@@ -34,6 +34,7 @@
 				"scope": [
 					"C:/Program Files (x86)/Steam/steamapps/common/Team Fortress 2/**/*",
 					"C:/Program Files (x86)/Steam/steamapps/workshop/content/440/**/*",
+					"C:/Program Files (x86)/Steam/steamapps/sourcemods/**/*",
 					"$APPDATA/tfmod.command.install.txt",
 					"$APPDATA/tfmod.command.disable.txt",
 					"$APPDATA/tfmod.command.enable.txt",
@@ -64,6 +65,9 @@
 					"https://files.gamebanana.com/mods/*",
 					"https://api.gamebanana.com/Core/Item/Data*"
 				]
+			},
+			"os": {
+				"all": true
 			}
 		},
 		"bundle": {

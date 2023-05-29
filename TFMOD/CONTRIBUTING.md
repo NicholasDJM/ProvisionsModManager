@@ -8,16 +8,6 @@ To contribute to this project, you must have at minimum, all of the below instal
  - [NodeJs](https://nodejs.org)
  - [Rust](https://rust-lang.org)
 
-Additionally, you must set the following settings:
- - For the "ESlint" VS Code Extension:
-	```json
-	"eslint.validate": [
-		"javascript",
-		"typescript",
-		"svelte"
-	]
-	```
-To set these settings: Press CTRL + COMMA (COMMAND + COMMA on MacOS), then search for the setting (Ex: `eslint.validate`), and edit the value.
 
 Additional reccomended extensions are as follows:
  - "Error Lens" VS Code Extension ([usernamehw.errorlens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens))

@@ -20,5 +20,9 @@
 	"sectionWebsite": {
 		"message": "Supported Websites",
 		"descriptions": "Title of the Supported Websites section in the options page"
+	},
+	"sectionOptions": {
+		"message": "Miscellaneous Options",
+		"description": "Various options for website specific functions."
 	}
 }

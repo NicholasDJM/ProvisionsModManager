@@ -1,0 +1,1 @@
+We should use WAL (https://hevodata.com/learn/write-ahead-logging/) on every file write operation, especially when downloading mods and compiling a mod archive.

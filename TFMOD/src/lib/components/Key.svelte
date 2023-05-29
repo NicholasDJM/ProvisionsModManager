@@ -55,7 +55,7 @@
 		<slot/>
 	</button>
 </span>
-<style>
+<style lang="postcss">
 	span {
 		display: inline-block;
 		position: absolute;

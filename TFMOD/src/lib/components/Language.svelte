@@ -84,7 +84,7 @@
 	</ul>
 	{/if}
 </main>
-<style>
+<style lang="postcss">
 	main {
 		display: flex;
 		flex-flow: column wrap;

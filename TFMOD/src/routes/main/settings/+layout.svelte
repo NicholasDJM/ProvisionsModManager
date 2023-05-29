@@ -32,7 +32,7 @@
 <main class="defaultMargin settings">
 	<slot/>
 </main>
-<style>
+<style lang="postcss">
 	:global(.settings label) {
 		display:grid; grid-template-columns:1fr auto;
 		margin-block-end: calc(1rem / 3);

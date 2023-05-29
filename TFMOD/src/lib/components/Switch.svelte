@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { i18n } from "$lib/js/i18n";
 	import Drag from "svelte-material-icons/DragVerticalVariant.svelte";
 	export let enabled = true;
 	function change(event: KeyboardEvent) {
@@ -13,15 +14,20 @@
 	}
 	const iconSize = 25,
 		size = iconSize + 10 + "px";
+	let translations: Record<string, string>;
+	$: translations = {
+		on: $i18n.t("enabled"),
+		off: $i18n.t("disabled")
+	};
 </script>
-<label class="switch" on:keydown={change} style={`--width: ${size}; --height: ${size}`}>
+<label class="switch" on:keydown={change} style={`--width: ${size}; --height: ${size}`} title={enabled ? translations.on : translations.off}>
 	<div class="switchBackground" data-checked={enabled}></div>
 	<div class="check" data-checked={enabled}>
 		<Drag size={iconSize + "px"}/>
 	</div>
 	<input type="checkbox" bind:checked={enabled}/>
 </label>
-<style>
+<style lang="postcss">
 	.switch {
 		--border: 1px;
 		/* stylelint-disable-next-line plugin/non-zero-length-expect-unit -- Number to be used in math. Larger number means smaller distance. */

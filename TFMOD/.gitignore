@@ -13,8 +13,6 @@ dist-ssr
 *.local
 
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
 .idea
 .DS_Store
 *.suo
@@ -34,3 +32,4 @@ dist-ssr
 /static/images/copyrighted_images
 /old
 /src/routes/test
+/src/lib/css/globalProperties.txt

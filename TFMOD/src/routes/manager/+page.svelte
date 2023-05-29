@@ -112,6 +112,7 @@
 	}
 	let mods: Array<modMetaData> = [];
 </script>
+<!-- eslint-disable @intlify/svelte/no-raw-text -- Not a user facing page. No translation needed. -->
 <h1>ID: {lastId}</h1>
 <table>
 	<thead>
@@ -150,7 +151,7 @@
 		<tr>
 			{#each Object.values(mods) as value}
 				<td>{value.name}</td>
-				<td><img src={value.images.main.file} alt={value.images.main.alt}/></td>
+				<td><img src={value.images.main.file} alt={value.images.main.alt} loading="lazy"/></td>
 				<td>{value.description.short}</td>
 				<td>{value.description.long}</td>
 				<td>{value.author}</td>
@@ -162,7 +163,7 @@
 		</tr>
 	</tbody>
 </table>
-<style>
+<style lang="postcss">
 	td {
 		border: 1px solid black;
 	}

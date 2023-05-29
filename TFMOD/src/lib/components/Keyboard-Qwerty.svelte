@@ -170,7 +170,7 @@
 		<input type="range" min="30" max="60" value={scale} on:change={reset}/>
 	</span>
 </label> -->
-<style>
+<style lang="postcss">
 	.keyboard {
 		--padding: 8px;
 

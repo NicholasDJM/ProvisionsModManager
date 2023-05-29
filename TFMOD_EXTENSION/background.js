@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-top-level-await -- Not available in this context. */
 require("webextension-polyfill");
 
 const log = (...text) => {
@@ -32,6 +33,14 @@ function send(message) {
 			error(error);
 		});
 }
+
+async function init(key, value) {
+	if (await get(key) === undefined) set(key, value);
+}
+
+init("setting_gamebanana", true);
+init("setting_mods_tf", true);
+init("setting_modboy", true);
 
 const oneSecond = 1000;
 setInterval(async () => {

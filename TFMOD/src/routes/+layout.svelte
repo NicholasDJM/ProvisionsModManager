@@ -27,6 +27,7 @@
 		clearInterval(timer);
 		clearInterval(directionTimer);
 	});
+	import "$lib/js/osTasks";
 </script>
 {#if dev}
 	<ScreenSize/>

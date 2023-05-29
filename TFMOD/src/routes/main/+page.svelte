@@ -22,6 +22,8 @@
 	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
 	import type { ModEvent, MoveEvent } from "$lib/components/Mod.svelte";
 	import Gallery from "$lib/components/Gallery.svelte";
+	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
+	import type { Images } from "$lib/components/Gallery.svelte";
 	import { onMount, onDestroy } from "svelte";
 	//import { dropdown, feedback } from "$lib/navDropdown.js";
 	let fullscreen = false;
@@ -117,8 +119,21 @@
 		selectedMod = "",
 		open = false,
 		mini = false,
-		miniTimer: ReturnType<typeof setInterval>;
-	const miniTimerDelay = 100;
+		miniTimer: ReturnType<typeof setInterval>,
+		keepOpen = false;
+	const images: Array<Images> = [
+		{
+			src: "/images/testLarge.png",
+			alt: "Hello",
+			selected: true
+		},
+		{
+			src: "/images/testLarge.png",
+			alt: "World",
+			selected: false
+		}
+	],
+		miniTimerDelay = 100;
 	function handleClick(event: CustomEvent<{id: string}>) {
 		selectedMod = event.detail.id;
 		if (mini) {
@@ -130,10 +145,12 @@
 		miniTimer = setInterval(() => {
 			/* eslint-disable-next-line no-magic-numbers -- It's pixels*/
 			mini = window.innerWidth < 1000;
-			if (open && mini) {
-				backButton.set(true);
-			} else {
-				backButton.set(false);
+			if (!keepOpen) {
+				if (open && mini) {
+					backButton.set(true);
+				} else {
+					backButton.set(false);
+				}
 			}
 			// TODO: Back button should differentiate between going back in nav history and simply changing a variable. Second store?
 		}, miniTimerDelay);
@@ -141,7 +158,9 @@
 	onDestroy(() => {
 		clearInterval(miniTimer);
 	});
-	$: open = $backButton;
+	// If currently viewing the gallery in fullscreen, don't reset the view to mods panel. (When fullscreen innerWidth is more than 1000)
+	$: keepOpen = fullscreen;
+	$: open = keepOpen ? true : $backButton;
 	// TODO: If mod has no thumbnail, resize text size to max
 </script>
 <div class="container">
@@ -162,19 +181,10 @@
 		</div>
 	</main>
 	<aside id="preview" class:previewOpen={open} inert={!open && mini}>
-		{#if open && mini}
+		{#if (open && mini) || keepOpen}
 			<HideNavBar/>
 		{/if}
-		<Gallery bind:fullscreen={fullscreen}>
-			<img src="/images/testLarge.png" alt="Test"/>
-			<img src="/images/testLarge.png" alt="Test"/>
-			<img src="/images/testLarge.png" alt="Test"/>
-			<img src="/images/testLarge.png" alt="Test"/>
-			<img src="/images/testLarge.png" alt="Test"/>
-			<img src="/images/testLarge.png" alt="Test"/>
-			<img src="/images/testLarge.png" alt="Test"/>
-			<img src="/images/testLarge.png" alt="Test"/>
-		</Gallery>
+		<Gallery bind:fullscreen={fullscreen} images={images}/>
 		{#if !fullscreen}
 			<div class="previewContent">
 				<h1>Hello</h1>
@@ -182,7 +192,7 @@
 		{/if}
 	</aside>
 </div>
-<style>
+<style lang="postcss">
 	main {
 		display: flex;
 		flex-flow: row wrap;
@@ -206,7 +216,9 @@
 		inline-size: 0;
 		/* TODO: Slide in from inline-end when open, and vice-versa when closed */
 	}
-	@media (min-width: 1000px) {
+	@custom-media --max-width (max-width: 1200px);
+	@custom-media --min-width (min-width: 1200px);
+	@media (--min-width) {
 		.container {
 			grid-template-columns: 50% 50%;
 		}
@@ -218,7 +230,7 @@
 			padding: var(--defaultMargin);
 		}
 	}
-	@media (max-width: 1000px) {
+	@media (--max-width) {
 		.container:has(aside.previewOpen) {
 			grid-template-columns: auto 100%;
 		}
@@ -227,8 +239,6 @@
 			padding: 0;
 		}
 		aside.previewOpen {
-			position: absolute;
-			inset-inline-start: 0;
 			inline-size: 100%;
 		}
 		/* BUG: Cannot nest rule below with rule above. Creates an error while compiling. Probably nothing I can do. Report to Svelte? PostCSS? Vite? */

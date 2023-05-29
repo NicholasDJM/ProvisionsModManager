@@ -18,7 +18,6 @@
 	}
 	// TODO: Ask permission to open external links, with option to save to localStorage.
 </script>
-<!-- svelte-ignore a11y-missing-attribute -->
 <a on:click={link} on:keydown={linkKeyboard} title={href} {href}>
 	<slot/>
 </a>
