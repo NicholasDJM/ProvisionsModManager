@@ -1,1 +1,20 @@
 We should use WAL (https://hevodata.com/learn/write-ahead-logging/) on every file write operation, especially when downloading mods and compiling a mod archive.
+
+Setting launch paremeters
+1. access `C:\Program Files (x86)\Steam\config\config.vdf`
+2. search for `"Accounts"`
+3. skip to `"SteamID"`
+4. save number (SteamID 64)
+5. repeat steps 3 & 4 until we find two consecutive closing curly brackets (ignoring white space)
+6. access all `C:\Program Files (x86)\Steam\userdata\**\localconfig.vdf`
+7. search each userdata configs for number(s) saved in step 4
+8. if the same number is found in multiple configs???
+8.1  if the number isn't found in any configs, ask user to select their name
+8.1.1 present `"PersonaName"` as found in localconfig.vdf under `"friends"`
+9. note folder number as SteamID 3
+10. search for (in order) `"Software"`, then `"440"`, `"LaunchOptions"`
+11. Save next string until `"\n`
+12. Add `-insert_search_path "C:\Program Files (x86)\Steam\steamapps\common\Team Fortress 2\tf\provisions\load\provisions_dir.vpk"`
+13. Save back to localconfig.vdf (split?)
+14. ???
+15. Profit!

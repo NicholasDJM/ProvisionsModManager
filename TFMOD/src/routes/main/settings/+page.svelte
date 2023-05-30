@@ -4,10 +4,19 @@
 	import { currentSettingsTab } from "$lib/js/settingsTab.js";
 	currentSettingsTab.set("main");
 	import Theme from "$lib/components/Theme.comp.svelte";
-	let translations: Record<string, string>;
-	$: translations = {
-		theme: $i18n.t("settings:theme")
-	};
+	let translations: Record<string, string>,
+		links: Array<string> = [];
+	$: {
+		translations = {
+			theme: $i18n.t("settings:theme"),
+			link: $i18n.t("links"),
+			clear: $i18n.t("links-clear")
+		};
+		if (localStorage.getItem("links")) {
+			// @ts-expect-error Will never be null, if statement above handles it.
+			links = Object.keys(JSON.parse(localStorage.getItem("links")));
+		}
+	}
 	onMount(() => {
 		for (const [, element] of document.querySelectorAll("details").entries()) {
 			element.open = true;
@@ -23,6 +32,10 @@
 	function langAr() {
 		$i18n.changeLanguage("ar");
 	}
+	function clearLinks() {
+		localStorage.removeItem("links");
+		links = [];
+	}
 </script>
 <details>
 	<summary><span class="themePreview">{translations.theme}</span></summary>
@@ -30,6 +43,16 @@
 		<Theme/>
 	</div>
 </details>
+{#if links.length > 0}
+<h1>
+	{translations.link}
+</h1>
+	{#each links as data}
+		<p>{data}</p>
+	{/each}
+	<button on:click={clearLinks}>{translations.clear}</button>
+{/if}
+<br/>
 <button on:click={lang}>En</button>
 <button on:click={langFr}>Fr</button>
 <button on:click={langAr}>Ar</button>

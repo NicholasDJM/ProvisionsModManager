@@ -139,13 +139,14 @@ export interface Metadata extends Version {
 	updateUrl?: JsonUrl,
 	images?: Images,
 	md5: Array<string>,
-	explicit?: Array<"blood" | "nudity" | "profanity" | "epilepsy">,
+	explicit?: Array<"blood" | "nudity" | "profanity" | "epilepsy" | "arachnophobia">,
 	options?: Options,
 	addons?: Array<Array<AddonPath> | AddonPath>,
 	dependencies?: Array<Url>,
 	peers?: Array<string>,
 	type: Types
 	holiday: Array<"smissmiss" | "scream fortress" | "tf birthday" | "tf2 birthday" | "april fools" | "full moon"> // Should only be holidays that TF2 is programmed to recognize.
+	links?: Array<Url> | Url
 }
 export type MetadataName = `metadata.${JsonExtension}`
 export type UpdateMetadataName = `latest.${JsonExtension}`

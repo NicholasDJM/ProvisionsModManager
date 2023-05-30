@@ -5,58 +5,58 @@
 		- Auto-defined zones are created as an inverse of all other zones. So there’s no need to define the whole image as a zone if you have smaller zones.
 	- Configuration files allow for future proofing new textures, mean the community can create new zones for new textures, and allow users to download them along side textures.
 - Sub-Models: An extension to the Texture Stitching Concept, would allow modders to define models with attachment points that could be attached to other models to create a full model.
-  - For example: A Sniper Scope could attach to a connecting point on a Sniper Rifle.
-  - Another example: Weapon cosmetics could be attached to stock models.
-  - Would require automatically compiling Sub-Models to a full model, so this feature is not a priority.
+	- For example: A Sniper Scope could attach to a connecting point on a Sniper Rifle.
+	- Another example: Weapon cosmetics could be attached to stock models.
+	- Would require automatically compiling Sub-Models to a full model, so this feature is not a priority.
 - Colour Customization: Allow certain cosmetics to be customized by the user with preselected colours and patterns.
 	- Allow Colours to be applied only to certain Paints.
 - Automatic Mod Installation: Support for several websites, including GameBanana, TF2Maps, Mods.tf, Nexus Mods, Colors.tf, MasterComfig, Moddb.com, huds.tf, and more in the future…
-  - With a web browser extension, we can add install buttons on each of these websites.
-  - Automatically downloads, extracts, and installs the mods in the correct places.
-  	- Uses 7Zip to extract files, like ZIP and RAR.
+	- With a web browser extension, we can add install buttons on each of these websites.
+	- Automatically downloads, extracts, and installs the mods in the correct places.
+		- Uses 7Zip to extract files, like ZIP and RAR.
 - Management of Server Mods: Allows for installations of mods to a TF2 Server, including support for Source Mods
-  - Source mods would be downloaded from Sourcemod.net
-  - Files could be uploaded via FTP (also SFTP)
+	- Source mods would be downloaded from Sourcemod.net
+	- Files could be uploaded via FTP (also SFTP)
 - Mod Metadata: A JSON file that can be uploaded along side mods to enable advanced features such as:
-  - Previews: Images, descriptions, YouTube videos, Vimeo videos, and 3D previews. (This is separate from auto-generated previews.)
-  - Mod Options: If your mod has customization settings, the Mod Manager will present them to the user, with short descriptions and thumbnail images.
-  - Install instructions: For more complex installations, Mod Manager can handle some complex or confusing steps on behalf of the user.
-  - Mod Requirements: Allow mods author’s to require separate mods to be installed, as a dependency.
-  - Outdated Mods: Authors (or many user reports) can mark a mod as outdated, causing a warning to be shown to users before download.
+	- Previews: Images, descriptions, YouTube videos, Vimeo videos, and 3D previews. (This is separate from auto-generated previews.)
+	- Mod Options: If your mod has customization settings, the Mod Manager will present them to the user, with short descriptions and thumbnail images.
+	- Install instructions: For more complex installations, Mod Manager can handle some complex or confusing steps on behalf of the user.
+	- Mod Requirements: Allow mods author’s to require separate mods to be installed, as a dependency.
+	- Outdated Mods: Authors (or many user reports) can mark a mod as outdated, causing a warning to be shown to users before download.
 - Auto-Detection of conflicting mods: Some mods will have the same files, and only one can be loaded by TF2. So we’ll automatically scan through every file for duplicates, and notify the user.
-  - With rules for particular files, some conflicts can be resolved without user interaction, typically text files, where we can apply a diff.
-  - Automatic Ordering of mods to prioritize newly added mods over older mods.
-  	- Higher or Lower priority can be given to some mods. For example, HUD mods could be given a higher priority, while a newly added mod that changes a Class’ Image would be ignored.
-  	- Find conflicting files and place the new mod just high enough to clear that confliction.
+	- With rules for particular files, some conflicts can be resolved without user interaction, typically text files, where we can apply a diff.
+	- Automatic Ordering of mods to prioritize newly added mods over older mods.
+		- Higher or Lower priority can be given to some mods. For example, HUD mods could be given a higher priority, while a newly added mod that changes a Class’ Image would be ignored.
+		- Find conflicting files and place the new mod just high enough to clear that confliction.
 - Automatic Renaming of mod files to allow support for a larger range of models.
-  - For example: A mod that changes the Huntsman is also compatible with the Fortified Compound.
-  - This system would also allow players to pick which model to apply the mod to.
-    - For example: A mod for a jacket could be applied to any number of models.
+	- For example: A mod that changes the Huntsman is also compatible with the Fortified Compound.
+	- This system would also allow players to pick which model to apply the mod to.
+	- For example: A mod for a jacket could be applied to any number of models.
 - Extensive Mod Previewer: Mod Manager automatically compiles mods with game files to present a preview of the mod; Preview any mod without needing to start the game.
-  - Example: HUD Previews
-  - Example: Model Previews
-  - Character Animations showing off the mod. Based on mod metadata, could change animation to fit.
-  	- For example: A jacket mod would make the character look at the chest and arms, while a pants mod would make them stick out their legs. Similarly, weapon mods mean the characters would inspect their weapon.
-  	- Mod Metadata could include custom animations as an Easter Egg.
+	- Example: HUD Previews
+	- Example: Model Previews
+	- Character Animations showing off the mod. Based on mod metadata, could change animation to fit.
+		- For example: A jacket mod would make the character look at the chest and arms, while a pants mod would make them stick out their legs. Similarly, weapon mods mean the characters would inspect their weapon.
+		- Mod Metadata could include custom animations as an Easter Egg.
 - Compression of VPKs and folders into a single VPK: Loading too many mods may sometimes cause TF2 to not load localization files, causing every text string in the game to fallback to their localization key, rather than loading from the user’s language.
 - CFG Integrated Development Environment: A robust IDE for editing and managing CFG files, allowing complex scripting for quicker in-game actions. With pre-defined scripts for some common use cases.
-  - Both a text editor and block-based programming are available
-  - Example: Holding the Shift key to access more commands.
-  - Example: Complex actions like Holding to turn on the Mic, or Tapping to keep the Mic on, on the same key.
-  - Flow chart for scripts. Learn how your scripts are executed and when. Find infinite loops in both exec commands and alias commands.
-  - Automatic “sv_allow_wait_command 0” detection: Prevent game crashes if connecting to a server with Wait disabled. (Some script functionality will be limited on these servers.)
-  - Full integration with MasterComfig.
-  - Documentation for every command: Easy to understand and follow documentation for nearly every command available in TF2.
-  - Quickly change keybinds in a single location, automatically updating bind commands where ever they are found/defined.
-  - Automatic descriptions of aliases inferred by comments.
-  - Keyboard display to show what keys are bound to which commands.
+	- Both a text editor and block-based programming are available
+	- Example: Holding the Shift key to access more commands.
+	- Example: Complex actions like Holding to turn on the Mic, or Tapping to keep the Mic on, on the same key.
+	- Flow chart for scripts. Learn how your scripts are executed and when. Find infinite loops in both exec commands and alias commands.
+	- Automatic “sv_allow_wait_command 0” detection: Prevent game crashes if connecting to a server with Wait disabled. (Some script functionality will be limited on these servers.)
+	- Full integration with MasterComfig.
+	- Documentation for every command: Easy to understand and follow documentation for nearly every command available in TF2.
+	- Quickly change keybinds in a single location, automatically updating bind commands where ever they are found/defined.
+	- Automatic descriptions of aliases inferred by comments.
+	- Keyboard display to show what keys are bound to which commands.
 - Mod Compatibility Reporting: Vote on compatibility for mods, and view other mods’ averaged votes.
 - Easy volume adjustments of sound files
-  - Original sound file is preserved, a copy is made then volume is adjusted on the copy. Volume on copy is never adjusted more than once, we always adjust a fresh copy. This prevents clipping if volume is set very high then lowered.
+	- Original sound file is preserved, a copy is made then volume is adjusted on the copy. Volume on copy is never adjusted more than once, we always adjust a fresh copy. This prevents clipping if volume is set very high then lowered.
 - Pyroland Manager: Detect whether a map will look good in pyroland, and enable/disable it.
-  - This would scan the BSP files for all the textures used, and compare to both vanilla textures and modded textures, then gives you a percentage of compatibility.
+	- This would scan the BSP files for all the textures used, and compare to both vanilla textures and modded textures, then gives you a percentage of compatibility.
 - Spray Manager: Quickly select which spray you’d like to use, and preview Level Of Detail (fading) sprays.
-  - Disable a LOD level, to make the spray a static image.
+	- Disable a LOD level, to make the spray a static image.
 - Full support for Windows, Mac and Linux.
 - Optional support for VirusTotal scanning: Allow players to enter their own API access key to scan every mod downloaded for extra security.
 - Closed Caption Editor: Enable viewing of Closed Captions, and editing various lines.
@@ -66,9 +66,12 @@
 		- Useful for triggering messages in CFG scripts via “cc_emit”, like toggling something on or off.
 	- See and edit text colours right in the editor.
 - Intro Video Creator: Automatically convert videos into .bik format.
-  - Maybe allow automatically downloading videos from YouTube and allow cutting the video.
+	- Maybe allow automatically downloading videos from YouTube and allow cutting the video.
 - Asset Pre-load Map: Automatically compile a map with every mod asset that needs to be preloaded to override existing assets (Either because of sv_pure or assets that are packaged inside maps)
-  - Quickly compile a tiny map (1x1 HU?) with every possible mod that requires asset preloading. If you want some things to work in casual, or you want to override models in maps that package their models with the map, this would fix that.
-  - Then we could use “map_background preload; wait 10; disconnect” in autoexec.cfg
-    - A note, this would effectively mute all menu music, perhaps a con in some people‘s eyes.
+	- Quickly compile a tiny map (1x1 HU?) with every possible mod that requires asset preloading. If you want some things to work in casual, or you want to override models in maps that package their models with the map, this would fix that.
+	- Then we could use “map_background preload; wait 10; disconnect” in autoexec.cfg
+		- A note, this would effectively mute all menu music, perhaps a con in some people‘s eyes.
 
+## Future Features
+- Integrate installation and auto updating of Source Mods, like Team Fortress 2 Classic, Open Fortress, and Pre-Fortress 2 right inside Provisions mod manager.
+	- Files can be large, make sure to split via PART http method, and use Write Ahead Log.

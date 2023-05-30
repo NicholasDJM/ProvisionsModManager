@@ -33,3 +33,4 @@ dist-ssr
 /old
 /src/routes/test
 /src/lib/css/globalProperties.txt
+/src/lib/js/osTasks.ts
