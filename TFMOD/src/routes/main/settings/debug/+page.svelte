@@ -7,6 +7,7 @@
 		// eslint-disable-next-line no-magic-numbers
 		windowSizeTime = LocalStorage.get("debug-windowSizeTime") ?? 3000;
 	import { readBinaryFile } from "@tauri-apps/api/fs";
+	import Link from "$lib/components/Link.comp.svelte";
 	// import { vpk } from "$lib/js/vpk";
 	async function testRead(event: Event) {
 		const target = event.target as HTMLButtonElement,
@@ -47,5 +48,5 @@
 	<input type="number" on:change={(event) => LocalStorage.set("debug-windowSizeTime", event.target.value)} value={windowSizeTime}>
 </label>
 <a href="/test">Test</a>
-
+<Link href="steam://exit">Exit Steam</Link>
 <button on:click={testRead}>Test Read</button>

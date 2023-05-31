@@ -69,7 +69,7 @@
 </script>
 <div class="galleryContainer">
 	<div class="gallery" class:full={fullscreen}>
-		<button aria-label="Previous Image" class="button"><Left {size}/></button>
+		<button aria-label="Previous Image" class="button noStyle reverse"><Left {size}/></button>
 		<div class="content">
 			<Swipe bind:active_item={selected} {...config}>
 				{#each images as item}
@@ -79,8 +79,8 @@
 				{/each}
 			</Swipe>
 		</div>
-		<button aria-label="Next Image" class="button"><Right {size}/></button>
-		<button aria-label="Toggle Fullscreen" id="fullscreenToggle" on:click={toggleFullscreen}>
+		<button aria-label="Next Image" class="button noStyle reverse"><Right {size}/></button>
+		<button class="noStyle" aria-label="Toggle Fullscreen" id="fullscreenToggle" on:click={toggleFullscreen}>
 			{#if fullscreen}
 				<FullscreenExit {size}/>
 			{:else}
@@ -96,6 +96,42 @@
 	</aside>
 </div>
 <style lang="postcss">
+	@property --transform {
+		syntax: "<transform-function>";
+		inherits: true;
+	}
+	@property --transition {
+		syntax: "<time>";
+		inherits: true;
+	}
+	@property --transitionReducedMotion {
+		syntax: "<time>";
+		inherits: true;
+	}
+	@property --accentColor {
+		syntax: "<color>";
+		inherits: true;
+	}
+	@property --backgroundColor {
+		syntax: "<color>";
+		inherits: true;
+	}
+	@property --textColorOptimal {
+		syntax: "<color>";
+		inherits: true;
+	}
+	@property --light {
+		syntax: "<color>";
+		inherits: true;
+	}
+	@property --dark {
+		syntax: "<color>";
+		inherits: true;
+	}
+	@property --defaultMargin {
+		syntax: "<length>";
+		inherits: true;
+	}
 	.galleryContainer {
 		display: flex;
 		flex-flow: column nowrap;
@@ -130,7 +166,7 @@
 
 		position: absolute;
 		inset-block: 50%;
-		transform: translateY(-50%);
+		transform: translateY(-50%) var(--transform);
 		block-size: 3.5rem;
 		aspect-ratio: 1;
 		transition: var(--transition);

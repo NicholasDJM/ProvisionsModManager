@@ -1,5 +1,8 @@
 -app-name = Provisions Mod Manager
+app-author = {-app-name} is created by {$author}.
 app-page = {-app-name} - {$page}
+-license = GPL-3.0
+app-license = {-app-name} is licensed under {-license}.
 
 ## Games
 game-tf2 = Team Fortress 2

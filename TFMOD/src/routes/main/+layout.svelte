@@ -262,7 +262,7 @@
 <div id="layout" style="--menuOffset: {menuOffset}; --menuVerticalOffset: {menuVerticalOffset}; --navRailSize: {navButtonSize}; --navRailPadding: {navRailPadding}; --buttonSize: {navButtonSize}; --iconSize: {navButtonIconSize}; --navRailComputed:-{navrailComputed}px">
 	<header id="navbar">
 		{#if !$backButton}
-			<button aria-label="Menu Toggle" class="btn menuRTL" on:click={toggleMenu}>
+			<button aria-label="Menu Toggle" class="btn menuRTL noStyle" on:click={toggleMenu}>
 				{#if menuOpen}
 					<MenuOpen size={buttonSize}/>
 				{:else}
@@ -270,7 +270,7 @@
 				{/if}
 			</button>
 		{:else}
-			<button aria-label="Back" class="btn menuRTL" on:click={goBack}>
+			<button aria-label="Back" class="btn menuRTL noStyle" on:click={goBack}>
 				<Back size={buttonSize}/>
 			</button>
 		{/if}
@@ -288,13 +288,13 @@
 		{/if}
 		<div style="display:grid; gap:0.5rem; grid-template-columns:auto auto;">
 			{#if search}
-				<button aria-label="Hide Searchbox" class="btn" on:click={() => {
+				<button aria-label="Hide Searchbox" class="btn noStyle" on:click={() => {
 					searchValue = ""; search = false;
 				}} on:keydown={clearSearch}><Clear size={buttonSize}/></button>
 			{:else}
 				<button aria-label="Show Searchbox" class="btn" on:click={() => search = true}><Search size={buttonSize}/></button>
 			{/if}
-			<button id="navDropdownButton" aria-label="Options Dropdown" class="btn" on:click={() => navDropdownVisible = !navDropdownVisible}><Options size={buttonSize}/></button>
+			<button id="navDropdownButton" aria-label="Options Dropdown" class="btn noStyle" on:click={() => navDropdownVisible = !navDropdownVisible}><Options size={buttonSize}/></button>
 			<NavDropdown {list} parent={"#navDropdownButton"} bind:visible={navDropdownVisible} dividers={[0]}/>
 		</div>
 	</header>

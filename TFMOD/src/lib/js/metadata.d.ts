@@ -51,6 +51,7 @@ type Spy = "spy" | "mentlegen";
 type Class = Scout | Soldier | Pyro | Demo | Heavy | Engineer | Medic | Sniper | Spy | "all";
 interface ItemType extends Type {
 	type: "item",
+	replace: string, // What model this mod is designed to replace. Should be a model file name.
 	paint?: boolean,
 	warpaint?: boolean,
 	team?: boolean,
@@ -145,7 +146,7 @@ export interface Metadata extends Version {
 	dependencies?: Array<Url>,
 	peers?: Array<string>,
 	type: Types
-	holiday: Array<"smissmiss" | "scream fortress" | "tf birthday" | "tf2 birthday" | "april fools" | "full moon"> // Should only be holidays that TF2 is programmed to recognize.
+	holiday: Array<"smissmiss" | "scream fortress" | "tf birthday" | "tf2 birthday" | "april fools" | "full moon"> // Should only be holidays that TF2 is programmed to recognize. TODO: Add more
 	links?: Array<Url> | Url
 }
 export type MetadataName = `metadata.${JsonExtension}`

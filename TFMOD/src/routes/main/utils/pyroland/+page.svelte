@@ -42,8 +42,7 @@
 		],
 		messageMaps = "No maps in list.";
 	type Map = [string, boolean]
-	let showOverlay = false,
-		maps: Array<Map> = [],
+	let maps: Array<Map> = [],
 		message: string = messageMaps,
 		saved = true,
 		mapsOriginal: any[] = [],
@@ -170,17 +169,15 @@
 	}
 	function showDialog() {
 		document.querySelector<HTMLDialogElement>("#addMapDialog").showModal?.();
-		showOverlay = true;
 	}
 	function hideOverlay() {
-		showOverlay = false;
 		jq("#mapDialogError").css("display", "none");
 	}
 	function error(text: string) {
 		jq("#mapDialogError").css("display", "block");
 		jq("#mapDialogError").text(text);
 		setTimeout(() => {
-			document.querySelector("#addMapDialog").showModal();
+			document.querySelector<HTMLDialogElement>("#addMapDialog")?.showModal();
 		}, 1);
 	}
 	function addMap() {
@@ -257,11 +254,7 @@
 			{/each}
 		</tbody>
 	</table>
-	</table>
 </div>
-{#if showOverlay}
-	<div class="overlay"></div>
-{/if}
 <dialog id="addMapDialog">
 	<label>
 		Map file name
@@ -278,9 +271,6 @@
 </dialog>
 <HideNavBar/>
 <style lang="postcss">
-	:root {
-		--corner: 3px;
-	}
 	.main {
 		margin-inline: var(--defaultMargin);
 		margin-block-end: var(--defaultMargin);
@@ -323,29 +313,11 @@
 		text-overflow: ellipsis;
 		overflow: hidden;
 	}
-	.overlay {
-		position: fixed;
-		inset: 0;
-		block-size: 100%;
-		inline-size: 100%;
-		background-color: rgb(0 0 0 / 0.5);
-		backdrop-filter: blur(2px);
-	}
 	.highlight:hover, .highlight:focus-within {
 		background-color: var(--accentColor);
 		box-shadow: 0 0 0.8rem 1px var(--accentColor);
 		/* border-radius: var(--corner); */
 		color: var(--textColorOptimal);
 		accent-color: var(--accentColorAlt);
-	}
-	button {
-		border-radius: var(--corner);
-		border: 0;
-		box-shadow: 0 0 1px 1px rgb(127 127 127 / 0.5);
-		&:hover:not(:disabled),&:focus-visible:not(:disabled) {
-			background-color: var(--accentColor);
-			color: var(--textColorOptimal);
-			box-shadow: 0 0 0.5rem 1px var(--accentColor);
-		}
 	}
 </style>

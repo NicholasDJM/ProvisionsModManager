@@ -18,3 +18,13 @@ Setting launch paremeters
 13. Save back to localconfig.vdf (split?)
 14. ???
 15. Profit!
+	"Computer\HKEY_CURRENT_USER\SOFTWARE\Valve\Steam\ActiveProcess\ActiveUser" could be used. But only on Windows.
+
+Changing localconfig.vdf doesn't apply the launch paremeters until steam is restarted.
+restart with these two commands. look for steam.exe between both commands.
+steam://exit
+steam://open/main
+
+Source SDK 2013 MP app ID is 243750
+"Computer\HKEY_CURRENT_USER\SOFTWARE\Valve\Steam\Apps\243750\Installed"
+steam://install/243750

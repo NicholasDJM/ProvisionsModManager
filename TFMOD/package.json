@@ -482,7 +482,7 @@
 			"property-no-unknown": [
 				true,
 				{
-					"ignore": [
+					"ignoreProperties": [
 						"corner-radius",
 						"display-type",
 						"marker-style",

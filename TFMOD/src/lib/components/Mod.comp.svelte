@@ -126,11 +126,11 @@
 			<span class="controlsText">{translations.version}</span>
 		{/if}
 		<Group>
-			<button aria-label={translations.moveTop} data-id="moveToTop" on:click={handleMove}><Top/></button>
-			<button aria-label={translations.moveBottom} data-id="moveToBottom"><Bottom/></button>
+			<button class="noStyle" aria-label={translations.moveTop} data-id="moveToTop" on:click={handleMove}><Top/></button>
+			<button class="noStyle" aria-label={translations.moveBottom} data-id="moveToBottom"><Bottom/></button>
 			<input aria-label={translations.position} type="number" value={info.position} min="1"/>
-			<button aria-label={translations.moveUp} data-id="moveUpOne"><Up/></button>
-			<button aria-label={translations.moveDown} data-id="moveDownOne"><Down/></button>
+			<button class="noStyle" aria-label={translations.moveUp} data-id="moveUpOne"><Up/></button>
+			<button class="noStyle" aria-label={translations.moveDown} data-id="moveDownOne"><Down/></button>
 		</Group>
 	</div>
 </div>
