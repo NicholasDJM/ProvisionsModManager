@@ -105,6 +105,8 @@
 		scheme: $i18n.t("settings:color-scheme"),
 		// direction: $i18n.t("settings:text-direction"),
 		motion: $i18n.t("settings:motion"),
+		motionNormal: $i18n.t("settings:motion-normal"),
+		motionReduce: $i18n.t("settings:motion-reduce"),
 		scrollbar: $i18n.t("settings:scrollbar")
 	};
 </script>
@@ -144,7 +146,7 @@
 			<option data-mode="light">Light</option>
 		</select> -->
 		<div>
-			<button class="darkmode" on:click={setMode} on:keydown={setModeKeyboard}>
+			<button class="darkmode noStyle" on:click={setMode} on:keydown={setModeKeyboard}>
 				{#if darkmode === "system"}
 					<System {size}/>
 				{:else if darkmode === "dark"}
@@ -166,8 +168,8 @@
 	<label>
 		{translations.motion}
 		<select on:change={changeMotion}>
-			<option data-motion="normalMotion">Follow System</option>
-			<option data-motion="reduceMotion">Reduce Motion</option>
+			<option data-motion="normalMotion">{translations.motionNormal}</option>
+			<option data-motion="reduceMotion">{translations.motionReduce}</option>
 		</select>
 	</label>
 	<label>

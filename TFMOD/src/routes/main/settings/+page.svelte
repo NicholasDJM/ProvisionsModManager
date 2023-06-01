@@ -37,27 +37,39 @@
 		links = [];
 	}
 </script>
-<details>
-	<summary><span class="themePreview">{translations.theme}</span></summary>
-	<div class="contents">
-		<Theme/>
+<div class="container">
+	<div>
+		<details>
+			<summary><span class="themePreview">{translations.theme}</span></summary>
+			<div class="contents">
+				<Theme/>
+			</div>
+		</details>
+		{#if links.length > 0}
+		<h1>
+			{translations.link}
+		</h1>
+			{#each links as data}
+				<p>{data}</p>
+			{/each}
+			<button on:click={clearLinks}>{translations.clear}</button>
+		{/if}
+		<br/>
+		<button on:click={lang}>En</button>
+		<button on:click={langFr}>Fr</button>
+		<button on:click={langAr}>Ar</button>
+		<p>{$i18n.language}</p>
 	</div>
-</details>
-{#if links.length > 0}
-<h1>
-	{translations.link}
-</h1>
-	{#each links as data}
-		<p>{data}</p>
-	{/each}
-	<button on:click={clearLinks}>{translations.clear}</button>
-{/if}
-<br/>
-<button on:click={lang}>En</button>
-<button on:click={langFr}>Fr</button>
-<button on:click={langAr}>Ar</button>
-<p>{$i18n.language}</p>
+</div>
 <style lang="postcss">
+	.container {
+		display: flex;
+		justify-content: center;
+		& > div {
+			max-inline-size: 50rem;
+			flex-grow: 1;
+		}
+	}
 	summary {
 		cursor: pointer;
 		/* text-align: center; */

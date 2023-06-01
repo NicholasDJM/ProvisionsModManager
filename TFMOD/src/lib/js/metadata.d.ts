@@ -36,7 +36,7 @@ type AddonPath = `${string}.vpk`
 type SematicVersion = `${number}.${number}.${number}`
 type ValidFileExtensions = "vpk" | "zip" | "rar" | "7z"
 interface Type {
-	type: "item" | "map" | "texture" | "sound" | "hud" | "script" | "bik",
+	type: "item" | "map" | "texture" | "sound" | "hud" | "script" | "bik" | "caption",
 	pure?: boolean
 }
 type Scout = "scout" | "scunt" | "Jeremy";
@@ -48,7 +48,8 @@ type Engineer = "engineer" | "engi" | "Dell Conagher";
 type Medic = "medic" | "Ludwig";
 type Sniper = "sniper" | "lucksman" | "Mundy" | "Mun-dee";
 type Spy = "spy" | "mentlegen";
-type Class = Scout | Soldier | Pyro | Demo | Heavy | Engineer | Medic | Sniper | Spy | "all";
+type Civilian = "civilian" | "vip";
+type Class = Scout | Soldier | Pyro | Demo | Heavy | Engineer | Medic | Sniper | Spy | Civilian | "all";
 interface ItemType extends Type {
 	type: "item",
 	replace: string, // What model this mod is designed to replace. Should be a model file name.
@@ -124,7 +125,22 @@ interface ScriptType extends Type {
 interface BikType extends Type {
 	type: "bik"
 }
-type Types = ItemType | MapType | TextureType | SoundType | HudType | ScriptType | BikType
+interface CaptionType extends Type {
+	type: "caption",
+	namespace: string // Same restriction as mod's ID
+	/* Caption files will be plain text.
+		Simple key value pairs, keys and values separated with a colon (:).
+		Captions can contain a # followed by either a 6 digit hex code, or a CSS colour name.
+		Strings starting with // are comments.
+		Keys meant for scripting can be namespaced.
+		Words starting with $ are variables that can be changed in scripting in the IDE. (Not during runtime, only during compile)
+		Comments starting with //@ declares a function.
+			The only function for now, is //@ namespace, and //@ end (READ: no space exists between the @ and the function name)
+			namespace: enabled prefixing all captions below with the namespace defined in metadata.json5
+			end: generic function. ends a function's effect
+	*/
+}
+type Types = ItemType | MapType | TextureType | SoundType | HudType | ScriptType | BikType | CaptionType
 interface Version {
 	metadataVersion: 1
 }

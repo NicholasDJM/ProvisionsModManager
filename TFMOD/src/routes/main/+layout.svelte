@@ -10,6 +10,7 @@
 	import { currentPage } from "$lib/js/page.js";
 	import { updateAvailable } from "$lib/js/update.js";
 	import { checkUpdate } from "@tauri-apps/api/updater";
+	import { exists } from "@tauri-apps/api/fs";
 	import { onMount, onDestroy } from "svelte";
 	import { backButton, backUrl } from "$lib/js/subpage.js";
 	import { goto, afterNavigate} from "$app/navigation";
@@ -67,7 +68,8 @@
 		navrailComputedPadding: string,
 		iconComputed: string,
 		showText = false,
-		profileSelectorFade = false;
+		profileSelectorFade = false,
+		navVisible = true;
 	function clearTimers() {
 		for (const [index] of menuTimer.entries()) {
 			clearTimeout(menuTimer[index]);
@@ -127,15 +129,58 @@
 		}
 		return text;
 	}
-	onMount(() => {
+	let list = [
+			{
+				id: "feedback",
+				text: "Feedback"
+			},
+			{
+				id: "test",
+				text: "Test"
+			}
+		],
+		navDropdownVisible = false,
+		translations: Record<string, string> = {
+			gameTf2: "",
+			gameTf2c: "",
+			gameOf: "",
+			gamePf2: "",
+			tf2: "",
+			tf2c: "",
+			of: "",
+			pf2: ""
+		},
+		/* Wrapping translations in a $ statement shouldn't be necessary, but it is.
+		I think it has something to do with Svelte grabbing the value before it's loaded, and then not updating once it is loaded. */
+		installed = {
+			tf2: false,
+			tf2c: false,
+			of: false,
+			pf2: false
+		},
+		basePath,
+		sdk,
+		profileType = "profile-not-installed";
+	onMount(async () => {
 		const navrailComputedPixels: number = css("#navrail", "inline-size").search("px"),
 			navrailComputedPaddingPixels: number = css("#navrail", "padding-inline").search("px"),
 			iconComputedPixels: number = navButtonIconSize.search("px");
+		basePath = "C:\\Program Files (x86)\\Steam\\steamapps\\";
+		sdk = await exists(basePath + "\\common\\Source SDK Base 2013 Multiplayer");
+		profileType = sdk ? profileType : "profile-no-sdk";
 		navrailComputed = css("#navrail", "inline-size").slice(0, navrailComputedPixels),
 		navrailComputedPadding = css("#navrail", "padding-inline").slice(0, navrailComputedPaddingPixels),
 		textComputed = css(".link", "font-size"),
 		iconComputed = navButtonIconSize.slice(0, iconComputedPixels);
 		// invoke("close_splashscreen");
+		installed.tf2 = await exists(basePath + "common\\Team Fortress 2\\hl2.exe"); // On windows, we could check the registry to see if TF2 is installed
+		installed.tf2c = await exists(basePath + "sourcemods\\tf2classic\\TF2ClassicLauncher.exe");
+		installed.of = await exists(basePath + "sourcemods\\open_fortress\\steam.inf");
+		installed.pf2 = await exists(basePath + "sourcemods\\pf2\\steam.inf");
+		console.table({
+			sdk,
+			...installed
+		});
 	});
 	function toggleMenu() {
 		menuOpen = !menuOpen;
@@ -174,7 +219,6 @@
 	onDestroy(() => {
 		clearInterval(updateCheckTimer);
 	});
-	let navVisible = true;
 	$: {
 		//TODO: replace jquery with onMount;
 		jq(() => {
@@ -220,22 +264,9 @@
 			search = false;
 		}
 	}
-	let list = [
-			{
-				id: "feedback",
-				text: "Feedback"
-			},
-			{
-				id: "test",
-				text: "Test"
-			}
-		],
-		navDropdownVisible = false,
-		translations: Record<string, string>;
-	/* Wrapping translations in a $ statement shouldn't be necessary, but it is.
-		I think it has something to do with Svelte grabbing the value before it's loaded, and then not updating once it is loaded. */
 	$: {
 		translations = {
+			search: $i18n.t("search"),
 			mods: $i18n.t("main:page-mods"),
 			sources: $i18n.t("sources:page-sources"),
 			utils: $i18n.t("utils:page-utils"),
@@ -246,12 +277,15 @@
 			settings: $i18n.t("settings:page-settings"),
 			profile: $i18n.t("profile-selector"),
 			skip: $i18n.t("skip-to-content"),
-			tf2: $i18n.t("game-tf2"),
-			tf2c: $i18n.t("game-tf2c"),
-			of: $i18n.t("game-of"),
-			pf2: $i18n.t("game-pf2"),
-			search: $i18n.t("search")
+			gameTf2: $i18n.t("game-tf2"),
+			gameTf2c: $i18n.t("game-tf2c"),
+			gameOf: $i18n.t("game-of"),
+			gamePf2: $i18n.t("game-pf2")
 		};
+		translations.tf2 = installed.tf2 ? translations.gameTf2 : $i18n.t(profileType, {game: translations.gameTf2});
+		translations.tf2c = installed.tf2c ? translations.gameTf2c : $i18n.t(profileType, {game: translations.gameTf2c});
+		translations.of = installed.of ? translations.gameOf : $i18n.t(profileType, {game: translations.gameOf});
+		translations.pf2 = installed.pf2 ? translations.gamePf2 : $i18n.t(profileType, {game: translations.gamePf2});
 	}
 	/* TODO: Fix search placeholder text colour.
 	// TODO: break out search to component, and implent svelte-typehead and search-text-highlight */
@@ -292,7 +326,7 @@
 					searchValue = ""; search = false;
 				}} on:keydown={clearSearch}><Clear size={buttonSize}/></button>
 			{:else}
-				<button aria-label="Show Searchbox" class="btn" on:click={() => search = true}><Search size={buttonSize}/></button>
+				<button aria-label="Show Searchbox" class="btn noStyle" on:click={() => search = true}><Search size={buttonSize}/></button>
 			{/if}
 			<button id="navDropdownButton" aria-label="Options Dropdown" class="btn noStyle" on:click={() => navDropdownVisible = !navDropdownVisible}><Options size={buttonSize}/></button>
 			<NavDropdown {list} parent={"#navDropdownButton"} bind:visible={navDropdownVisible} dividers={[0]}/>
@@ -307,10 +341,10 @@
 		<div class="profileSelector" class:fade={profileSelectorFade}>
 			<label for="profile">{translations.profile}</label>
 			<select id="profile">
-				<option>{translations.tf2}</option>
-				<option>{translations.tf2c}</option>
-				<option>{translations.of}</option>
-				<option>{translations.pf2}</option>
+				<option selected disabled={!installed.tf2}>{translations.tf2}</option>
+				<option disabled={!installed.tf2c}>{translations.tf2c}</option>
+				<option disabled={!installed.of}>{translations.of}</option>
+				<option disabled={!installed.pf2}>{translations.pf2}</option>
 			</select>
 		</div>
 		<div class="navButtons primaryNavButtons">

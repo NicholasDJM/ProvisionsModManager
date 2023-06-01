@@ -75,7 +75,7 @@
 					},
 					{
 						...modstf,
-						url: "https://mods.tf"
+						url: "http://mods.tf"
 					},
 					{
 						...grid,

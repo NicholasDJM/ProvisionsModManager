@@ -189,6 +189,9 @@ devDependencies:
   postcss-nested-vars:
     specifier: 1.0.0
     version: 1.0.0
+  postcss-positioning:
+    specifier: 0.4.0
+    version: 0.4.0(postcss-calc@8.2.4)
   postcss-preset-env:
     specifier: 8.1.0
     version: 8.1.0(postcss@8.4.21)
@@ -5393,6 +5396,15 @@ packages:
     dependencies:
       postcss: 8.4.21
       postcss-value-parser: 4.2.0
+    dev: true
+
+  /postcss-positioning@0.4.0(postcss-calc@8.2.4):
+    resolution: {integrity: sha512-kiOOQmiWywt8SKBmYtLvn5s9EdFa2A8bsbFivtHwBzgJOIrjyPATEK8rgkI8xTuo1Kb0hHyXyzG950l0+VjU+Q==}
+    peerDependencies:
+      postcss-calc: ^6.0.1
+    dependencies:
+      postcss: 7.0.39
+      postcss-calc: 8.2.4(postcss@8.4.21)
     dev: true
 
   /postcss-preset-env@8.1.0(postcss@8.4.21):

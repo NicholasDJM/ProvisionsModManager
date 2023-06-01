@@ -51,7 +51,7 @@
 		downColor = "";
 </script>
 <span style={`--font:${fontSize};--width:${width};--height:${height};--minWidth:${minWidth};--minHeight:${minHeight};--top:${top};--left:${left};`} style:color style:downColor>
-	<button class:status={status()} class:key={!status()} class:green class:rounded class:circle class:flat data-keytooltip={keycode}>
+	<button class="noStyle" class:status={status()} class:key={!status()} class:green class:rounded class:circle class:flat data-keytooltip={keycode}>
 		<slot/>
 	</button>
 </span>
@@ -82,6 +82,7 @@
 		justify-content: center;
 		transition: 50ms;
 		border-radius: 0.3rem;
+		color: black;
 		&:active {
 			border: 0.2rem inset #F0ECE8;
 			background-color: var(--downColor, #CECBC7);

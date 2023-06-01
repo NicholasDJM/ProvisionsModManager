@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { setContext } from "svelte";
 	import candy from "$lib/json/colorway-candy.json";
-	import { LocalStorage } from "combo-storage";
 	// setContext("colorway", LocalStorage.get("editorKeyboardColorway"));
-	import Key from "./Key.svelte";
+	import Key from "./Key.comp.svelte";
 	import { keySize, keySizeH, keySizeW } from "../js/keySize.js";
 	import MSWindows from "svelte-material-icons/MicrosoftWindows.svelte";
-	// TODO: Seperate out generic logic to $lib/js/keyobard.js
+	// TODO: Separate out generic logic to $lib/js/keyboard.js
 	// TODO: Rename to Keyboard-Qwerty-US.svelte when we create new layouts, like French Canadian.
 	keySize.set("16px");
 	keySizeH.set("40px");
@@ -91,7 +90,7 @@
 	<Key keycode="BACKSPACE" left={repeat()} top={top()} width={double + "px"} fontSize="14px">Backspace<br/>⟵</Key>
 	<Key keycode="INS" left={repeat(false, size + half)} top={top()} width={almostDouble + "px"} fontSize="14px">Insert</Key>
 	<Key keycode="HOME" left={repeat(false, halfAlmost)} top={top()} width={almostDouble + "px"}>Home</Key>
-	<Key keycode="PGDN" left={repeat(false, halfAlmost)} top={top()} width={almostDouble + "px"}>Page<br/>Down</Key>
+	<Key keycode="PGUP" left={repeat(false, halfAlmost)} top={top()} width={almostDouble + "px"}>Page<br/>Up</Key>
 	<Key keycode="NUMLOCK" left={repeat(false, size)} top={top()} fontSize="13px">Num<br/>Lock</Key>
 	<Key keycode="KP_SLASH" left={repeat()} top={top()}>/</Key>
 	<Key keycode="KP_MULTIPLY" left={repeat()} top={top()}>*</Key>

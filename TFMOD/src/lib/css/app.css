@@ -1,8 +1,8 @@
-@import url("$lib/css/theme-blue.css");
-@import url("$lib/css/theme-green.css");
-@import url("$lib/css/theme-red.css");
-@import url("$lib/css/theme-purple.css");
-@import url("$lib/css/theme-yellow.css");
+@import url("./theme-blue.css");
+@import url("./theme-green.css");
+@import url("./theme-red.css");
+@import url("./theme-purple.css");
+@import url("./theme-yellow.css");
 :root {
 	--defaultMargin: 0.5rem;
 	--transitionOriginal: 200ms;
@@ -130,6 +130,10 @@ dialog {
 	&::backdrop {
 		backdrop-filter: blur(0.1rem);
 	}
+}
+button:not(.noStyle):active {
+	background-color: var(--light) !important;
+	color: var(--dark) !important;
 }
 button:not(.noStyle) {
 	border-radius: 1rem;

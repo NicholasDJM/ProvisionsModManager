@@ -1,4 +1,4 @@
-<script lang="ts">
+<script async lang="ts">
 	import { AceEditor } from "svelte-ace";
 	import "brace/theme/monokai";
 	import "../mode-source-cfg.js";
@@ -23,14 +23,13 @@
 	onDestroy(() => {
 		clearInterval(timer);
 	});
-	import KeyboardQwerty from "$lib/components/Keyboard-Qwerty.svelte";
-	const windowSize = async () => await appWindow.innerSize();
-	windowSize().then(data => console.log(data));
+	import KeyboardQwerty from "$lib/components/Keyboard-Qwerty.comp.svelte";
+	// const windowSize = async () => await appWindow.innerSize();
 	let text = "[\n\t\"Hello World\",\n\t\"This is a JSON Document\"\n]";
 	const menuBarHeight = "55",
 		buttonSize = "20",
 		size = buttonSize + "px";
-	let editorHeight: string;
+	// let editorHeight: string;
 	LocalStorage.set("editorKeyboardStyle", "");
 	jq(() => {
 		jq(".menu").css("height", menuBarHeight + "px");
@@ -40,17 +39,18 @@
 		   })
 		   jq(":root").css("block-size", "100%"); */
 	});
-	addEventListener("beforeunload", async (event) => {
+	addEventListener("beforeunload", (event) => {
 		event.preventDefault();
 		//const result = await confirm("There are unsaved documents. Are you sure you want to quit?", {title: "CFG IDE", type: "warning"});
 		return event.returnValue = "";
 	});
-	function unload(event) {
+	/*function unload(event: Event) {
 		console.log("hello");
 		event.preventDefault();
 		//const result = await confirm("There are unsaved documents. Are you sure you want to quit?", {title: "CFG IDE", type: "warning"});
 		return event.returnValue = "";
 	}
+	*/
 </script>
 <!-- <button on:click={unload}>Close</button> -->
 <div class="menu n" style="background:#272822">
