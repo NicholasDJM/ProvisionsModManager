@@ -9,33 +9,26 @@
 	import { readBinaryFile } from "@tauri-apps/api/fs";
 	import Link from "$lib/components/Link.comp.svelte";
 	// import { vpk } from "$lib/js/vpk";
+	// import { vpk } from "$lib/js/vpkBruteforce";
+	import { vpkexe } from "$lib/js/vpkFromBin";
 	async function testRead(event: Event) {
 		const target = event.target as HTMLButtonElement,
 			// eslint-disable-next-line no-magic-numbers
 			signature = [52, 18, 170, 85],
-			file = "";
+			file = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\tf\\custom\\mc_diamond_market_gardener.vpk";
+		//  file = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\tf\\custom\\mc_diamond_market_gardener.vpk";
 		console.log("Reading", file);
 		target.setAttribute("disabled", "");
-		const data = await readBinaryFile(file);
-		console.log(data);
-		const fileSignature = [data[0], data[1], data[2], data[3]];
-		if (fileSignature === signature) {
-			console.log("File is a VPK");
-		} else {
-			let match = true;
-			for (let index = 0; index < fileSignature.length || index < signature.length; index++) {
-				console.log(fileSignature[index], signature[index], fileSignature[index] === signature[index]);
-				if (fileSignature[index] !== signature[index]) {
-					match = false;
-				}
-			}
-			console.log(match);
-			console.log(fileSignature === signature);
-			console.log(signature);
-			console.log(fileSignature);
-		}
+		// const data = await readBinaryFile(file);
+		// vpk.load([data]);
+		await vpkexe.directory(file);
 		console.log("done");
 		target.removeAttribute("disabled");
+	}
+	import { Command } from "@tauri-apps/api/shell";
+	function workshop() {
+		// new Command("install_workshop_item", ["hello", "world"]).execute();
+		new Command("install_workshop_item", ["+workshop_download_item", "440", "2969509359"]).execute();
 	}
 </script>
 <label>
@@ -47,6 +40,13 @@
 	Window Size Display Time (in milliseconds)
 	<input type="number" on:change={(event) => LocalStorage.set("debug-windowSizeTime", event.target.value)} value={windowSizeTime}>
 </label>
+<br>
 <a href="/test">Test</a>
-<Link href="steam://exit">Exit Steam</Link>
+<br>
+<Link href="steam://ExitSteam">Exit Steam</Link>
+<br>
+<button on:click={workshop}>Download workshop item</button>
+<br>
+<Link href="steam://install/440">Install</Link>
+<br>
 <button on:click={testRead}>Test Read</button>

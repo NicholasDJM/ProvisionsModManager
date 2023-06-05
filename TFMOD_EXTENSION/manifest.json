@@ -8,12 +8,11 @@
 	"default_locale": "en",
 	"content_scripts": [
 		{
-			"matches": ["*://*.gamebanana.com/*"],
-			"js": ["build/provisions.bundle.js"]
-		},
-		{
-			"matches": ["*://*.mods.tf/*"],
-			"js": ["build/provisions.bundle.js"]
+			"matches": [
+				"*://*.gamebanana.com/*"
+			],
+			"js": ["build/provisions.bundle.js"],
+			"run_at": "document_end"
 		}
 	],
 	"background": {
@@ -21,7 +20,7 @@
 	},
 	"options_ui":
 	{
-		"page": "settings.html",
+		"page": "src/settings.html",
 		"browser_style": true
 	},
 	"browser_specific_settings": {

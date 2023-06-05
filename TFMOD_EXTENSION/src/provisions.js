@@ -70,6 +70,8 @@ if (p("mods") || p("sprays") || p("sounds") || p("scripts")) {
 			clearInterval(interval);
 			let pageType = document.querySelector("#Breadcrumb").children[0].getAttribute("href").split("https://gamebanana.com/games/")[1],
 				websites = await get("websites") ?? [["gamebanana", true], ["mods_tf", true]];
+			// TODO: Add more cases
+			// eslint-disable-next-line sonarjs/no-small-switch -- Will add more in the future
 			switch(pageType) {
 				case "297": {
 					console.log(websites[0][1]);

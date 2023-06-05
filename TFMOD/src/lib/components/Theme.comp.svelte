@@ -37,11 +37,6 @@
 			}
 		}
 	}
-	function setModeKeyboard(event: KeyboardEvent) {
-		if (event.key === "Enter" || event.key === "Space") {
-			setMode();
-		}
-	}
 	// function changeDirection() {
 	// 	LocalStorage.set("direction", this.options[this.selectedIndex].dataset.direction);
 	// 	if (this.options[this.selectedIndex].dataset.direction === "auto") {
@@ -107,7 +102,10 @@
 		motion: $i18n.t("settings:motion"),
 		motionNormal: $i18n.t("settings:motion-normal"),
 		motionReduce: $i18n.t("settings:motion-reduce"),
-		scrollbar: $i18n.t("settings:scrollbar")
+		scrollbar: $i18n.t("settings:scrollbar"),
+		auto: $i18n.t("settings:color-scheme-auto"),
+		dark: $i18n.t("settings:color-scheme-dark"),
+		light: $i18n.t("settings:color-scheme-light")
 	};
 </script>
 <div class="palettePreview" style="--fade:{fade}">
@@ -146,7 +144,7 @@
 			<option data-mode="light">Light</option>
 		</select> -->
 		<div>
-			<button class="darkmode noStyle" on:click={setMode} on:keydown={setModeKeyboard}>
+			<button class="darkmode noStyle" on:click={setMode} aria-label={darkmode === "system" ? translations.auto : (darkmode === "dark" ? translations.dark : translations.light)}>
 				{#if darkmode === "system"}
 					<System {size}/>
 				{:else if darkmode === "dark"}

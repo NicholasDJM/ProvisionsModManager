@@ -141,6 +141,30 @@ interface CaptionType extends Type {
 	*/
 }
 type Types = ItemType | MapType | TextureType | SoundType | HudType | ScriptType | BikType | CaptionType
+type MappingName = "tf2" | "tf2c" | "of" | "pf2";
+type MappingEntry = `${mappingName}:${string}`
+type Mapping = Record<string, Array<MappingEntry>>;
+interface GameMappings {
+	tf2?: Mapping,
+	tf2c?: Mapping,
+	of?: Mapping,
+	pf2?: Mapping,
+}
+	/* If a mod is applicable to more than one Sourcemod, map the files here.
+		For each game, there must be a full file path in a VPK archive, then another file path of another game
+		for example (pseudo):
+			mappings: {
+				"tf2": {
+					"TF2_Mod.vpk/really/long/and/complicated/file/path.vtf": [
+						"tf2c:simple/path.vtf"
+					]
+				}
+			}
+
+		Eventually, all files for all games should be mapped within provisions mod manager, allowing multi-game mods to be fully automatic.
+	*/
+
+
 interface Version {
 	metadataVersion: 1
 }
@@ -163,7 +187,9 @@ export interface Metadata extends Version {
 	peers?: Array<string>,
 	type: Types
 	holiday: Array<"smissmiss" | "scream fortress" | "tf birthday" | "tf2 birthday" | "april fools" | "full moon"> // Should only be holidays that TF2 is programmed to recognize. TODO: Add more
-	links?: Array<Url> | Url
+	links?: Array<Url> | Url,
+	game: Array<"TF2" | "TF2C" | "OF" | "PF2">,
+	mappings?: GameMappings
 }
 export type MetadataName = `metadata.${JsonExtension}`
 export type UpdateMetadataName = `latest.${JsonExtension}`

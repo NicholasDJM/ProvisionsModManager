@@ -18,9 +18,44 @@
 			},
 			"shell": {
 				"all": false,
-				"open": true,
-				"sidecar": true,
+				"open": "^(((mailto:\\w+)|(tel:\\w+)|(https?://\\w+)).+)|(steam://install/(243750|440))",
+				"sidecar": false,
+				"execute": true,
 				"scope": [
+					{
+						"name": "vpk",
+						"cmd": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\bin\\vpk.exe",
+						"args": true
+					},
+					{
+						"name": "tf2_folder_win",
+						"cmd": "explorer.exe",
+						"args": ["C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\tf"]
+					},
+					{
+						"name": "tf2c_folder_win",
+						"cmd": "explorer.exe",
+						"args": ["C:\\Program Files (x86)\\Steam\\steamapps\\sourcemods\\tf2classic"]
+					},
+					{
+						"name": "of_folder_win",
+						"cmd": "explorer.exe",
+						"args": ["C:\\Program Files (x86)\\Steam\\steamapps\\sourcemods\\open_fortress"]
+					},
+					{
+						"name": "pf2_folder_win",
+						"cmd": "explorer.exe",
+						"args": ["C:\\Program Files (x86)\\Steam\\steamapps\\sourcemods\\pf2"]
+					},
+					{
+						"name": "install_workshop_item",
+						"cmd": "C:\\Program Files (x86)\\Steam\\steam.exe",
+						"args": [
+							"+workshop_download_item",
+							"440",
+							{"validator": "\\d+"}
+						]
+					}
 				]
 			},
 			"fs": {

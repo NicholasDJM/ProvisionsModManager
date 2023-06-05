@@ -3,6 +3,10 @@ app-author = {-app-name} is created by {$author}.
 app-page = {-app-name} - {$page}
 -license = GPL-3.0
 app-license = {-app-name} is licensed under {-license}.
+app-about = {-app-name} {$version} is created by {$author}, is licensed under {-license}.
+app-contributors = Contributors
+-app-contrib-url = https://contrib.rocks
+app-contributors-alt = Image of GitHub contributors' avatars. Made with {-app-contrib-url}
 
 ## Games
 game-tf2 = Team Fortress 2
@@ -12,7 +16,7 @@ game-pf2 = Pre-Fortress 2
 
 ## User Interface
 skip-to-content = Skip to Content
-update-notice = Update Available
+update-notice = Update {$version} Available
 extension-notice = Install Web Extension
 profile-selector = Profile
 profile-not-installed = {$game} (Not installed)

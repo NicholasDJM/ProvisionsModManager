@@ -75,3 +75,7 @@
 ## Future Features
 - Integrate installation and auto updating of Source Mods, like Team Fortress 2 Classic, Open Fortress, and Pre-Fortress 2 right inside Provisions mod manager.
 	- Files can be large, make sure to split via PART http method, and use Write Ahead Log.
+- Synchronize with a server's map list, and semi-automatically download workshop maps, move workshop maps to the maps folder, and optionally add map to mtp.cfg.
+	- There are several advantages to copying workshop maps from the workshop folder to the maps folder:
+		- On windows, if you try recording a Replay, the replay will stop functioning on workshop maps, due to a name error. Because TF2 attempts to name the replay files with the word "workshop\\" in it, the backslash is an invalid character on Windows, thus failing to save a replay. Moving the maps to the local maps folder means Replay will now work. However, connecting to servers with maps in the maps folder means downloading directly from the server if you don't have the map, usually being very slow. Instead, this feature would semi-automatically download a JSON file from the server with a list of workshop ID's, download the files, and move the map files, so connecting to the server is quick.
+	- Can't be fully automatic because instructing the Steam client to download workshop items brings it to the forefront, on top of any other programs. (This would disrupt user experience.)

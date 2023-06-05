@@ -110,11 +110,7 @@
 							}
 						}
 						maps = result;
-						LocalStorage.set("maps", result);
-						/* BUG: Had to set map data to localStorage
-						   because Svelte kept updating mapsOriginal,
-						   even though it's only set here and only once. like it was a reactive variable. It's not
-						*/
+						mapsOriginal = structuredClone(result);
 					} else {
 						throw ["Invalid data", data];
 					}
@@ -163,12 +159,11 @@
 		}
 	}
 	function reset() {
-		//loadMaps();
-		maps = LocalStorage.get("maps");
+		maps = structuredClone(mapsOriginal);
 		saved = true;
 	}
 	function showDialog() {
-		document.querySelector<HTMLDialogElement>("#addMapDialog").showModal?.();
+		document.querySelector<HTMLDialogElement>("#addMapDialog")?.showModal();
 	}
 	function hideOverlay() {
 		jq("#mapDialogError").css("display", "none");
@@ -193,7 +188,12 @@
 		const bsp = ".bsp";
 		if (value.length > 0) {
 			if (value.slice(bsp.length * -1) !== bsp) {
-				value = value + bsp;
+				const reg = /^workshop\/.+/;
+				if (reg.test(value)) {
+					console.log("Map is a workshop map, not adding '.bsp'")
+				} else {
+					value = value + bsp;
+				}
 			}
 			if (hasMap) {
 				error("Map already is in list");

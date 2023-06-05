@@ -2,7 +2,9 @@
 	export interface Images {
 		src: string,
 		alt: string,
-		selected: boolean
+		selected: boolean,
+		width: number,
+		height: number
 	}
 </script>
 <script lang="ts">
@@ -74,7 +76,7 @@
 			<Swipe bind:active_item={selected} {...config}>
 				{#each images as item}
 					<SwipeItem>
-						<img src={item.src} alt={item.alt} loading="lazy">
+						<img class="image" src={item.src} alt={item.alt} width={item.width} height={item.height} loading="lazy">
 					</SwipeItem>
 				{/each}
 			</Swipe>
@@ -92,7 +94,6 @@
 		{#each images as image}
 			<img src={image.src} alt={image.alt} class="carouselButton" class:selected={image.selected} class:grayscale={!image.selected} loading="lazy"/>
 		{/each}
-		<span></span>
 	</aside>
 </div>
 <style lang="postcss">
@@ -132,6 +133,14 @@
 		syntax: "<length>";
 		inherits: true;
 	}
+	@property --size {
+		syntax: "<length>";
+		inherits: true;
+		initial-value: 6rem;
+	}
+	:root {
+		--size: 6rem;
+	}
 	.galleryContainer {
 		display: flex;
 		flex-flow: column nowrap;
@@ -145,7 +154,15 @@
 		max-block-size: 100%;
 	}
 	:global(.swipe-handler) {
+		/* stylelint-disable-next-line stylelint-logical-properties/enforce-logical-properties -- Third party code, we need to target this property. */
 		width: 100%;
+	}
+	:global(.dot) {
+		box-shadow: 0 0 0.8rem 1px var(--accentColor);
+		border-color: var(--accentColor) !important;
+	}
+	:global(.is-active) {
+		--sv-swipe-indicator-active-color: var(--light);
 	}
 	.content {
 		block-size: 100%;
@@ -202,8 +219,6 @@
 		transform: translateY(0%);
 	}
 	.carousel {
-		--size: 6rem;
-
 		border-block-start: 0.2rem outset rgb(127 127 127 / 0.5);
 		background-color: var(--dark);
 		display: flex;
@@ -242,5 +257,10 @@
 		&:hover, &:focus-visible {
 			filter: grayscale(0%);
 		}
+	}
+	.image {
+		block-size: calc(100% - var(--size));
+		inline-size: 100%;
+		object-fit: contain;
 	}
 </style>

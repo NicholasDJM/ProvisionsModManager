@@ -24,6 +24,9 @@ preview-accent-alt = Alt Accent
 preview-background-alt = Alt Background
 
 color-scheme = Color Scheme
+color-scheme-auto = Automatic
+color-scheme-dark = Dark
+color-scheme-light = Light
 
 text-direction = Text Direction
 direction-auto = Follow Locale

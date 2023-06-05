@@ -63,6 +63,10 @@ body {
 	overflow: hidden;
 }
 * {
+	/* While an automatic * {box-sizing: border-box;} is available through postcss-time-machine,
+		it heavily pollutes the styles. It appends this rule to every Svelte component's CSS.
+		So we instead set it here.
+	*/
 	box-sizing: border-box;
 	user-select: none;
 }
@@ -80,18 +84,12 @@ a:hover, a:focus-visible {
 	--transition: 0 !important;
 	--transitionReducedMotion: var(--transitionOriginal, 200ms) !important;
 }
-.rtl #corner {
-	transform: scaleX(-100%);
-}
-.rtl .reverse {
-	--transform: scaleX(-100%);
-	transform: scaleX(-100%);
-}
 .rtl {
 	direction: rtl;
-}
-.rtl .menuRTL {
-	transform: scaleX(-100%);
+	& .reverse {
+		--transform: scaleX(-100%);
+		transform: scaleX(-100%);
+	}
 }
 .tippy-box[data-theme~="red"] {
 	background-color: var(--color-red-3);
@@ -127,6 +125,7 @@ a:hover, a:focus-visible {
 }
 dialog {
 	border-radius: 0.5rem;
+	border-color: var(--accentColor);
 	&::backdrop {
 		backdrop-filter: blur(0.1rem);
 	}

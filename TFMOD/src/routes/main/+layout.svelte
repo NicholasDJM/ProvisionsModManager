@@ -152,15 +152,16 @@
 		},
 		/* Wrapping translations in a $ statement shouldn't be necessary, but it is.
 		I think it has something to do with Svelte grabbing the value before it's loaded, and then not updating once it is loaded. */
-		installed = {
+		installed: Record<string, boolean> = {
 			tf2: false,
 			tf2c: false,
 			of: false,
 			pf2: false
 		},
-		basePath,
-		sdk,
-		profileType = "profile-not-installed";
+		basePath: string,
+		sdk = false,
+		profileType = "profile-not-installed",
+		profile = localStorage.getItem("profile") || "tf2";
 	onMount(async () => {
 		const navrailComputedPixels: number = css("#navrail", "inline-size").search("px"),
 			navrailComputedPaddingPixels: number = css("#navrail", "padding-inline").search("px"),
@@ -173,6 +174,7 @@
 		textComputed = css(".link", "font-size"),
 		iconComputed = navButtonIconSize.slice(0, iconComputedPixels);
 		// invoke("close_splashscreen");
+		// TODO: Separate logic of detecting installed games into a ts file.
 		installed.tf2 = await exists(basePath + "common\\Team Fortress 2\\hl2.exe"); // On windows, we could check the registry to see if TF2 is installed
 		installed.tf2c = await exists(basePath + "sourcemods\\tf2classic\\TF2ClassicLauncher.exe");
 		installed.of = await exists(basePath + "sourcemods\\open_fortress\\steam.inf");
@@ -265,6 +267,12 @@
 		}
 	}
 	$: {
+		function sdkMissing(game: string): string {
+			return sdk ? $i18n.t("game-" + game) : $i18n.t("profile-no-sdk", {game: $i18n.t("game-" + game)});
+		}
+		function isInstalled(game: string): string {
+			return installed[game] ? sdkMissing(game) : $i18n.t("profile-not-installed", {game: $i18n.t("game-" + game)})
+		}
 		translations = {
 			search: $i18n.t("search"),
 			mods: $i18n.t("main:page-mods"),
@@ -273,30 +281,34 @@
 			troubleshoot: $i18n.t("troubleshoot:page-troubleshoot"),
 			wizard: $i18n.t("wizard:page-wizard"),
 			extension: $i18n.t("extension-notice"),
-			update: $i18n.t("update-notice"),
+			update: $i18n.t("update-notice", {version: "0.0.0"}),
 			settings: $i18n.t("settings:page-settings"),
 			profile: $i18n.t("profile-selector"),
 			skip: $i18n.t("skip-to-content"),
-			gameTf2: $i18n.t("game-tf2"),
-			gameTf2c: $i18n.t("game-tf2c"),
-			gameOf: $i18n.t("game-of"),
-			gamePf2: $i18n.t("game-pf2")
+			tf2: installed.tf2 ? $i18n.t("game-tf2") : $i18n.t("profile-not-installed", {game: $i18n.t("game-tf2")}),
+			tf2c: isInstalled("tf2c"),
+			of: isInstalled("of"),
+			pf2: isInstalled("pf2")
 		};
-		translations.tf2 = installed.tf2 ? translations.gameTf2 : $i18n.t(profileType, {game: translations.gameTf2});
-		translations.tf2c = installed.tf2c ? translations.gameTf2c : $i18n.t(profileType, {game: translations.gameTf2c});
-		translations.of = installed.of ? translations.gameOf : $i18n.t(profileType, {game: translations.gameOf});
-		translations.pf2 = installed.pf2 ? translations.gamePf2 : $i18n.t(profileType, {game: translations.gamePf2});
 	}
-	/* TODO: Fix search placeholder text colour.
+	function gotoMain() {
+		location.href = "#main";
+	}
+	function changeProfile(event: Event) {
+		const target = event.target as HTMLSelectElement;
+		profile = target?.options[target.selectedIndex].dataset.game || "tf2";
+		// selectedProfile = localStorage.getItem("profile") || profileValue?.dataset?.game || "tf2";
+		localStorage.setItem("profile", profile);
+	};
 	// TODO: break out search to component, and implent svelte-typehead and search-text-highlight */
 </script>
-<a href="#main" class="skip">
+<a href="#main" class="skip" on:click={gotoMain}>
 	{translations.skip}
 </a>
 <div id="layout" style="--menuOffset: {menuOffset}; --menuVerticalOffset: {menuVerticalOffset}; --navRailSize: {navButtonSize}; --navRailPadding: {navRailPadding}; --buttonSize: {navButtonSize}; --iconSize: {navButtonIconSize}; --navRailComputed:-{navrailComputed}px">
 	<header id="navbar">
 		{#if !$backButton}
-			<button aria-label="Menu Toggle" class="btn menuRTL noStyle" on:click={toggleMenu}>
+			<button aria-label="Menu Toggle" class="btn reverse noStyle" on:click={toggleMenu}>
 				{#if menuOpen}
 					<MenuOpen size={buttonSize}/>
 				{:else}
@@ -304,7 +316,7 @@
 				{/if}
 			</button>
 		{:else}
-			<button aria-label="Back" class="btn menuRTL noStyle" on:click={goBack}>
+			<button aria-label="Back" class="btn reverse noStyle" on:click={goBack}>
 				<Back size={buttonSize}/>
 			</button>
 		{/if}
@@ -340,11 +352,11 @@
 		</div>
 		<div class="profileSelector" class:fade={profileSelectorFade}>
 			<label for="profile">{translations.profile}</label>
-			<select id="profile">
-				<option selected disabled={!installed.tf2}>{translations.tf2}</option>
-				<option disabled={!installed.tf2c}>{translations.tf2c}</option>
-				<option disabled={!installed.of}>{translations.of}</option>
-				<option disabled={!installed.pf2}>{translations.pf2}</option>
+			<select id="profile" on:change={changeProfile}>
+				<option selected={profile === "tf2"} disabled={!installed.tf2} data-game="tf2">{translations.tf2}</option>
+				<option selected={profile === "tf2c"} disabled={!installed.tf2c} data-game="tf2c">{translations.tf2c}</option>
+				<option selected={profile === "of"} disabled={!installed.of} data-game="of">{translations.of}</option>
+				<option selected={profile === "pf2"} disabled={!installed.pf2} data-game="pf2">{translations.pf2}</option>
 			</select>
 		</div>
 		<div class="navButtons primaryNavButtons">
@@ -443,7 +455,7 @@
 			</NavButton>
 		</div>
 	</nav>
-	<span id="corner" class:open="{menuOpen}"></span>
+	<span id="corner" class="reverse" class:open="{menuOpen}"></span>
 	{#if menuOpen}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div id="closeMenu" on:click={closeMenu} transition:blur={{duration: reducedMotionSpeed}}></div>

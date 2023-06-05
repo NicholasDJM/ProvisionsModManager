@@ -5,11 +5,13 @@
     currentSettingsTab.set("about");
 	let translations: Record<string, string>;
 	$: translations = {
-		author: $i18n.t("app-author", {author: "Nicholas Miller"}),
-		license: $i18n.t("app-license")
+		about: $i18n.t("app-about", {author: "Nicholas Miller", version: "0.0.1"}),
+		contrib: $i18n.t("app-contributors"),
+		contribAlt: $i18n.t("app-contributors-alt")
 	};
 </script>
-<p>{translations.author}
+<p>{translations.about}
     <Link href="https://github.com/NicholasDJM/ProvisionsModManager">Github</Link>
 </p>
-<p>{translations.license}</p>
+<h1>{translations.contrib}</h1>
+<img src="https://contrib.rocks/image?repo=NicholasDJM/ProvisisonsModManager" alt={translations.contribAlt}>

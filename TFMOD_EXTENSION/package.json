@@ -1,19 +1,16 @@
 {
 	"scripts": {
-		"bundle": "pnpm run bundle:content&&pnpm run bundle:background&&pnpm run bundle:settings",
-		"watch:front": "watchify provisions.js -o build/provisions.bundle.js",
-		"watch:back": "watchify background.js -o build/background.bundle.js",
-		"watch:settings": "watchify settings.js -o build/settings.bundle.js",
-		"bundle:content": "browserify provisions.js -o build/provisions.bundle.js",
-		"bundle:background": "browserify background.js -o build/background.bundle.js",
-		"bundle:settings": "browserify settings.js -o build/settings.bundle.js",
-		"lint": "eslint --fix ./*.js"
+		"watch": "concurrently \"watchify src/provisions.js -o build/provisions.bundle.js\" \"watchify src/background.js -o build/background.bundle.js\" \"watchify src/settings.js -o build/settings.bundle.js\"",
+		"build": "concurrently \"browserify src/provisions.js -o build/provisions.bundle.js\" \"browserify src/background.js -o build/background.bundle.js\" \"browserify src/settings.js -o build/settings.bundle.js\"",
+		"lint": "eslint --fix ./src/*.js"
 	},
 	"devDependencies": {
-		"@types/eslint": "^8.37.0",
+		"@types/eslint": "^8.40.0",
 		"@types/watchify": "^3.11.1",
 		"browserify": "^17.0.0",
+		"concurrently": "8.0.1",
 		"eslint": "8.36.0",
+		"eslint-plugin-sonarjs": "0.19.0",
 		"eslint-plugin-unicorn": "46.0.0",
 		"watchify": "^4.0.0",
 		"webextension-polyfill": "0.10.0"
@@ -27,11 +24,13 @@
 			"webextensions": true
 		},
 		"plugins": [
-			"unicorn"
+			"unicorn",
+			"sonarjs"
 		],
 		"extends": [
 			"eslint:recommended",
-			"plugin:unicorn/recommended"
+			"plugin:unicorn/recommended",
+			"plugin:sonarjs/recommended"
 		],
 		"parserOptions": {
 			"ecmaVersion": "latest"
@@ -119,8 +118,8 @@
 				"as-needed"
 			],
 			"complexity": [
-				"off",
-				2
+				"warn",
+				15
 			],
 			"max-depth": [
 				"off",
@@ -151,7 +150,7 @@
 			],
 			"no-multi-assign": "error",
 			"no-multi-str": "error",
-			"no-nested-ternary": "error",
+			"no-nested-ternary": "off",
 			"no-eval": "error",
 			"no-implied-eval": "error",
 			"no-script-url": "error",
@@ -197,14 +196,24 @@
 			"unicorn/filename-case": [
 				"error",
 				{
-					"case": "camelCase"
+					"case": "camelCase",
+					"ignore": [
+						"\\w+\\.comp\\.svelte"
+					]
 				}
 			],
 			"unicorn/prefer-query-selector": "warn",
 			"unicorn/prefer-dom-node-dataset": "off",
 			"unicorn/prefer-module": "off",
 			"unicorn/numeric-separators-style": "off",
-			"no-restricted-properties": "off"
+			"unicorn/prevent-abbreviations": [
+				"warn",
+				{
+					"checkFilenames": false
+				}
+			],
+			"no-restricted-properties": "off",
+			"unicorn/expiring-todo-comments": "off"
 		}
 	}
 }

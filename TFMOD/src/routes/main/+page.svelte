@@ -23,6 +23,7 @@
 	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
 	import type { Images } from "$lib/components/Gallery.comp.svelte";
 	import { onMount, onDestroy } from "svelte";
+	import { Command } from "@tauri-apps/api/shell";
 	//import { dropdown, feedback } from "$lib/navDropdown.js";
 	let fullscreen = false,
 		translations: Record<string, string>;
@@ -124,12 +125,16 @@
 		{
 			src: "/images/testLarge.png",
 			alt: "Hello",
-			selected: true
+			selected: true,
+			width: 640,
+			height: 480
 		},
 		{
 			src: "/images/testLarge.png",
 			alt: "World",
-			selected: false
+			selected: false,
+			width: 640,
+			height: 480
 		}
 	],
 		miniTimerDelay = 100;
@@ -144,8 +149,8 @@
 	$: pageTitle = $i18n.t("app-page", $title);
 	onMount(() => {
 		miniTimer = setInterval(() => {
-			/* eslint-disable-next-line no-magic-numbers -- It's pixels*/
-			mini = window.innerWidth < 1000;
+			// @ts-expect-error It's the root element. It's always available. (After the DOM has loaded, of course)
+			mini = getComputedStyle(document.querySelector(":root")).getPropertyValue("--mini") === "yes";
 			if (!keepOpen) {
 				if (open && mini) {
 					backButton.set(true);
@@ -163,8 +168,26 @@
 	$: keepOpen = fullscreen;
 	$: open = keepOpen ? true : $backButton;
 	$: translations = {
-		page: pageTitle
+		page: pageTitle,
+		open: $i18n.t("open-folder")
 	};
+	function openFolder() {
+		const profile = localStorage.getItem("profile");
+		console.log(profile);
+		switch (profile) {
+			case "tf2c":
+				new Command("tf2c_folder_win").spawn();
+				break;
+			case "of":
+				new Command("of_folder_win").spawn();
+				break;
+			case "pf2":
+				new Command("pf2_folder_win").spawn();
+				break;
+			default:
+				new Command("tf2_folder_win").spawn();
+		}
+	}
 	// TODO: If mod has no thumbnail, resize text size to max
 </script>
 <svelte:head>
@@ -174,6 +197,7 @@
 	<div class="defaultMargin main" inert={open}>
 		<!-- <button on:click={() => compact.set(!$compact)}>{$compact ? "Compact" : "Comfortable"}</button> -->
 		<Pills options={filterOptions} on:pill={handlePillEvent}/>
+		<button on:click={openFolder}>{translations.open}</button>
 		<div class="mods">
 			{#each mods as mod (mod.position)}
 				{#if filter.all ||
@@ -200,6 +224,17 @@
 	</aside>
 </div>
 <style lang="postcss">
+	@property --defaultMargin {
+		syntax: "<length>";
+	}
+	:root {
+		--mini: no;
+	}
+	@below lg {
+		:root {
+			--mini: yes;
+		}
+	}
 	.main {
 		display: flex;
 		flex-flow: row wrap;
@@ -232,7 +267,8 @@
 			inline-size: auto;
 		}
 		.previewContent {
-			padding: var(--defaultMargin);
+			padding-inline: var(--defaultMargin);
+			padding-block: var(--defaultMargin);
 		}
 	}
 	@below lg {
@@ -241,14 +277,16 @@
 		}
 		.container:has(aside.previewOpen) .main {
 			inline-size: 0;
-			padding: 0;
+			padding-inline: 0;
+			padding-block: 0;
 		}
 		aside.previewOpen {
 			inline-size: 100%;
 		}
 		/* BUG: Cannot nest rule below with rule above. Creates an error while compiling. Probably nothing I can do. Report to Svelte? PostCSS? Vite? */
 		aside.previewOpen .previewContent {
-			padding: var(--defaultMargin);
+			padding-inline: var(--defaultMargin);
+			padding-block: var(--defaultMargin);
 		}
 	}
 </style>

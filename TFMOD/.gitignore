@@ -33,3 +33,4 @@ dist-ssr
 /old
 /src/routes/test
 /src/lib/js/osTasks.ts
+/cfg_length_test.js
