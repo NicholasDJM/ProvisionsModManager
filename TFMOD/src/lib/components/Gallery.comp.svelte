@@ -104,10 +104,12 @@
 	@property --transition {
 		syntax: "<time>";
 		inherits: true;
+		initial-value: "200ms";
 	}
 	@property --transitionReducedMotion {
 		syntax: "<time>";
 		inherits: true;
+		initial-value: "200ms";
 	}
 	@property --accentColor {
 		syntax: "<color>";

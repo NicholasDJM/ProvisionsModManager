@@ -16,6 +16,7 @@
 	import type { ModInfo } from "$lib/js/modInfo";
 	export let info: ModInfo;
 	const lang: string = LocalStorage.get("language"),
+		langShort: string = lang.slice(0, 2),
 		dispatch = createEventDispatcher();
 	function handleClick() {
 		dispatch("mod", {id: info.md5});
@@ -46,7 +47,7 @@
 			}
 		}
 	}
-	let censor = info.explicit?.length > 0 || false,
+	let censor = info.explicit ? info.explicit.length > 0 : false,
 		translations: Record<string, string>;
 	$: {
 		translations = {
@@ -96,7 +97,7 @@
 				<p class="description">
 					{#if info.description}
 						{#each info.description as data}
-							{#if data.lang === lang}
+							{#if data.lang === lang || data.lang === langShort}
 								{data.text}
 							{/if}
 						{/each}
@@ -135,6 +136,39 @@
 	</div>
 </div>
 <style lang="postcss">
+	@property --defaultMargin {
+		syntax: "<length>";
+	}
+	@property --textColor {
+		syntax: "<color>";
+	}
+	@property --textColorOptimal {
+		syntax: "<color>";
+	}
+	@property --accentColor {
+		syntax: "<color>";
+	}
+	@property --backgroundColor {
+		syntax: "<color>";
+	}
+	@property --backgroundColorAlt {
+		syntax: "<color>";
+	}
+	@property --transition {
+		syntax: "<time>";
+		inherits: true;
+		initial-value: "200ms";
+	}
+	@property --transitionReducedMotion {
+		syntax: "<time>";
+		inherits: true;
+		initial-value: "200ms";
+	}
+	@property --grid {
+		syntax: "<length>";
+		inherits: true;
+		initial-value: "1fr";
+	}
 	a {
 		color: var(--textColor);
 		text-decoration: none;
@@ -175,12 +209,10 @@
 		opacity: 0.9;
 	}
 	img {
-		--mask: linear-gradient(270deg, rgb(0 0 0 / 1) 80%, rgb(0 0 0 / 0) 99%, rgb(0 0 0 / 0) 100%);
+		$mask: linear-gradient(270deg, rgb(0 0 0 / 1) 80%, rgb(0 0 0 / 0) 99%, rgb(0 0 0 / 0) 100%);
 		--size: 128px;
 
-		/* stylelint-disable-next-line property-no-vendor-prefix -- Mask doesn't work on MS Edge */
-		-webkit-mask: var(--mask);
-		mask: var(--mask);
+		mask: $mask;
 		inline-size: var(--size);
 		block-size: var(--size);
 		display:block;

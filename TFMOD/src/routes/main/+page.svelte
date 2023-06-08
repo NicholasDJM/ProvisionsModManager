@@ -145,7 +145,8 @@
 		}
 		console.log(open);
 	}
-	let pageTitle: string;
+	let pageTitle: string,
+		profile = localStorage.getItem("profile") || "tf2";
 	$: pageTitle = $i18n.t("app-page", $title);
 	onMount(() => {
 		miniTimer = setInterval(() => {
@@ -159,6 +160,7 @@
 				}
 			}
 			// TODO: Back button should differentiate between going back in nav history and simply changing a variable. Second store?
+			profile = localStorage.getItem("profile") || "tf2";
 		}, miniTimerDelay);
 	});
 	onDestroy(() => {
@@ -169,23 +171,30 @@
 	$: open = keepOpen ? true : $backButton;
 	$: translations = {
 		page: pageTitle,
-		open: $i18n.t("open-folder")
+		open: $i18n.t("open-folder"),
+		tf2: $i18n.t("game-tf2"),
+		tf2c: $i18n.t("game-tf2c"),
+		of: $i18n.t("game-of"),
+		pf2: $i18n.t("game-pf2")
 	};
 	function openFolder() {
-		const profile = localStorage.getItem("profile");
 		console.log(profile);
 		switch (profile) {
-			case "tf2c":
-				new Command("tf2c_folder_win").spawn();
+			case "tf2c": {
+				new Command("tf2c_folder_win").execute();
 				break;
-			case "of":
-				new Command("of_folder_win").spawn();
+			}
+			case "of": {
+				new Command("of_folder_win").execute();
 				break;
-			case "pf2":
-				new Command("pf2_folder_win").spawn();
+			}
+			case "pf2": {
+				new Command("pf2_folder_win").execute();
 				break;
-			default:
-				new Command("tf2_folder_win").spawn();
+			}
+			default: {
+				new Command("tf2_folder_win").execute();
+			}
 		}
 	}
 	// TODO: If mod has no thumbnail, resize text size to max
@@ -195,9 +204,10 @@
 </svelte:head>
 <div class="container">
 	<div class="defaultMargin main" inert={open}>
+		<h1>{translations[profile]}</h1>
+		<button on:click={openFolder}>{translations.open}</button>
 		<!-- <button on:click={() => compact.set(!$compact)}>{$compact ? "Compact" : "Comfortable"}</button> -->
 		<Pills options={filterOptions} on:pill={handlePillEvent}/>
-		<button on:click={openFolder}>{translations.open}</button>
 		<div class="mods">
 			{#each mods as mod (mod.position)}
 				{#if filter.all ||
@@ -234,6 +244,9 @@
 		:root {
 			--mini: yes;
 		}
+	}
+	h1 {
+		margin-block: 0;
 	}
 	.main {
 		display: flex;

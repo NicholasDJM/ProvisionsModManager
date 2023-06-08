@@ -48,12 +48,19 @@
 						"args": ["C:\\Program Files (x86)\\Steam\\steamapps\\sourcemods\\pf2"]
 					},
 					{
-						"name": "install_workshop_item",
+						"name": "install_workshop_item_win",
 						"cmd": "C:\\Program Files (x86)\\Steam\\steam.exe",
 						"args": [
 							"+workshop_download_item",
 							"440",
 							{"validator": "\\d+"}
+						]
+					},
+					{
+						"name": "steam_quit_win",
+						"cmd": "C:\\Program Files (x86)\\Steam\\steam.exe",
+						"args": [
+							"+quit"
 						]
 					}
 				]

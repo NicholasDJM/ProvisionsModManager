@@ -39,7 +39,8 @@
 		"settings": {},
 		"ignorePatterns": [
 			"*.min.js",
-			"*.bundle.js"
+			"*.bundle.js",
+			"/node_modules"
 		],
 		"globals": {},
 		"rules": {
@@ -62,7 +63,7 @@
 				"error",
 				"always"
 			],
-			"no-unused-vars": "off",
+			"no-unused-vars": "warn",
 			"comma-spacing": "error",
 			"camelcase": "warn",
 			"no-var": "error",

@@ -179,7 +179,7 @@
 		installed.tf2c = await exists(basePath + "sourcemods\\tf2classic\\TF2ClassicLauncher.exe");
 		installed.of = await exists(basePath + "sourcemods\\open_fortress\\steam.inf");
 		installed.pf2 = await exists(basePath + "sourcemods\\pf2\\steam.inf");
-		console.table({
+		console.log({
 			sdk,
 			...installed
 		});
@@ -205,14 +205,31 @@
 		// backButton.set(false);
 		if (menuOpen) toggleMenu();
 	}
-	const oneSecond = 1000;
-	setInterval(() => {
-		// TODO: Move transition to a store, then set on root via top +layout.svelte
-		menuSpeed = Number.parseFloat(css(":root", "--transition").split("ms")[0].split("s")[0].split("m")[0].split("h")[0]); //In ms
-		jq(":root").css("--menuSpeed", menuSpeed + "ms");
-		reducedMotionSpeed = Number.parseFloat(css(":root", "--transitionReducedMotion").split("ms")[0].split("s")[0].split("m")[0].split("h")[0]); //In ms
-	}, oneSecond);
-	const tenSeconds = 10000,
+	const oneSecond = 1000,
+		speedTimer = setInterval(() => {
+			// TODO: Move transition to a store, then set on root via top +layout.svelte
+			const speed = css(":root", "--transition");
+			if (Number.parseFloat(speed) !== menuSpeed) {
+				if (speed.includes("ms")) {
+					menuSpeed = Number.parseFloat(speed.split("ms")[0]);
+				} else if (speed.includes("s")) {
+					menuSpeed = Number.parseFloat(speed.split("s")[0]) * 1000;
+				}
+				jq(":root").css("--menuSpeed", menuSpeed + "ms");
+			}
+			// menuSpeed = Number.parseFloat(css(":root", "--transition").split("ms")[0].split("s")[0].split("m")[0].split("h")[0]); //In ms
+			{
+				const speed = css(":root", "--transitionReducedMotion");
+				if (Number.parseFloat(speed) !== reducedMotionSpeed) {
+					if (speed.includes("ms")) {
+						reducedMotionSpeed = Number.parseFloat(speed.split("ms")[0]);
+					} else if (speed.includes("s")) {
+						reducedMotionSpeed = Number.parseFloat(speed.split("s")[0]) * 1000;
+					}
+				}
+			}
+		}, oneSecond),
+		tenSeconds = 10000,
 		updateCheckTimer = setInterval(() => {
 			checkUpdate().then(result => {
 				updateAvailable.set(result.shouldUpdate);
@@ -220,12 +237,11 @@
 		}, tenSeconds);
 	onDestroy(() => {
 		clearInterval(updateCheckTimer);
+		clearInterval(speedTimer);
 	});
 	$: {
-		//TODO: replace jquery with onMount;
 		jq(() => {
-			/* BUG: Cannot remove this jquery statement, breaks animation in navrail.
-			*/
+			// BUG: Cannot remove this jquery statement, breaks animation in navrail.
 			menuVerticalOffset = menuOpen ? profileSelectorSize : "0"; // Fires twice?
 		});
 	}
@@ -240,7 +256,7 @@
 	let previousPage: string = base;
 	afterNavigate(({from}) => {
 		const url = from?.url?.pathname;
-		console.log(url);
+		// console.log(url);
 		if (url) {
 			previousPage = url;
 			localStorage.setItem("previousPage", from?.url?.pathname);
@@ -271,7 +287,7 @@
 			return sdk ? $i18n.t("game-" + game) : $i18n.t("profile-no-sdk", {game: $i18n.t("game-" + game)});
 		}
 		function isInstalled(game: string): string {
-			return installed[game] ? sdkMissing(game) : $i18n.t("profile-not-installed", {game: $i18n.t("game-" + game)})
+			return installed[game] ? sdkMissing(game) : $i18n.t("profile-not-installed", {game: $i18n.t("game-" + game)});
 		}
 		translations = {
 			search: $i18n.t("search"),
@@ -299,7 +315,7 @@
 		profile = target?.options[target.selectedIndex].dataset.game || "tf2";
 		// selectedProfile = localStorage.getItem("profile") || profileValue?.dataset?.game || "tf2";
 		localStorage.setItem("profile", profile);
-	};
+	}
 	// TODO: break out search to component, and implent svelte-typehead and search-text-highlight */
 </script>
 <a href="#main" class="skip" on:click={gotoMain}>
@@ -561,10 +577,6 @@
 		/* display: grid; */
 		/* grid-template-columns: auto 1fr; */
 		block-size:100%;
-		span {
-			display: flex;
-			align-items: center;
-		}
 	}
 	.search {
 		color: var(--textColorOptimal);

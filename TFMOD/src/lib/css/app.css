@@ -3,9 +3,10 @@
 @import url("./theme-red.css");
 @import url("./theme-purple.css");
 @import url("./theme-yellow.css");
+@import url("./globalProperties.css");
 :root {
 	--defaultMargin: 0.5rem;
-	--transitionOriginal: 200ms;
+	--transitionOriginal: 200;
 	--transition: var(--transitionOriginal, 200ms);
 	--transitionReducedMotion: var(--transition, 200ms);
 
@@ -87,7 +88,12 @@ a:hover, a:focus-visible {
 .rtl {
 	direction: rtl;
 	& .reverse {
+		/*
+			Use --transform if you also need to apply your own transformations as well as reverse.
+			Example transform: translateY(-50%) var(--transform);
+		 */
 		--transform: scaleX(-100%);
+
 		transform: scaleX(-100%);
 	}
 }

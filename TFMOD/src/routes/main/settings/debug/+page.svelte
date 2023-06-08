@@ -8,27 +8,26 @@
 		windowSizeTime = LocalStorage.get("debug-windowSizeTime") ?? 3000;
 	import { readBinaryFile } from "@tauri-apps/api/fs";
 	import Link from "$lib/components/Link.comp.svelte";
-	// import { vpk } from "$lib/js/vpk";
+	import { read } from "$lib/js/vpk";
 	// import { vpk } from "$lib/js/vpkBruteforce";
-	import { vpkexe } from "$lib/js/vpkFromBin";
 	async function testRead(event: Event) {
 		const target = event.target as HTMLButtonElement,
 			// eslint-disable-next-line no-magic-numbers
-			signature = [52, 18, 170, 85],
-			file = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\tf\\custom\\mc_diamond_market_gardener.vpk";
-		//  file = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Team Fortress 2\\tf\\custom\\mc_diamond_market_gardener.vpk";
+			signature = [52, 18, 170, 85];
 		console.log("Reading", file);
 		target.setAttribute("disabled", "");
-		// const data = await readBinaryFile(file);
-		// vpk.load([data]);
-		await vpkexe.directory(file);
+		try {
+			let data = read([await readBinaryFile(file)]);
+		} catch (error) {
+			console.error(error);
+		}
 		console.log("done");
 		target.removeAttribute("disabled");
 	}
 	import { Command } from "@tauri-apps/api/shell";
 	function workshop() {
 		// new Command("install_workshop_item", ["hello", "world"]).execute();
-		new Command("install_workshop_item", ["+workshop_download_item", "440", "2969509359"]).execute();
+		new Command("install_workshop_item_win", ["+workshop_download_item", "440", "2969509359"]).execute();
 	}
 </script>
 <label>

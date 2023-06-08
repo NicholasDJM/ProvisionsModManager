@@ -11,18 +11,18 @@ const log = (...text) => {
 log("Loading...");
 document.querySelector("#version").textContent = browser.i18n.getMessage("optionsTitle", browser.runtime.getManifest().version);
 
-for (const [index, element] of document.querySelectorAll("[data-string]").entries()) {
+for (const [, element] of document.querySelectorAll("[data-string]").entries()) {
 	element.textContent = browser.i18n.getMessage(element.dataset.string);
 }
 
-function length_(object) {
+function length(object) {
 	return Object.keys(object).length;
 }
 
 async function get(name) {
 	let result;
 	await browser.storage.local.get(["setting_" + name]).then(data => {
-		if (length_(data) > 0) {
+		if (length(data) > 0) {
 			result = data["setting_" + name];
 		}
 	});
@@ -40,7 +40,7 @@ function listen(element, value = "value") {
 
 // eslint-disable-next-line unicorn/prefer-top-level-await -- Not available in this context.
 (async () => {
-	for (const [index, element] of document.querySelectorAll("input").entries()) {
+	for (const [, element] of document.querySelectorAll("input").entries()) {
 		const key = element.dataset.key,
 			defaultValue = element.dataset.default,
 			// eslint-disable-next-line no-await-in-loop -- Unless we're creating a massive amount of options, this shouldn't matter in terms of performance.
@@ -48,9 +48,9 @@ function listen(element, value = "value") {
 			// FIXME: This should convert to proper types. ^
 		debug("KEY", key);
 		// eslint-disable-next-line no-await-in-loop
-		debug("VALUE", await get(key));
+		debug("SAVED VALUE", await get(key));
 		debug("DEFAULT", defaultValue);
-		debug("VALUE COMPUTED", currentValue);
+		debug("VALUE", currentValue);
 		if (currentValue === undefined) {
 			set(key, defaultValue);
 		}

@@ -1,0 +1,63 @@
+@property --defaultMargin {
+	syntax: "<length>";
+	inherits: true;
+}
+@property --transition {
+	syntax: "<time>";
+	inherits: true;
+	initial-value: 200ms;
+}
+@property --transitionReducedMotion {
+	syntax: "<time>";
+	inherits: true;
+	initial-value: 200ms;
+}
+@property --transform {
+	syntax: "<transform-function>";
+	inherits: true;
+}
+@property --reduceMotion {
+	syntax: "yes | no";
+	inherits: true;
+	initial-value: no;
+}
+@property --accentColor {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: var(--color-blue-3);
+}
+@property --backgroundColor {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: var(--color-gray-2);
+}
+@property --backgroundColorAlt {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: var(--color-gray-1);
+}
+@property --textColor {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: var(--color-gray-6);
+}
+@property --textColorOptimal {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: var(--color-gray-1);
+}
+@property --textColorInverse {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: var(--color-gray-1);
+}
+@property --light {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: var(--color-gray-5);
+}
+@property --dark {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: var(--color-gray-1);
+}

@@ -5,13 +5,16 @@
 	import { currentPage } from "$lib/js/page.js";
 	currentPage.set("sources");
 	import Link from "$lib/components/Link.comp.svelte";
+	interface LinkTypeNoUrl {
+		translation: string,
+		favicon?: string,
+		alt: string
+	}
+	interface LinkType extends LinkTypeNoUrl {
+		url: string
+	}
 	type Sources = {
-		links: Array<{
-			translation: string
-			favicon?: string,
-			url: string,
-			alt: string
-		}>,
+		links: Array<LinkType>,
 		logo: {
 			url: string,
 			width: number,
@@ -46,22 +49,29 @@
 		modsalt: $i18n.t("sources:modstf-alt"),
 		gridalt: $i18n.t("sources:grid-alt")
 	};
-	let gb = {
+	let gb: LinkTypeNoUrl =
+		{
 			translation: "gamebanana",
 			favicon: "https://icons.duckduckgo.com/ip2/gamebanana.com.ico",
 			alt: ""
 		},
-		modstf = {
+		modstf: LinkTypeNoUrl = {
 			translation: "mods",
 			favicon: "https://icons.duckduckgo.com/ip2/mods.tf.ico",
 			alt: ""
 		},
-		grid = {
+		grid: LinkTypeNoUrl = {
 			translation: "grid",
 			favicon: "https://icons.duckduckgo.com/ip2/steamgriddb.com.ico",
 			alt: ""
 		},
 		source: Array<Sources>;
+	function link(address: string, preset: LinkTypeNoUrl): LinkType {
+		return {
+			...preset,
+			url: address
+		};
+	}
 	$: {
 		gb.alt = translations.gamebananaalt;
 		modstf.alt = translations.modsalt;
@@ -69,18 +79,9 @@
 		source = [
 			{
 				links: [
-					{
-						...gb,
-						url: "https://tf2.gamebanana.com"
-					},
-					{
-						...modstf,
-						url: "http://mods.tf"
-					},
-					{
-						...grid,
-						url: "https://www.steamgriddb.com/game/10602"
-					}
+					link("https://tf2.gamebanana.com", gb),
+					link("http://mods.tf", modstf),
+					link("https://www.steamgriddb.com/game/10602", grid)
 				],
 				logo: {
 					url: "/images/copyrighted_images/tf2.png",
@@ -92,14 +93,8 @@
 			},
 			{
 				links: [
-					{
-						...gb,
-						url: "https://gamebanana.com/games/5418"
-					},
-					{
-						...grid,
-						url: "https://www.steamgriddb.com/game/5262654"
-					}
+					link("https://gamebanana.com/games/5418", gb),
+					link("https://www.steamgriddb.com/game/5262654", grid)
 				],
 				logo: {
 					url: "/images/copyrighted_images/tf2c.png",
@@ -111,14 +106,8 @@
 			},
 			{
 				links: [
-					{
-						...gb,
-						url: "https://gamebanana.com/games/7286"
-					},
-					{
-						...grid,
-						url: "https://www.steamgriddb.com/game/5248803"
-					}
+					link("https://gamebanana.com/games/7286", gb),
+					link("https://www.steamgriddb.com/game/5248803", grid)
 				],
 				logo: {
 					url: "/images/copyrighted_images/of.png",
@@ -131,14 +120,8 @@
 			},
 			{
 				links: [
-					{
-						...gb,
-						url: "https://gamebanana.com/games/7748"
-					},
-					{
-						...grid,
-						url: "https://www.steamgriddb.com/game/5262280"
-					}
+					link("https://gamebanana.com/games/7748", gb),
+					link("https://www.steamgriddb.com/game/5262280", grid)
 				],
 				logo: {
 					url: "/images/copyrighted_images/pf2.webp",

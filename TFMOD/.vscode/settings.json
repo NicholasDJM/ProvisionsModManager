@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "balloonicorn",
+        "icns",
         "NUMLOCK",
         "PGDN",
         "PGUP",
@@ -13,6 +14,7 @@
         "smissmiss",
         "stylify",
         "tauri",
+        "tfmod",
         "unmaximize",
         "unplugin",
         "Vite"
@@ -29,8 +31,6 @@
         "**/dist": true,
         "**/dist-ssr": true,
         "**/*.local": true,
-        ".vscode/*": true,
-        ".vscode/extensions.json": true,
         "**/.idea": true,
         "**/.DS_Store": true,
         "**/*.suo": true,
@@ -44,7 +44,9 @@
         "**/.env": true,
         "**/.env.*": true,
         "**/.env.example": true,
-        "src-tauri/target/": true
+        "src-tauri/target/": true,
+        "resources": true,
+        "old": true
     },
     "workspace.isHidden": true,
     "gutterpreview.sourceFolder": "static",
@@ -52,43 +54,44 @@
     "cSpell.enableFiletypes": [
         "fluent"
     ],
-	"eslint.validate": [
-		"javascript",
-		"typescript",
-		"svelte"
-	],
-	"todo-tree.general.tags": [
-		"BUG",
-		"HACK",
-		"FIXME",
-		"TODO",
-		"INFO",
-		"[ ]",
-		"[x]",
-		"NOTE",
-		"WARNING"
-	],
-	"todo-tree.highlights.backgroundColourScheme": [
-		"red",
-		"orange",
-		"yellow",
-		"green",
-		"blue",
-		"white",
-		"green",
-		"skyblue",
-		"orange"
-	],
-	"todo-tree.highlights.foregroundColourScheme": [
-		"white",
-		"black",
-		"black",
-		"white",
-		"white",
-		"black",
-		"black",
-		"black",
-		"black"
-	],
-	"todo-tree.highlights.useColourScheme": true
+    "eslint.validate": [
+        "javascript",
+        "typescript",
+        "svelte"
+    ],
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO",
+        "INFO",
+        "[ ]",
+        "[x]",
+        "NOTE",
+        "WARNING"
+    ],
+    "todo-tree.highlights.backgroundColourScheme": [
+        "red",
+        "orange",
+        "yellow",
+        "green",
+        "blue",
+        "white",
+        "green",
+        "skyblue",
+        "orange"
+    ],
+    "todo-tree.highlights.foregroundColourScheme": [
+        "white",
+        "black",
+        "black",
+        "white",
+        "white",
+        "black",
+        "black",
+        "black",
+        "black"
+    ],
+    "todo-tree.highlights.useColourScheme": true,
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }

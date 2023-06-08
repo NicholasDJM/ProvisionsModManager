@@ -29,6 +29,7 @@ clipboard = Copy to Clipboard
 link-no-ask = Trust this link?
 links = Trusted Links
 links-clear = Clear Links
+open-folder = Open Folder
 
 ## Errors
 e404 = Page not found

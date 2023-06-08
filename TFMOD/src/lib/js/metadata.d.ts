@@ -1,3 +1,4 @@
+// TODO: Just learned of JSON schemas (thanks to VS Code failing to load a schema for user settings). So: rewrite all of this in a JSON schema.
 // NOTE: This metadata currently only applies to Team Fortress 2 mods only, not to Team Fortress 2 Classic mods, Open Fortress mods, or Pre Fortress 2 mods.
 import type { LanguageCode } from "iso-639-1";
 type Languages = Record<LanguageCode, string>;
@@ -150,19 +151,19 @@ interface GameMappings {
 	of?: Mapping,
 	pf2?: Mapping,
 }
-	/* If a mod is applicable to more than one Sourcemod, map the files here.
-		For each game, there must be a full file path in a VPK archive, then another file path of another game
-		for example (pseudo):
-			mappings: {
-				"tf2": {
-					"TF2_Mod.vpk/really/long/and/complicated/file/path.vtf": [
-						"tf2c:simple/path.vtf"
-					]
-				}
+/* If a mod is applicable to more than one Sourcemod, map the files here.
+	For each game, there must be a full file path in a VPK archive, then another file path of another game
+	for example (pseudo):
+		mappings: {
+			"tf2": {
+				"TF2_Mod.vpk/really/long/and/complicated/file/path.vtf": [
+					"tf2c:simple/path.vtf"
+				]
 			}
+		}
 
-		Eventually, all files for all games should be mapped within provisions mod manager, allowing multi-game mods to be fully automatic.
-	*/
+	Eventually, all files for all games should be mapped within provisions mod manager, allowing multi-game mods to be fully automatic.
+*/
 
 
 interface Version {
@@ -180,7 +181,7 @@ export interface Metadata extends Version {
 	updateUrl?: JsonUrl,
 	images?: Images,
 	md5: Array<string>,
-	explicit?: Array<"blood" | "nudity" | "profanity" | "epilepsy" | "arachnophobia">,
+	explicit?: Array<"blood" | "nudity" | "profanity" | "epilepsy" | "arachnophobia" | "spoiler">,
 	options?: Options,
 	addons?: Array<Array<AddonPath> | AddonPath>,
 	dependencies?: Array<Url>,
