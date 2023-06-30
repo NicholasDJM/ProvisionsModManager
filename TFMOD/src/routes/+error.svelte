@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import { title } from "$lib/js/title.js";
-	import Link from "$lib/components/Link.comp.svelte";
+	import { title } from "$lib/js/stores/store";
+	import Link from "$lib/components/Link.svelte";
 	import "@fontsource/roboto";
 	title.set(`Error ${$page.status}`);
-	import { currentPage } from "$lib/js/page.js";
+	import { currentPage } from "$lib/js/stores/store";
 	currentPage.set(null);
 	console.dir($page);
 	function goBack() {

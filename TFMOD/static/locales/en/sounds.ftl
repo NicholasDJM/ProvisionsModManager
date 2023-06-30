@@ -1,0 +1,1 @@
+page-sounds = Sounds Explorer

@@ -30,7 +30,7 @@
 </script>
 <div class="pillbox">
 	{#each options as option}
-		<label class="pill">
+		<label class="pill" aria-label={option.text}>
 			<span class="text">
 			{#if option.icon}
 				<svelte:component this={option.icon}/>

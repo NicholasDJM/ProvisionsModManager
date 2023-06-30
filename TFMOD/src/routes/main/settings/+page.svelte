@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { i18n } from "$lib/js/i18n.js";
-	import { currentSettingsTab } from "$lib/js/settingsTab.js";
+	import { i18n } from "$lib/js/stores/store";
+	import { currentSettingsTab } from "$lib/js/stores/store";
 	currentSettingsTab.set("main");
-	import Theme from "$lib/components/Theme.comp.svelte";
+	import Theme from "$lib/components/Theme.svelte";
 	let translations: Record<string, string>,
 		links: Array<string> = [];
 	$: {

@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers -- It's all magic numbers. */
-
+import * as Comlink from "comlink";
 function reverse(data: Array<number>): Array<number> {
 	const newData = [];
 	for (let index = data.length; index > 0; index--) {
@@ -257,3 +257,5 @@ export function read(files: Array<Uint8Array>): Array<Entry> {
 	console.table(finalData);
 	return finalData;
 }
+
+Comlink.expose({read: read});

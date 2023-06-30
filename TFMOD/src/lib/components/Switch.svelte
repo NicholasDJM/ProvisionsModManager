@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { i18n } from "$lib/js/i18n";
+	import { i18n } from "$lib/js/stores/store";
 	import Drag from "svelte-material-icons/DragVerticalVariant.svelte";
 	export let enabled = true;
 	function change(event: KeyboardEvent) {

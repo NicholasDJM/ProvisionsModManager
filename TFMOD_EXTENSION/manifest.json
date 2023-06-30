@@ -9,7 +9,12 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"*://*.gamebanana.com/*"
+				"*://*.gamebanana.com/*",
+				"*://*.mods.tf/*",
+				"*://*.tf2maps.net/*",
+				"*://tf2classic.com/*",
+				"*://openfortress.fun/*",
+				"*://prefortress.com/*"
 			],
 			"js": ["build/provisions.bundle.js"],
 			"run_at": "document_end"

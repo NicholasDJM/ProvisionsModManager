@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { currentSettingsTab } from "$lib/js/settingsTab.js";
+	import { currentSettingsTab } from "$lib/js/stores/store";
 	currentSettingsTab.set("update");
-	import { updateAvailable } from "$lib/js/update.js";
+	import { updateAvailable } from "$lib/js/stores/store";
 </script>
 <form>
 	<label>

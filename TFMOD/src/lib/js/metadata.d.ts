@@ -34,6 +34,10 @@ interface Options {
 					This will be added to a preload map and loaded upon first starting the game.
 */
 type AddonPath = `${string}.vpk`
+interface AddonMod {
+	file: AddonPath
+	required?: true
+}
 type SematicVersion = `${number}.${number}.${number}`
 type ValidFileExtensions = "vpk" | "zip" | "rar" | "7z"
 interface Type {
@@ -63,13 +67,15 @@ interface ItemType extends Type {
 interface MapType {
 	type: "map",
 	plugins?: Array<URL>,
-	MLMesh?: boolean
+	MLMesh?: boolean,
+	background: boolean
 }
 /*
 	Plugins: Array of URLs that should resolve to SourceMod plugins the map requires to function. Would be synced to a server.
 		Would require a plugin on the server to manage these additional plugins.
 	MLMesh: Reserved for future use. Machine learning navigation mesh
-	Future TODO: Create SourceMod plugin that learns from player actions and movements to give more human-like TFBots.
+		Future TODO: Create SourceMod plugin that learns from player actions and movements to give more human-like TFBots.
+	background: Is this map a background map to be loaded via map_background
 */
 interface TextureType extends Type {
 	type: "texture",
@@ -91,14 +97,29 @@ interface SoundType extends Type {
 	// "base" mods will conflict with each other, as will "other" mods.
 	// However, multiple "other" mods can exist along side a single "base" mod for the same sound.
 }
+
+interface ResolutionOptionFile {
+	original: string,
+	override: string
+}
+
+interface ResolutionOption {
+	// Files that apply to 4:3 will also apply to bigger ratios. But NOT the other way around.
+	minimumRatio: "4:3" | "16:9" | "16:10" | "21:9",
+	files: Array<ResolutionOptionFile>
+}
+
 interface HudConfig {
 	name: string,
 	element?: string,
 	enable?: boolean,
 	color?: string,
-	position?: string
-	misc?: Record<string, string>
+	position?: string,
+	misc?: Record<string, string>,
+	resolution: Array<ResolutionOption>
 }
+// HUDs can define a set of files for certain resolutions that will be applied automatically based on user's current screen resolution (when compiling mods)
+
 interface HudType extends Type {
 	type: "hud",
 	config: Array<HudConfig>
@@ -165,6 +186,11 @@ interface GameMappings {
 	Eventually, all files for all games should be mapped within provisions mod manager, allowing multi-game mods to be fully automatic.
 */
 
+interface Author {
+	name: string,
+	note: Languages
+}
+// Note is to be used as a way of attribution. "How did this particular author contribute?" Artist? Model? Sound design?
 
 interface Version {
 	metadataVersion: 1
@@ -172,7 +198,7 @@ interface Version {
 export interface Metadata extends Version {
 	id: string // While it can't be validated here, ID must be lowercase letters from A-Z and periods, and must start with a letter.
 	name?: Languages,
-	author?: Array<string> | string,
+	author?: Array<Author> | Author | string,
 	version?: SematicVersion,
 	license?: string,
 	description?: Languages,
@@ -181,9 +207,9 @@ export interface Metadata extends Version {
 	updateUrl?: JsonUrl,
 	images?: Images,
 	md5: Array<string>,
-	explicit?: Array<"blood" | "nudity" | "profanity" | "epilepsy" | "arachnophobia" | "spoiler">,
+	explicit?: Array<"blood" | "nudity" | "profanity" | "epilepsy" | "arachnophobia" | "spoiler" | "motion">,
 	options?: Options,
-	addons?: Array<Array<AddonPath> | AddonPath>,
+	addons?: Array<Array<AddonMod> | AddonMod>,
 	dependencies?: Array<Url>,
 	peers?: Array<string>,
 	type: Types

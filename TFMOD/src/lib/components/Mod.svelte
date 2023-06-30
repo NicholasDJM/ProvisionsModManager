@@ -4,15 +4,15 @@
 </script>
 <script lang="ts">
 	import { onMount, onDestroy, createEventDispatcher } from "svelte";
-	import Switch from "$lib/components/Switch.comp.svelte";
-	import Group from "$lib/components/Group.comp.svelte";
+	import Switch from "$lib/components/Switch.svelte";
+	import Group from "$lib/components/Group.svelte";
 	import Up from "svelte-material-icons/ChevronUp.svelte";
 	import Down from "svelte-material-icons/ChevronDown.svelte";
 	import Top from "svelte-material-icons/ChevronDoubleUp.svelte";
 	import Bottom from "svelte-material-icons/ChevronDoubleDown.svelte";
 	import Download from "svelte-material-icons/Download.svelte";
 	import { LocalStorage } from "combo-storage";
-	import { i18n } from "$lib/js/i18n";
+	import { i18n } from "$lib/js/stores/store";
 	import type { ModInfo } from "$lib/js/modInfo";
 	export let info: ModInfo;
 	const lang: string = LocalStorage.get("language"),
@@ -66,6 +66,9 @@
 			position: $i18n.t("main:position")
 		};
 	}
+	// TODO: Add ability to see dependencies and/or addons for mods as an expandable list below mod entry.
+	// 		NOTE: Where would we put a control to expand/collapse list?
+	// TODO: Fix accessibility on explicit warning, as multiple explicit tags are created in separate text nodes, should be combined in to one node.
 </script>
 <div class="main">
 	<div class="censorContainer">
@@ -180,6 +183,7 @@
 		border-radius: 1rem;
 		overflow: hidden;
 		transition: var(--transitionReducedMotion);
+		/* max-inline-size: 50rem; */
 		&:hover, &:focus-visible {
 			box-shadow: 0 0 3px 3px var(--accentColor);
 		}

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { i18n } from "$lib/js/i18n.js";
-	import { title } from "$lib/js/title.js";
-	import { currentPage } from "$lib/js/page.js";
+	import { i18n } from "$lib/js/stores/store";
+	import { title } from "$lib/js/stores/store";
+	import { currentPage } from "$lib/js/stores/store";
 	currentPage.set("settings");
-	import { currentSettingsTab } from "$lib/js/settingsTab.js";
-	import TabBar from "$lib/components/TabBar.comp.svelte";
+	import { currentSettingsTab } from "$lib/js/stores/store";
+	import TabBar from "$lib/components/TabBar.svelte";
 	import { dev } from "$app/environment";
 	interface Tab {
 		text: string,

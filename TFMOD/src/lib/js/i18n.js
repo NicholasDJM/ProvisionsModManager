@@ -11,7 +11,7 @@ const detectionOptions = {
 	fluentOptions = {};
 // @ts-expect-error I don't what TypeScript complaining about, it works.
 i18next.use(LanguageDetector).use(Fluent).use(FluentBackend).init({
-	ns: ["main", "settings", "sources", "utils", "troubleshoot", "wizard", "intro", "common", "pyroland"],
+	ns: ["main", "settings", "sources", "utils", "troubleshoot", "wizard", "intro", "common", "pyroland", "sounds"],
 	defaultNS: "common",
 	supportedLng: ["en", "fr"],
 	detection: detectionOptions,

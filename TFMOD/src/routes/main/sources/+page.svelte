@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { i18n } from "$lib/js/i18n.js";
-	import { title } from "$lib/js/title.js";
+	import { i18n } from "$lib/js/stores/store";
+	import { title } from "$lib/js/stores/store";
 	$: title.set($i18n.t("sources:page-sources"));
-	import { currentPage } from "$lib/js/page.js";
+	import { currentPage } from "$lib/js/stores/store";
 	currentPage.set("sources");
-	import Link from "$lib/components/Link.comp.svelte";
+	import Link from "$lib/components/Link.svelte";
 	interface LinkTypeNoUrl {
 		translation: string,
 		favicon?: string,
@@ -37,32 +37,41 @@
 		modsalt: "",
 		gridalt: ""
 	};
-	$: translations = {
-		tf2: $i18n.t("game-tf2"),
-		tf2c: $i18n.t("game-tf2c"),
-		of: $i18n.t("game-of"),
-		pf2: $i18n.t("game-pf2"),
-		gamebanana: $i18n.t("sources:gamebanana"),
-		mods: $i18n.t("sources:modstf"),
-		grid: $i18n.t("sources:grid"),
-		gamebananaalt: $i18n.t("sources:gamebanana-alt"),
-		modsalt: $i18n.t("sources:modstf-alt"),
-		gridalt: $i18n.t("sources:grid-alt")
-	};
+	$: {
+		translations.tf2 = $i18n.t("game-tf2");
+		translations.tf2c = $i18n.t("game-tf2c"); // NOTE: These two must be set in a separate statement so it's available to tf2Wiki
+		translations = {
+			...translations,
+			of: $i18n.t("game-of"),
+			pf2: $i18n.t("game-pf2"),
+			gamebanana: $i18n.t("sources:gamebanana"),
+			mods: $i18n.t("sources:modstf"),
+			grid: $i18n.t("sources:grid"),
+			gamebananaalt: $i18n.t("sources:gamebanana-alt"),
+			modsalt: $i18n.t("sources:modstf-alt"),
+			gridalt: $i18n.t("sources:grid-alt"),
+			tf2Wiki: $i18n.t("sources:wiki", {game: translations.tf2}),
+			tf2cWiki: $i18n.t("sources:wiki", {game: translations.tf2c}),
+			tf2maps: $i18n.t("sources:tf2maps"),
+			workshop: $i18n.t("sources:workshop")
+		};
+		console.log(translations);
+	}
 	let gb: LinkTypeNoUrl =
 		{
 			translation: "gamebanana",
-			favicon: "https://icons.duckduckgo.com/ip2/gamebanana.com.ico",
 			alt: ""
 		},
 		modstf: LinkTypeNoUrl = {
 			translation: "mods",
-			favicon: "https://icons.duckduckgo.com/ip2/mods.tf.ico",
 			alt: ""
 		},
 		grid: LinkTypeNoUrl = {
 			translation: "grid",
-			favicon: "https://icons.duckduckgo.com/ip2/steamgriddb.com.ico",
+			alt: ""
+		},
+		tf2maps: LinkTypeNoUrl = {
+			translation: "tf2maps",
 			alt: ""
 		},
 		source: Array<Sources>;
@@ -78,13 +87,25 @@
 		grid.alt = translations.gridalt;
 		source = [
 			{
+				// ==== Team Fortress 2 ====
 				links: [
 					link("https://tf2.gamebanana.com", gb),
 					link("http://mods.tf", modstf),
-					link("https://www.steamgriddb.com/game/10602", grid)
+					link("https://www.tf2maps.net", tf2maps),
+					{
+						url: "https://steamcommunity.com/app/440/workshop",
+						alt: "",
+						translation: "workshop"
+					},
+					link("https://www.steamgriddb.com/game/10602", grid),
+					{
+						url: "https://wiki.teamfortress.com/wiki/Main_Page",
+						translation: "tf2Wiki",
+						alt: ""
+					}
 				],
 				logo: {
-					url: "/images/copyrighted_images/tf2.png",
+					url: "/images/copyrighted_images/tf2.webp",
 					alt: translations.tf2,
 					width: 512,
 					height: 128
@@ -92,12 +113,17 @@
 				url: "https://steampowered.com/app/440"
 			},
 			{
+				// ==== TF2 Classic ====
 				links: [
 					link("https://gamebanana.com/games/5418", gb),
-					link("https://www.steamgriddb.com/game/5262654", grid)
+					link("https://www.steamgriddb.com/game/5262654", grid),
+					link("https://wiki.tf2classic.com/wiki/Main_Page", {
+						translation: "tf2cWiki",
+						alt: ""
+					})
 				],
 				logo: {
-					url: "/images/copyrighted_images/tf2c.png",
+					url: "/images/copyrighted_images/tf2c.webp",
 					alt: translations.tf2c,
 					width: 3000,
 					height: 959
@@ -105,12 +131,13 @@
 				url: "https://tf2classic.com"
 			},
 			{
+				// ==== Open Fortress ====
 				links: [
 					link("https://gamebanana.com/games/7286", gb),
 					link("https://www.steamgriddb.com/game/5248803", grid)
 				],
 				logo: {
-					url: "/images/copyrighted_images/of.png",
+					url: "/images/copyrighted_images/of.webp",
 					alt: translations.of,
 					width: 2089,
 					height: 384,
@@ -119,6 +146,7 @@
 				url: "https://openfortress.fun"
 			},
 			{
+				// ==== Pre-Fortress 2 ====
 				links: [
 					link("https://gamebanana.com/games/7748", gb),
 					link("https://www.steamgriddb.com/game/5262280", grid)
@@ -137,16 +165,16 @@
 <div class="defaultMargin main">
 	{#each source as card}
 		<div>
-			<Link href={card.url}>
-				<h1><img class={card.logo.class + " logo"} src={card.logo.url} alt={card.logo.alt} width={card.logo.width} height={card.logo.height} loading="lazy"></h1>
+			<Link href={card.url} icon={false}>
+				<h1><img class="{card.logo.class ?? ""} logo" src={card.logo.url} alt={card.logo.alt} width={card.logo.width} height={card.logo.height} loading="lazy"></h1>
 			</Link>
-			<ul>
+			<div class="center">
 				{#each card.links as link}
-					<li>
-						<Link href={link.url}>{#if link.favicon}<img class="favicon" src={link.favicon} alt={link.alt} loading="lazy">{/if}{translations[link.translation]}</Link>
-					</li>
+					<span>
+						<Link href={link.url} alt={link.alt}>{translations[link.translation]}</Link>
+					</span>
 				{/each}
-			</ul>
+			</div>
 		</div>
 	{/each}
 </div>
@@ -188,6 +216,16 @@
 		margin-block: auto;
 		block-size: auto;
 	}
+	.center {
+		display: flex;
+		flex-flow: column;
+		max-inline-size: max-content;
+		gap: 0.25rem;
+		& span {
+			justify-content: center;
+			max-inline-size: max-content;
+		}
+	}
 	/* stylelint-disable-next-line rem-over-px/rem-over-px, color-hex-case -- rem-over-px: This is how the drop shadow is defined on openfortress.com. color-hex-case: This works apparently. */
 	$ofDropShadow: drop-shadow(4px 4px 0 #574168c0);
 	/* stylelint-disable-next-line a11y/selector-pseudo-class-focus -- Handled in next rule. */
@@ -213,6 +251,8 @@
 	$gap: 0.45rem;
 	.favicon {
 		margin-inline-end: $gap;
+		position: relative;
+		inset-block-end: 0;
 	}
 	li {
 		/* stylelint-disable-next-line rem-over-px/rem-over-px -- Size of favicon. */

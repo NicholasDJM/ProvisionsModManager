@@ -5,8 +5,12 @@
 			inherits: true;
 			syntax: "<position>";
 		}
+		@property --menuCornerSize {
+			inherits: true;
+			syntax: "<length>";
+		}
 		#navrail:not(.open) {
-			inset-inline-start: calc(var(--navRailComputed) - 20px) !important;
+			inset-inline-start: calc(var(--navRailComputed) - var(--menuCornerSize)) !important;
 		}
 		#corner:not(.open) {
 			inset-inline-start: var(--navRailComputed) !important;

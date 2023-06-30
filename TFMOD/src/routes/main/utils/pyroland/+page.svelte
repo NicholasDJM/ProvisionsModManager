@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import HideNavBar from "$lib/components/HideNavBar.comp.svelte";
-	import { title } from "$lib/js/title.js";
-	import { i18n } from "$lib/js/i18n";
+	import HideNavBar from "$lib/components/HideNavBar.svelte";
+	import { title } from "$lib/js/stores/store";
+	import { i18n } from "$lib/js/stores/store";
 	$: title.set($i18n.t("pyroland:page-pyroland"));
-	import { backButton, backUrl } from "$lib/js/subpage.js";
+	import { backButton, backUrl } from "$lib/js/stores/store";
 	backButton.set(true);
 	backUrl.set(true);
 	// @ts-expect-error Can't do anything about missing types.
@@ -67,6 +67,7 @@
 					} else if (data.slice(0, startsWithWin.length) === startsWithWin) { // Windows
 						start = startsWithWin.length;
 					}
+					const splitter = "\u00F7";
 					if (start) {
 						data = data.slice(start); // Remove "VisionFilterShadersMapWhitelist" and {
 						/* console.log("No Newlines")
@@ -80,7 +81,7 @@
 						data = data.replace(/\r/g, ""); // Remove Windows Newline
 						/* console.log("Remove Windows Newline")
 						   console.log(data) */
-						data = data.replace(/""/g, "/"); // Turn two Double Quotes into a slash
+						data = data.replace(/""/g, splitter); // Turn two Double Quotes into a division symbol
 						/* console.log("Two Quotes into Slash")
 						   console.log(data) */
 						data = data.replace(/"/g, ""); // Remove quotes
@@ -99,12 +100,15 @@
 							/* console.log("Map")
 							   console.log(newData[i]) */
 							if (newData[index] !== "") {
-								if (newData[index].split("/").length !== 2) {
-									throw ["Cannot parse data", newData];
+								const split = newData[index].split(splitter);
+								/* eslint-disable-next-line no-magic-numbers -- If the split does not produce exactly two entries, something's gone wrong. */
+								if (split.length !== 2) {
+									/* eslint-disable-next-line no-magic-numbers -- Ditto */
+									throw [`Cannot parse data. Found ${split.length > 2 ? "more" : "less"} than 2 entries in array after split.`, newData[index], newData];
 								}
 								/*  Final split to get data.
 								   console.log(result.length); */
-								result[result.length] = [newData[index].split("/")[0], newData[index].split("/")[1] === "1" ? true : false];
+								result[result.length] = [split[0], split[1] === "1" ? true : false];
 								/* console.log("Result")
 									   console.log("\"%c"+newData[i].split("/")[0] + "%c\", \"%c" +  (newData[i].split("/")[1] == "1" ? true : false)+"%c\"", "color:lightgreen", "color:white", "color:cyan", "color:white") */
 							}

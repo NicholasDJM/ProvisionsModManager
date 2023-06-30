@@ -3,18 +3,18 @@
 	import "@fontsource/roboto";
 	import "reasonable-colors";
 	import "$lib/css/app.css";
-	import "$lib/css/stylify.css";
 	import "$lib/css/defaultMargin.css";
-	import { i18n } from "$lib/js/i18n";
-	import { title } from "$lib/js/title.js";
-	import { currentPage } from "$lib/js/page.js";
-	import { updateAvailable } from "$lib/js/update.js";
+	import { i18n } from "$lib/js/stores/store";
+	import { title } from "$lib/js/stores/store";
+	import { currentPage } from "$lib/js/stores/store";
+	import { updateAvailable } from "$lib/js/stores/store";
 	import { checkUpdate } from "@tauri-apps/api/updater";
 	import { exists } from "@tauri-apps/api/fs";
 	import { onMount, onDestroy } from "svelte";
-	import { backButton, backUrl } from "$lib/js/subpage.js";
+	import { backButton, backUrl } from "$lib/js/stores/store";
 	import { goto, afterNavigate} from "$app/navigation";
 	import { blur } from "svelte/transition";
+	import { base } from "$app/paths";
 	import jq from "jquery";
 	// TODO: Remove all uses of jQuery from entire project.
 	import Cog from "svelte-material-icons/Cog.svelte";
@@ -25,20 +25,20 @@
 	import File from "svelte-material-icons/File.svelte";
 	import FileOutline from "svelte-material-icons/FileOutline.svelte";
 	import Web from "svelte-material-icons/Web.svelte";
-	import Options from "svelte-material-icons/DotsVertical.svelte";
-	import Update from "svelte-material-icons/Download.svelte";
-	import Extension from "svelte-material-icons/PuzzlePlus.svelte";
-	import NavButton from "$lib/components/navButton.comp.svelte";
-	import Back from "svelte-material-icons/ArrowLeft.svelte";
+	import DotsVertical from "svelte-material-icons/DotsVertical.svelte";
+	import Download from "svelte-material-icons/Download.svelte";
+	import PuzzlePlus from "svelte-material-icons/PuzzlePlus.svelte";
+	import ArrowLeft from "svelte-material-icons/ArrowLeft.svelte";
 	import Lightbulb from "svelte-material-icons/Lightbulb.svelte";
 	import LightbulbOutline from "svelte-material-icons/LightbulbOutline.svelte";
 	import FilePlus from "svelte-material-icons/FilePlus.svelte";
 	import FilePlusOutline from "svelte-material-icons/FilePlusOutline.svelte";
-	import Search from "svelte-material-icons/Magnify.svelte";
-	import Clear from "svelte-material-icons/Close.svelte";
-	import NavDropdown from "$lib/components/NavDropdown.comp.svelte";
+	import Magnify from "svelte-material-icons/Magnify.svelte";
+	import Close from "svelte-material-icons/Close.svelte";
 </script>
 <script lang="ts">
+	import NavButton from "$lib/components/NavButton.svelte";
+	import NavDropdown from "$lib/components/NavDropdown.svelte";
 
 	//https://stackoverflow.com/questions/7444451/how-to-get-the-actual-rendered-font-when-its-not-defined-in-css
 	function css(selector: string, property: string): string {
@@ -166,6 +166,7 @@
 		const navrailComputedPixels: number = css("#navrail", "inline-size").search("px"),
 			navrailComputedPaddingPixels: number = css("#navrail", "padding-inline").search("px"),
 			iconComputedPixels: number = navButtonIconSize.search("px");
+		// TODO: Grab OS, and set paths accordingly.
 		basePath = "C:\\Program Files (x86)\\Steam\\steamapps\\";
 		sdk = await exists(basePath + "\\common\\Source SDK Base 2013 Multiplayer");
 		profileType = sdk ? profileType : "profile-no-sdk";
@@ -173,8 +174,8 @@
 		navrailComputedPadding = css("#navrail", "padding-inline").slice(0, navrailComputedPaddingPixels),
 		textComputed = css(".link", "font-size"),
 		iconComputed = navButtonIconSize.slice(0, iconComputedPixels);
-		// invoke("close_splashscreen");
-		// TODO: Separate logic of detecting installed games into a ts file.
+		/* invoke("close_splashscreen");
+		   TODO: Separate logic of detecting installed games into a ts file. */
 		installed.tf2 = await exists(basePath + "common\\Team Fortress 2\\hl2.exe"); // On windows, we could check the registry to see if TF2 is installed
 		installed.tf2c = await exists(basePath + "sourcemods\\tf2classic\\TF2ClassicLauncher.exe");
 		installed.of = await exists(basePath + "sourcemods\\open_fortress\\steam.inf");
@@ -252,7 +253,6 @@
 		buttonIds++;
 		return data.toString();
 	};
-	import { base } from "$app/paths";
 	let previousPage: string = base;
 	afterNavigate(({from}) => {
 		const url = from?.url?.pathname;
@@ -282,13 +282,13 @@
 			search = false;
 		}
 	}
+	function sdkMissing(game: string): string {
+		return sdk ? $i18n.t("game-" + game) : $i18n.t("profile-no-sdk", {game: $i18n.t("game-" + game)});
+	}
+	function isInstalled(game: string): string {
+		return installed[game] ? sdkMissing(game) : $i18n.t("profile-not-installed", {game: $i18n.t("game-" + game)});
+	}
 	$: {
-		function sdkMissing(game: string): string {
-			return sdk ? $i18n.t("game-" + game) : $i18n.t("profile-no-sdk", {game: $i18n.t("game-" + game)});
-		}
-		function isInstalled(game: string): string {
-			return installed[game] ? sdkMissing(game) : $i18n.t("profile-not-installed", {game: $i18n.t("game-" + game)});
-		}
 		translations = {
 			search: $i18n.t("search"),
 			mods: $i18n.t("main:page-mods"),
@@ -308,6 +308,7 @@
 		};
 	}
 	function gotoMain() {
+		closeMenu();
 		location.href = "#main";
 	}
 	function changeProfile(event: Event) {
@@ -333,7 +334,7 @@
 			</button>
 		{:else}
 			<button aria-label="Back" class="btn reverse noStyle" on:click={goBack}>
-				<Back size={buttonSize}/>
+				<ArrowLeft size={buttonSize}/>
 			</button>
 		{/if}
 		{#if search}
@@ -352,15 +353,15 @@
 			{#if search}
 				<button aria-label="Hide Searchbox" class="btn noStyle" on:click={() => {
 					searchValue = ""; search = false;
-				}} on:keydown={clearSearch}><Clear size={buttonSize}/></button>
+				}} on:keydown={clearSearch}><Close size={buttonSize}/></button>
 			{:else}
-				<button aria-label="Show Searchbox" class="btn noStyle" on:click={() => search = true}><Search size={buttonSize}/></button>
+				<button aria-label="Show Searchbox" class="btn noStyle" on:click={() => search = true}><Magnify size={buttonSize}/></button>
 			{/if}
-			<button id="navDropdownButton" aria-label="Options Dropdown" class="btn noStyle" on:click={() => navDropdownVisible = !navDropdownVisible}><Options size={buttonSize}/></button>
+			<button id="navDropdownButton" aria-label="Options Dropdown" class="btn noStyle" on:click={() => navDropdownVisible = !navDropdownVisible}><DotsVertical size={buttonSize}/></button>
 			<NavDropdown {list} parent={"#navDropdownButton"} bind:visible={navDropdownVisible} dividers={[0]}/>
 		</div>
 	</header>
-	<nav id="navrail" class:open="{menuOpen}" inert={navVisible}>
+	<nav id="navrail" class:open="{menuOpen}" inert={navVisible} aria-label="Navigation Rail/Menu ({menuOpen ? "Menu Open" : "Menu Closed"})">
 		<!-- FIXME: setting display:none is causing some layout shift problems, rebuild with a static element that is resized, then add selector as child, that then can be hidden -->
 		<!-- 	We need to use display:none as select seems to be able to interfere with selection of other elements, even if height is 0 -->
 		<div class="profileSelectorSpacer">
@@ -442,7 +443,7 @@
 					highlight={$currentPage}
 					on:click={closeMenu}
 				>
-					<Extension size={navButtonIconSize}/>
+					<PuzzlePlus size={navButtonIconSize}/>
 				</NavButton>
 			{/if}
 			{#if $updateAvailable}
@@ -455,7 +456,7 @@
 					highlight={$currentPage}
 					on:click={closeMenu}
 				>
-					<Update size={navButtonIconSize}/>
+					<Download size={navButtonIconSize}/>
 				</NavButton>
 			{/if}
 			<NavButton
@@ -476,7 +477,7 @@
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div id="closeMenu" on:click={closeMenu} transition:blur={{duration: reducedMotionSpeed}}></div>
 	{/if}
-	<main class="content" id="main" class:open="{menuOpen}">
+	<main class="content" id="main" class:open="{menuOpen}" aria-label={$title} inert={menuOpen}>
 		<slot />
 	</main>
 </div>
@@ -536,6 +537,7 @@
 	/* stylelint-enable plugin/non-zero-length-expect-unit */
 	:root {
 		transition: var(--transition);
+		--menuCornerSize: 20px; /* BUG: Can't use $cornerSize, PostCSS won't compile to real value. Why? */
 	}
 	.skip {
 		$size: 2.5rem;
@@ -669,6 +671,7 @@
 		opacity: 0;
 		block-size: var(--menuVerticalOffset);
 		transition: block-size var(--transition);
+		color-scheme: light;
 	}
 	.profileSelector select {
 		$size: calc(var(--profileSelectorSize, 55px) - 10px);
@@ -695,6 +698,7 @@
 		z-index: $navrailIndex;
 		aspect-ratio: 1;
 		mask-image: $cornerMask;
+		/* clip-path: circle(100% at 100% 100%); */
 		position: fixed;
 		inset-block-start: $navBarSize;
 		inset-inline-start: calc(var(--navRailSize) + (var(--navRailPadding) * 2) + var(--menuOffset));

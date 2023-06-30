@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { i18n } from "$lib/js/i18n.js";
-	import { title } from "$lib/js/title.js";
+	import { i18n } from "$lib/js/stores/store";
+	import { title } from "$lib/js/stores/store";
 	$: title.set($i18n.t("utils:page-utils"));
-	import { currentPage } from "$lib/js/page.js";
+	import { currentPage } from "$lib/js/stores/store";
 	currentPage.set("utils");
-	import UtilityCard from "$lib/components/UtilityCard.comp.svelte";
+	import UtilityCard from "$lib/components/UtilityCard.svelte";
 	import { WebviewWindow } from "@tauri-apps/api/window";
 	import { invoke } from "@tauri-apps/api";
 	function openIDE(event: KeyboardEvent | MouseEvent) {
@@ -34,24 +34,31 @@
 	const cards: Array<Card> = [
 		{
 			title: "Pyroland Manager",
-			src: "/images/copyrighted_images/balloonicorn.png",
+			src: "/images/copyrighted_images/balloonicorn.webp",
 			alt: "Pyroland Manager Image",
 			description: "Manage and analyse which maps are eligible for Pyroland",
 			href: "/main/utils/pyroland"
 		},
 		{
 			title: "CFG Editor",
-			src: "/images/test.png",
+			src: "/images/test.webp",
 			alt: "CFG Editor Image",
 			description: "Create and edit scripts with our IDE",
 			func: openIDE
 		},
 		{
 			title: "Caption Editor",
-			src: "/images/test.png",
+			src: "/images/test.webp",
 			alt: "Caption Editor Image",
 			description: "Create custom captions that can be emitted via script.",
 			func: openCaption
+		},
+		{
+			title: "Sound Explorer",
+			src: "/images/test.webp",
+			alt: "Sound Explorer",
+			description: "Find and play various game sounds.",
+			href: "/main/utils/sounds"
 		}
 	];
 </script>

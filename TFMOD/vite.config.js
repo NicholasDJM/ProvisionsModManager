@@ -1,14 +1,29 @@
 import { defineConfig } from "vite";
 import { sveltekit } from "@sveltejs/kit/vite";
 import { MagicRegExpTransformPlugin } from "magic-regexp/transform";
+import autoImport from "sveltekit-autoimport";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 /* global process */
 
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [
 		MagicRegExpTransformPlugin.vite(),
+		ViteImageOptimizer(),
+		autoImport({
+			components: [
+				"./src/lib/components",
+				"./node_modules/svelte-material-icons"
+			],
+			exclude: ""
+		}),
 		sveltekit()
 	],
+	optimizeDeps: {
+		exclude: [
+			"codemirror"
+		]
+	},
 
 	/*	 Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
 	*/// prevent vite from obscuring rust errors

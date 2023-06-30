@@ -2,7 +2,7 @@
 	// @ts-expect-error Can't do anything about missing types.
 	import { LocalStorage } from "combo-storage";
 	import { onMount, onDestroy } from "svelte";
-	import { i18n } from "$lib/js/i18n";
+	import { i18n } from "$lib/js/stores/store";
 	import { direction } from "$lib/js/direction";
 	import jq from "jquery";
 	import Sun from "svelte-material-icons/WeatherSunny.svelte";

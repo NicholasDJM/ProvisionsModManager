@@ -1,29 +1,30 @@
 <script async lang="ts">
-	import { AceEditor } from "svelte-ace";
-	import "brace/theme/monokai";
-	import "../mode-source-cfg.js";
+	//import { AceEditor } from "svelte-ace";
+	//import "brace/theme/monokai";
+	//import "../mode-source-cfg.js";
+	import Editor from "svelte-codemirror-editor";
 	import jq from "jquery";
 	import FolderOpen from "svelte-material-icons/FolderOpenOutline.svelte";
 	import Save from "svelte-material-icons/ContentSave.svelte";
 	import { confirm } from "@tauri-apps/api/dialog";
-	import { appWindow } from "@tauri-apps/api/window";
+	//import { appWindow } from "@tauri-apps/api/window";
 	import { onMount, onDestroy } from "svelte";
 	// @ts-expect-error -- Can't do anything about missing types.
 	import { LocalStorage } from "combo-storage";
-	let timer: ReturnType<typeof setInterval>;
+	//let timer: ReturnType<typeof setInterval>;
 	onMount(() => {
-		const interval = 100;
-		timer = setInterval(async () => {
-			if (LocalStorage.get("window-focus") === appWindow.label) {
-				LocalStorage.set("window-focus", "");
-				await appWindow.setFocus();
-			}
-		}, interval);
+		// const interval = 100;
+		// timer = setInterval(async () => {
+		// 	if (LocalStorage.get("window-focus") === appWindow.label) {
+		// 		LocalStorage.set("window-focus", "");
+		// 		await appWindow.setFocus();
+		// 	}
+		// }, interval);*/
 	});
 	onDestroy(() => {
-		clearInterval(timer);
+		//clearInterval(timer);
 	});
-	import KeyboardQwerty from "$lib/components/Keyboard-Qwerty.comp.svelte";
+	import KeyboardQwerty from "$lib/components/Keyboard-Qwerty.svelte";
 	// const windowSize = async () => await appWindow.innerSize();
 	let text = "[\n\t\"Hello World\",\n\t\"This is a JSON Document\"\n]";
 	const menuBarHeight = "55",
@@ -31,14 +32,14 @@
 		size = buttonSize + "px";
 	// let editorHeight: string;
 	LocalStorage.set("editorKeyboardStyle", "");
-	jq(() => {
-		jq(".menu").css("height", menuBarHeight + "px");
-		jq(".toolbar").css("height", buttonSize + "px");
+	//jq(() => {
+		//jq(".menu").css("height", menuBarHeight + "px");
+		//jq(".toolbar").css("height", buttonSize + "px");
 		/* windowSize().then(data=>{
 		   	editorHeight = `calc(100vh - ${menuBarHeight}px)`
 		   })
 		   jq(":root").css("block-size", "100%"); */
-	});
+	//});
 	addEventListener("beforeunload", (event) => {
 		event.preventDefault();
 		//const result = await confirm("There are unsaved documents. Are you sure you want to quit?", {title: "CFG IDE", type: "warning"});
@@ -66,16 +67,10 @@
 	</aside>
 	<div style="height:100%">
 		<div class="editor">
-			<AceEditor lang="source-cfg" theme="monokai" value={text} on:input={object => {
-				text = object.details; console.log(object.details);
-			}} width="100%" height="100%"/>
+			<Editor/>
 		</div>
 	</div>
 </div>
-<details>
-	<summary>Key Bind Finder</summary>
-	<KeyboardQwerty/>
-</details>
 <style lang="postcss">
 	:root {
 		block-size: 100%;

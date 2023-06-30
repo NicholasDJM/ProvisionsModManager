@@ -1,27 +1,27 @@
 
 <script lang="ts">
-	import { i18n } from "$lib/js/i18n.js";
-	import { title } from "$lib/js/title.js";
+	import { i18n } from "$lib/js/stores/store";
+	import { title } from "$lib/js/stores/store";
 	$: title.set($i18n.t("main:page-mods"));
-	import { currentPage } from "$lib/js/page.js";
+	import { currentPage } from "$lib/js/stores/store";
 	currentPage.set("mods");
-	import { backButton } from "$lib/js/subpage";
+	import { backButton } from "$lib/js/stores/store";
 	import Enabled from "svelte-material-icons/FileCheckOutline.svelte";
 	import Disabled from "svelte-material-icons/FileRemoveOutline.svelte";
 	import Conflicts from "svelte-material-icons/FileAlertOutline.svelte";
 	import Outdated from "svelte-material-icons/FileCancelOutline.svelte";
-	import Pills from "$lib/components/Pills.comp.svelte";
+	import Pills from "$lib/components/Pills.svelte";
 	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
-	import type { PillEvent } from "$lib/components/Pills.comp.svelte";
-	import HideNavBar from "$lib/components/HideNavBar.comp.svelte";
+	import type { PillEvent } from "$lib/components/Pills.svelte";
+	import HideNavBar from "$lib/components/HideNavBar.svelte";
 	import type {ModInfo} from "$lib/js/modInfo";
 	/* eslint-disable unicorn/prevent-abbreviations */
-	import Mod from "$lib/components/Mod.comp.svelte";
+	import Mod from "$lib/components/Mod.svelte";
 	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
-	import type { ModEvent, MoveEvent } from "$lib/components/Mod.comp.svelte";
-	import Gallery from "$lib/components/Gallery.comp.svelte";
+	import type { ModEvent, MoveEvent } from "$lib/components/Mod.svelte";
+	import Gallery from "$lib/components/Gallery.svelte";
 	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
-	import type { Images } from "$lib/components/Gallery.comp.svelte";
+	import type { Images } from "$lib/components/Gallery.svelte";
 	import { onMount, onDestroy } from "svelte";
 	import { Command } from "@tauri-apps/api/shell";
 	//import { dropdown, feedback } from "$lib/navDropdown.js";
@@ -74,6 +74,7 @@
 	// Ex: If enabled and conflicts are enabled, only show mods that are both enabled and have Conflicts;
 	//		It should not show any disabled mods with conflicts.
 	*/
+	// BUG: This has somehow been broken since the last time I've touched this code.
 	let mods: Array<ModInfo> =
 		[
 			{
@@ -93,7 +94,7 @@
 						text: "Bonjour"
 					}
 				],
-				src: "/images/test.png",
+				src: "/images/test.webp",
 				alt: "Test",
 				position: 1,
 				md5: "123",
@@ -105,7 +106,7 @@
 			},
 			{
 				name: "Hello World",
-				src: "/images/test.png",
+				src: "/images/test.webp",
 				alt: "Test",
 				position: 2,
 				md5: "123",
@@ -123,14 +124,14 @@
 		keepOpen = false;
 	const images: Array<Images> = [
 		{
-			src: "/images/testLarge.png",
+			src: "/images/testLarge.webp",
 			alt: "Hello",
 			selected: true,
 			width: 640,
 			height: 480
 		},
 		{
-			src: "/images/testLarge.png",
+			src: "/images/testLarge.webp",
 			alt: "World",
 			selected: false,
 			width: 640,
@@ -254,12 +255,14 @@
 		align-content: flex-start;
 		gap: 1rem;
 		overflow-y: auto;
+		justify-content: center;
 	}
 	.mods {
 		display: flex;
 		flex-flow: column wrap;
+		flex-grow: 1;
+		max-inline-size: 50rem;
 		gap: var(--defaultMargin);
-		inline-size: 100%;
 	}
 	.container {
 		display: grid;

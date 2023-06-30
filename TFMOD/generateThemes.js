@@ -36,6 +36,7 @@ function generate(
 	textInverseDark,
 	backgroundAlt,
 	backgroundAltDark) {
+	console.log("Creating", theme, "theme...");
 	return `.theme-${theme} {
 	color-scheme: light;
 

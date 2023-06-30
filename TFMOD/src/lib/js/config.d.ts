@@ -1,4 +1,5 @@
 /* eslint-disable */
+/* eslint-enable no-warning-comments */
 /* Utilities for CFG files
 
 	Remember: All of this is compiled, none of this is available in-game.
@@ -111,6 +112,7 @@
 			>= more or equal
 			<= less or equal
 			~> not more than
+			~< not less than
 			~<= not less than or equal
 			~>= not more than or equal
 			~ compare types.

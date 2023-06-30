@@ -4,7 +4,7 @@
 		It's not often, but I've only ever seen it after creating this component.
 	*/
 	import { onMount, onDestroy } from "svelte";
-	import { i18n } from "$lib/js/i18n";
+	import { i18n } from "$lib/js/stores/store";
 	import { open } from "@tauri-apps/api/shell";
 	import { writeText } from "@tauri-apps/api/clipboard";
 	let address: string | undefined,
@@ -25,12 +25,12 @@
 	export function previewHide() {
 		show = false;
 	}
-	export async function openLink(href: string, bypass = false, steam = false) {
+	export async function openLink(href: string, bypass = false, steam = false, noSave = false) {
 		// NOTE: Set steam to true only when needed.
-		// TODO: Add special handling of steam links. We need to execute a command on the system, like "start" on windows.
+		// TODO: Disallow saving links when getting links from descriptions of mods. Use noSave.
 		const s = href.slice(0, 8),
 			s2 = href.slice(0, 7);
-		if (s !== "https://" && s2 !== "http://" && (steam && s !== "steam://")) throw `Only HTTP(S) ${steam ? "/ STEAM " : ""}addresses are allowed`;
+		if (s !== "https://" && s2 !== "http://" && (steam && s !== "steam://")) throw new Error(`Only HTTP(S) ${steam ? "/ STEAM " : ""}addresses are allowed`);
 		address = href;
 		const data = localStorage.getItem("links"),
 			dataParsed = data ? JSON.parse(data) : undefined;
@@ -125,7 +125,7 @@
 		<button on:click={cancel}>{translations.cancel}</button>
 	</div>
 </dialog>
-<div class="linkPreview" class:fade={!show2}>
+<div class="linkPreview" class:fade={!show2} aria-label="Link Preview">
 {address2}
 </div>
 <style lang="postcss">

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { currentPage } from "$lib/js/page.js";
+	import { currentPage } from "$lib/js/stores/store";
 	currentPage.set("troubleshoot");
-	import { title } from "$lib/js/title.js";
-	import { i18n } from "$lib/js/i18n.js";
+	import { title } from "$lib/js/stores/store";
+	import { i18n } from "$lib/js/stores/store";
 	$: title.set($i18n.t("troubleshoot:page-troubleshoot"));
 	import SvelteMarkdown from "svelte-markdown";
 	import brokenSound from "$lib/guides/en/CorruptedSound.md?raw";

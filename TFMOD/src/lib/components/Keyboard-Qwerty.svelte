@@ -2,7 +2,7 @@
 	import { setContext } from "svelte";
 	import candy from "$lib/json/colorway-candy.json";
 	// setContext("colorway", LocalStorage.get("editorKeyboardColorway"));
-	import Key from "./Key.comp.svelte";
+	import Key from "./Key.svelte";
 	import { keySize, keySizeH, keySizeW } from "../js/keySize.js";
 	import MSWindows from "svelte-material-icons/MicrosoftWindows.svelte";
 	// TODO: Separate out generic logic to $lib/js/keyboard.js

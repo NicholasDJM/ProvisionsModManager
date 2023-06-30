@@ -3,13 +3,12 @@
 	import "@fontsource/roboto";
 	import "reasonable-colors";
 	import "$lib/css/app.css";
-	import "$lib/css/stylify.css";
 	import "$lib/css/defaultMargin.css";
 	// @ts-expect-error -- Can't do anything about missing types.
 	import { LocalStorage } from "combo-storage";
 	import * as Flag from "svelte-flags";
 	import { isLoading } from "svelte-i18next";
-	import { i18n } from "$lib/js/i18n";
+	import { i18n } from "$lib/js/stores/store";
 	import { onMount, onDestroy } from "svelte";
 	import Search from "svelte-material-icons/Magnify.svelte";
 	import { items, term, filtered } from "$lib/js/languageSearch";
@@ -53,7 +52,12 @@
 		"english",
 		"french"
 	]);
-	const langData = {
+	interface Lang {
+		native: string,
+		english: string,
+		flag: any
+	}
+	const langData: Record<string, Lang> = {
 		english: {
 			native: "English",
 			english: "English",
