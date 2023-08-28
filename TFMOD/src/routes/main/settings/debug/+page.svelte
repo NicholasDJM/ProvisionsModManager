@@ -55,3 +55,12 @@
 <Link href="steam://install/440">Install</Link>
 <br>
 <button on:click={testRead}>Test Read</button>
+<a href="/404" id="a">404</a>
+<style type="postcss">
+	#a {
+		color: green;
+	}
+	#a:hover, #a:focus-visible {
+		color: red;
+	}
+</style>

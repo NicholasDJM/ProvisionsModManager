@@ -28,9 +28,12 @@
 	export async function openLink(href: string, bypass = false, steam = false, noSave = false) {
 		// NOTE: Set steam to true only when needed.
 		// TODO: Disallow saving links when getting links from descriptions of mods. Use noSave.
-		const s = href.slice(0, 8),
-			s2 = href.slice(0, 7);
-		if (s !== "https://" && s2 !== "http://" && (steam && s !== "steam://")) throw new Error(`Only HTTP(S) ${steam ? "/ STEAM " : ""}addresses are allowed`);
+		const https = "https://",
+			http = "http://",
+			steamProtocol = "steam://",
+			s = href.slice(0, https.length),
+			s2 = href.slice(0, http.length);
+		if (s !== https && s2 !== http && (steam && s !== steamProtocol)) throw new Error(`Only HTTP(S) ${steam ? "/ STEAM " : ""}addresses are allowed`);
 		address = href;
 		const data = localStorage.getItem("links"),
 			dataParsed = data ? JSON.parse(data) : undefined;
@@ -88,7 +91,7 @@
 			timer = setInterval(() => {
 				//
 				if (address2 !== element?.dataset.href) {
-					translations.title = $i18n.t("link-title", {address: element?.dataset.href});
+					translations.title = $i18n.t("link-title");
 					address2 = element?.dataset.href;
 				}
 				errorMessage = _errorMessage;
@@ -113,6 +116,7 @@
 <dialog id="linkDialog">
 	<div class="message">
 		<h1>{translations.title}</h1>
+		<span class="address">{address2}</span>
 		<code id="error">{errorMessage}</code>
 	</div>
 	<div class="controls">
@@ -176,5 +180,8 @@
 		to {
 			opacity: 0;
 		}
+	}
+	.address {
+
 	}
 </style>

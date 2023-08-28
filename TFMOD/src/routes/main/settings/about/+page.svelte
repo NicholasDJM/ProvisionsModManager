@@ -10,6 +10,7 @@
 		contribAlt: $i18n.t("app-contributors-alt")
 	};
 </script>
+<!-- eslint-disable @intlify/svelte/no-raw-text -- Text is a proper name, cannot translate. -->
 <p>{translations.about}
     <Link href="https://github.com/NicholasDJM/ProvisionsModManager" icon={false}>Github</Link>
 </p>

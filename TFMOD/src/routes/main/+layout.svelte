@@ -4,17 +4,14 @@
 	import "reasonable-colors";
 	import "$lib/css/app.css";
 	import "$lib/css/defaultMargin.css";
-	import { i18n } from "$lib/js/stores/store";
-	import { title } from "$lib/js/stores/store";
-	import { currentPage } from "$lib/js/stores/store";
-	import { updateAvailable } from "$lib/js/stores/store";
+	import { i18n, title, currentPage, updateAvailable, backButton, backUrl } from "$lib/js/stores/store";
 	import { checkUpdate } from "@tauri-apps/api/updater";
 	import { exists } from "@tauri-apps/api/fs";
 	import { onMount, onDestroy } from "svelte";
-	import { backButton, backUrl } from "$lib/js/stores/store";
 	import { goto, afterNavigate} from "$app/navigation";
 	import { blur } from "svelte/transition";
 	import { base } from "$app/paths";
+	import { getInstalled } from "$lib/js/tasks";
 	import jq from "jquery";
 	// TODO: Remove all uses of jQuery from entire project.
 	import Cog from "svelte-material-icons/Cog.svelte";
@@ -37,6 +34,8 @@
 	import Close from "svelte-material-icons/Close.svelte";
 </script>
 <script lang="ts">
+	/* NOTE: Import for these components must remain in the non-module script tag, as sveltekit-autoimport can't see them otherwise.
+		(If these imports are not here, sveltekit-autoimport will add them, causing an error, if they're already defined in the module script)*/
 	import NavButton from "$lib/components/NavButton.svelte";
 	import NavDropdown from "$lib/components/NavDropdown.svelte";
 
@@ -78,6 +77,7 @@
 	}
 	function menuText(display: boolean) {
 		clearTimers();
+		// TODO: move profile selector out of menu and into main +page? would solve the below problem
 		// TODO: Instead of display:none on profileSelector, inert plus visibility:hidden?
 		const profile = document.querySelector<HTMLElement>(".profileSelector"),
 			spacer = document.querySelector<HTMLElement>(".profileSelectorSpacer");
@@ -158,32 +158,26 @@
 			of: false,
 			pf2: false
 		},
-		basePath: string,
-		sdk = false,
 		profileType = "profile-not-installed",
 		profile = localStorage.getItem("profile") || "tf2";
 	onMount(async () => {
-		const navrailComputedPixels: number = css("#navrail", "inline-size").search("px"),
+		const installed = await getInstalled(),
+			navrailComputedPixels: number = css("#navrail", "inline-size").search("px"),
 			navrailComputedPaddingPixels: number = css("#navrail", "padding-inline").search("px"),
 			iconComputedPixels: number = navButtonIconSize.search("px");
 		// TODO: Grab OS, and set paths accordingly.
-		basePath = "C:\\Program Files (x86)\\Steam\\steamapps\\";
-		sdk = await exists(basePath + "\\common\\Source SDK Base 2013 Multiplayer");
-		profileType = sdk ? profileType : "profile-no-sdk";
+		profileType = installed.sdk ? profileType : "profile-no-sdk";
 		navrailComputed = css("#navrail", "inline-size").slice(0, navrailComputedPixels),
 		navrailComputedPadding = css("#navrail", "padding-inline").slice(0, navrailComputedPaddingPixels),
 		textComputed = css(".link", "font-size"),
 		iconComputed = navButtonIconSize.slice(0, iconComputedPixels);
 		/* invoke("close_splashscreen");
 		   TODO: Separate logic of detecting installed games into a ts file. */
-		installed.tf2 = await exists(basePath + "common\\Team Fortress 2\\hl2.exe"); // On windows, we could check the registry to see if TF2 is installed
-		installed.tf2c = await exists(basePath + "sourcemods\\tf2classic\\TF2ClassicLauncher.exe");
-		installed.of = await exists(basePath + "sourcemods\\open_fortress\\steam.inf");
-		installed.pf2 = await exists(basePath + "sourcemods\\pf2\\steam.inf");
-		console.log({
-			sdk,
-			...installed
-		});
+		// installed.tf2 = await exists(basePath + "common\\Team Fortress 2\\hl2.exe"); // On windows, we could check the registry to see if TF2 is installed
+		// installed.tf2c = await exists(basePath + "sourcemods\\tf2classic\\TF2ClassicLauncher.exe");
+		// installed.of = await exists(basePath + "sourcemods\\open_fortress\\steam.inf");
+		// installed.pf2 = await exists(basePath + "sourcemods\\pf2\\steam.inf");
+		console.log(installed);
 	});
 	function toggleMenu() {
 		menuOpen = !menuOpen;
@@ -283,7 +277,7 @@
 		}
 	}
 	function sdkMissing(game: string): string {
-		return sdk ? $i18n.t("game-" + game) : $i18n.t("profile-no-sdk", {game: $i18n.t("game-" + game)});
+		return installed.sdk ? $i18n.t("game-" + game) : $i18n.t("profile-no-sdk", {game: $i18n.t("game-" + game)});
 	}
 	function isInstalled(game: string): string {
 		return installed[game] ? sdkMissing(game) : $i18n.t("profile-not-installed", {game: $i18n.t("game-" + game)});

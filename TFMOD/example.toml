@@ -1,0 +1,22 @@
+version = 1 # Metadata version
+
+[general]
+id = "tf.mod"
+author = "Username"
+license = false
+version = 1
+update = "http://example.com/metadata.toml"
+explicit = []
+type = ""
+game = "TF2"
+
+[files]
+files = []
+hashes = []
+addons = []
+requried = []
+optional = []
+
+[locale.en-ca]
+name = "test"
+description = "This is a test"

@@ -1,0 +1,234 @@
+{
+	"root": true,
+	"private": true,
+	"license": "GPL 3.0",
+	"todo": "Finish moving all ESLint configs to root package.json",
+	"_eslintConfig": {
+		"root": true,
+		"env": {
+			"browser": true,
+			"commonjs": true,
+			"es2022": true,
+			"webextensions": true
+		},
+		"plugins": [
+			"unicorn",
+			"sonarjs",
+			"security",
+			"no-unsanitized"
+		],
+		"extends": [
+			"eslint:recommended",
+			"plugin:unicorn/recommended",
+			"plugin:sonarjs/recommended",
+			"plugin:security/recommended",
+			"plugin:no-unsanitized/DOM"
+		],
+		"parserOptions": {
+			"ecmaVersion": "latest"
+		},
+		"overrides": [
+			{
+				"files": [
+					"*.ts"
+				],
+				"parser": "@typescript-eslint/parser",
+				"parserOptions": {
+					"project": "./tsconfig.json",
+					"tsconfigRootDir": "."
+				},
+				"plugins": [
+					"@typescript-eslint/eslint-plugin"
+				],
+				"extends": [
+					"plugin:@typescript-eslint/recommended"
+				],
+				"rules": {
+					"no-unused-vars": "off",
+					"@typescript-eslint/no-unused-vars": "warn"
+				}
+			}
+		],
+		"settings": {},
+		"ignorePatterns": [
+			"*.min.js",
+			"/build",
+			"/node_modules"
+		],
+		"globals": {},
+		"rules": {
+			"indent": [
+				"error",
+				"tab",
+				{
+					"SwitchCase": 1
+				}
+			],
+			"linebreak-style": [
+				"error",
+				"windows"
+			],
+			"quotes": [
+				"warn",
+				"double"
+			],
+			"semi": [
+				"error",
+				"always"
+			],
+			"no-unused-vars": "warn",
+			"comma-spacing": "error",
+			"camelcase": "warn",
+			"no-var": "error",
+			"no-warning-comments": [
+				"warn",
+				{
+					"terms": [
+						"TODO:",
+						"FIXME:",
+						"BUG:",
+						"ERROR:",
+						"WARNING:"
+					]
+				}
+			],
+			"yoda": "warn",
+			"no-constant-condition": [
+				"error",
+				{
+					"checkLoops": false
+				}
+			],
+			"eqeqeq": [
+				"error",
+				"smart"
+			],
+			"dot-notation": "error",
+			"func-style": [
+				"error",
+				"declaration",
+				{
+					"allowArrowFunctions": true
+				}
+			],
+			"guard-for-in": "error",
+			"multiline-comment-style": [
+				"warn",
+				"bare-block"
+			],
+			"no-alert": "error",
+			"no-confusing-arrow": "error",
+			"no-else-return": "error",
+			"no-lonely-if": "error",
+			"no-await-in-loop": "warn",
+			"no-constant-binary-expression": "error",
+			"no-duplicate-imports": "warn",
+			"no-self-compare": "error",
+			"no-template-curly-in-string": "warn",
+			"no-unmodified-loop-condition": "error",
+			"no-unreachable-loop": "error",
+			"no-use-before-define": "error",
+			"arrow-body-style": [
+				"warn",
+				"as-needed"
+			],
+			"complexity": [
+				"warn",
+				15
+			],
+			"max-depth": [
+				"off",
+				4
+			],
+			"consistent-return": "error",
+			"default-case": "error",
+			"default-case-last": "error",
+			"dot-location": [
+				"error",
+				"property"
+			],
+			"no-eq-null": "error",
+			"no-implicit-coercion": "error",
+			"no-magic-numbers": [
+				"error",
+				{
+					"ignore": [
+						0,
+						1,
+						-1
+					],
+					"enforceConst": true,
+					"ignoreArrayIndexes": true,
+					"ignoreDefaultValues": true,
+					"detectObjects": false
+				}
+			],
+			"no-multi-assign": "error",
+			"no-multi-str": "error",
+			"no-nested-ternary": "off",
+			"no-eval": "error",
+			"no-implied-eval": "error",
+			"no-script-url": "error",
+			"no-empty-function": "error",
+			"no-floating-decimal": "error",
+			"no-implicit-globals": "error",
+			"one-var": [
+				"error",
+				"consecutive"
+			],
+			"one-var-declaration-per-line": [
+				"error",
+				"always"
+			],
+			"require-await": "error",
+			"array-bracket-spacing": [
+				"error",
+				"never"
+			],
+			"arrow-spacing": "error",
+			"brace-style": "error",
+			"comma-dangle": "error",
+			"comma-style": "error",
+			"func-call-spacing": "error",
+			"no-multi-spaces": "error",
+			"no-multiple-empty-lines": "error",
+			"no-trailing-spaces": "error",
+			"semi-spacing": [
+				"error",
+				{
+					"before": false,
+					"after": true
+				}
+			],
+			"semi-style": "error",
+			"space-before-blocks": "error",
+			"space-in-parens": [
+				"error",
+				"never"
+			],
+			"space-infix-ops": "error",
+			"unicorn/consistent-function-scoping": "warn",
+			"unicorn/filename-case": [
+				"error",
+				{
+					"case": "camelCase",
+					"ignore": [
+						"./src/lib/components/*.svelte"
+					]
+				}
+			],
+			"unicorn/prefer-query-selector": "warn",
+			"unicorn/prefer-dom-node-dataset": "off",
+			"unicorn/prefer-module": "off",
+			"unicorn/numeric-separators-style": "off",
+			"unicorn/prevent-abbreviations": [
+				"warn",
+				{
+					"checkFilenames": false
+				}
+			],
+			"no-restricted-properties": "off",
+			"unicorn/expiring-todo-comments": "off"
+		}
+	}
+}

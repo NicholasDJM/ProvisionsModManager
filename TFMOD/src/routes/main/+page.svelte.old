@@ -1,0 +1,325 @@
+
+<script lang="ts">
+	/* TODO: Rewrite whole page to look more like CurseForge or Vortex mod managers.
+		Simple list of mods, an <aside> for more info (place on top of list if window is small (or shrink list area?))
+		use InteractJS to make <aside> resizable, and make drag and drop reordering of mods.
+		add an expansison/dropdown? for mods to allow more inforation without opening the <aside>
+			(Description, optional mods, dependencies, etc.)
+		Not sure where to put mod thumbnail image, i like the idea that the image is grayscaled when the mod is disabled.
+			dedicated spot? or behind text with a gradient fade?
+			Should show more of the thumbnail when expanding (see above)
+			I don't think putting it behind text is readable, so i may just add a dedicated spot on the left.
+			should we forego a large image and go with a icon instead?
+		How to order critical options?
+			Drag and drop handle goes where?
+			toggle on right?
+			update buttons on right?
+
+		Mockup:
+			Drag Handle and move mod position up/down, Mod Position, Thumbnail, Name or Filename (expand to take up space), version number or update button, uninstall, expand button for more info.
+		When expanded, same as above but add an additional bar at bottom for extra controls
+	*/
+
+	import { i18n, title, currentPage, backButton } from "$lib/js/stores/store";
+	$: title.set($i18n.t("main:page-mods"));
+	currentPage.set("mods");
+	import Enabled from "svelte-material-icons/FileCheckOutline.svelte";
+	import Disabled from "svelte-material-icons/FileRemoveOutline.svelte";
+	import Conflicts from "svelte-material-icons/FileAlertOutline.svelte";
+	import Outdated from "svelte-material-icons/FileCancelOutline.svelte";
+	import Pills from "$lib/components/Pills.svelte";
+	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
+	import type { PillEvent } from "$lib/components/Pills.svelte";
+	import HideNavBar from "$lib/components/HideNavBar.svelte";
+	import type { ModInfo } from "$lib/js/modInfo";
+	/* eslint-disable unicorn/prevent-abbreviations */
+	import Mod from "$lib/components/Mod.svelte";
+	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
+	import type { ModEvent, MoveEvent } from "$lib/components/Mod.svelte";
+	import Gallery from "$lib/components/Gallery.svelte";
+	/* eslint-disable-next-line no-duplicate-imports -- Not a duplicate. */
+	import type { Images } from "$lib/components/Gallery.svelte";
+	import { onMount, onDestroy } from "svelte";
+	import { Command } from "@tauri-apps/api/shell";
+	//import { dropdown, feedback } from "$lib/navDropdown.js";
+	let fullscreen = false,
+		translations: Record<string, string>;
+	interface Options {
+		name: string,
+		text: string,
+		/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Don't know what the type is supposed to be. It's a Component */
+		icon?: any
+	}
+	const filterOptions: Array<Options> = [
+		{
+			name: "enabled",
+			text: "Enabled",
+			icon: Enabled
+		},
+		{
+			name: "disabled",
+			text: "Disabled",
+			icon: Disabled
+		},
+		{
+			name: "conflicts",
+			text: "Conflicts",
+			icon: Conflicts
+		},
+		{
+			name: "outdated",
+			text: "Incompatible",
+			icon: Outdated
+		}
+	];
+	let filter: Record<string, boolean> = {
+		all: true,
+		enabled: false,
+		disabled: false,
+		conflicts: false,
+		outdated: false
+	};
+	function handlePillEvent(event: PillEvent) {
+		//console.log("Clicked %c\"" + event.detail.name + "\"%c with a state of %c" + event.detail.state, "color:lightgreen", "color:white", "color:skyblue");
+		filter[event.detail.name] = event.detail.state;
+		//console.log(event.detail.name, filter[event.detail.name]);
+		filter.enabled || filter.disabled || filter.conflicts || filter.outdated ? filter.all = false : filter.all = true;
+		// console.table(filter);
+	}
+	/* TODO: Handle combinations of selected pills. Right now, selected pills only show all of their type
+	// Eventually, I want the results to be combined.
+	// Ex: If enabled and conflicts are enabled, only show mods that are both enabled and have Conflicts;
+	//		It should not show any disabled mods with conflicts.
+	*/
+	// BUG: This has somehow been broken since the last time I've touched this code.
+	let mods: Array<ModInfo> =
+		[
+			{
+				name: "Hello World",
+				author: "Nicholas Miller",
+				description: [
+					{
+						lang: "es",
+						text: "Hola"
+					},
+					{
+						lang: "en",
+						text: "Hello89hase4ghuiauieh4 uioah89huuiopha89puihsd 89pi89p 89hjaw 89pihjouef3 89pa h8i9ja h8i9pwph8i9 h89p fh89ppawe h8i9pa ph8i9 8i9pw 8i9pou8i9 ah8i9oh89iw h8i9op aiosdjmn rg89ha97ue8ih4gau8i9eh48ri9 a4wh89 tawe 94u8htu8i9pahu8i9pw 4eu89a 9hu8iwhu8i9pat wp9ehu8io tph9u8iaew4ui9 hhuiop"
+					},
+					{
+						lang: "fr",
+						text: "Bonjour"
+					}
+				],
+				src: "/images/test.webp",
+				alt: "Test",
+				position: 1,
+				md5: "123",
+				enabled: true,
+				outdated: false,
+				conflicts: 0,
+				update: false,
+				version: "1.0.5"
+			},
+			{
+				name: "Hello World",
+				src: "/images/test.webp",
+				alt: "Test",
+				position: 2,
+				md5: "123",
+				enabled: false,
+				outdated: false,
+				conflicts: 30,
+				explicit: ["blood", "nudity"],
+				update: true
+			}
+		],
+		selectedMod = "",
+		open = false,
+		mini = false,
+		miniTimer: ReturnType<typeof setInterval>,
+		keepOpen = false;
+	const images: Array<Images> = [
+		{
+			src: "/images/testLarge.webp",
+			alt: "Hello",
+			selected: true,
+			width: 640,
+			height: 480
+		},
+		{
+			src: "/images/testLarge.webp",
+			alt: "World",
+			selected: false,
+			width: 640,
+			height: 480
+		}
+	],
+		miniTimerDelay = 100;
+	function handleClick(event: CustomEvent<{id: string}>) {
+		selectedMod = event.detail.id;
+		if (mini) {
+			open = true;
+		}
+		console.log(open);
+	}
+	let pageTitle: string,
+		profile = localStorage.getItem("profile") || "tf2";
+	$: pageTitle = $i18n.t("app-page", $title);
+	onMount(() => {
+		miniTimer = setInterval(() => {
+			// @ts-expect-error It's the root element. It's always available. (After the DOM has loaded, of course)
+			mini = getComputedStyle(document.querySelector(":root")).getPropertyValue("--mini") === "yes";
+			if (!keepOpen) {
+				if (open && mini) {
+					backButton.set(true);
+				} else {
+					backButton.set(false);
+				}
+			}
+			// TODO: Back button should differentiate between going back in nav history and simply changing a variable. Second store?
+			profile = localStorage.getItem("profile") || "tf2";
+		}, miniTimerDelay);
+	});
+	onDestroy(() => {
+		clearInterval(miniTimer);
+	});
+	// If currently viewing the gallery in fullscreen, don't reset the view to mods panel. (When fullscreen innerWidth is more than 1000)
+	$: keepOpen = fullscreen;
+	$: open = keepOpen ? true : $backButton;
+	$: translations = {
+		page: pageTitle,
+		open: $i18n.t("open-folder"),
+		tf2: $i18n.t("game-tf2"),
+		tf2c: $i18n.t("game-tf2c"),
+		of: $i18n.t("game-of"),
+		pf2: $i18n.t("game-pf2")
+	};
+	function openFolder() {
+		console.log(profile);
+		switch (profile) {
+			case "tf2c": {
+				new Command("tf2c_folder_win").execute();
+				break;
+			}
+			case "of": {
+				new Command("of_folder_win").execute();
+				break;
+			}
+			case "pf2": {
+				new Command("pf2_folder_win").execute();
+				break;
+			}
+			default: {
+				new Command("tf2_folder_win").execute();
+			}
+		}
+	}
+	// TODO: If mod has no thumbnail, resize text size to max
+</script>
+<svelte:head>
+	<title>{translations.page}</title>
+</svelte:head>
+<div class="container">
+	<div class="defaultMargin main" inert={open}>
+		<h1>{translations[profile]}</h1>
+		<button on:click={openFolder}>{translations.open}</button>
+		<!-- <button on:click={() => compact.set(!$compact)}>{$compact ? "Compact" : "Comfortable"}</button> -->
+		<Pills options={filterOptions} on:pill={handlePillEvent}/>
+		<div class="mods">
+			{#each mods as mod (mod.position)}
+				{#if filter.all ||
+					((filter.enabled && mod.enabled) ||
+					(filter.disabled && !mod.enabled) ||
+					(filter.conflicts && mod.conflicts) ||
+					(filter.outdated && mod.outdated))
+				}
+					<Mod info={mod} on:mod={handleClick}/>
+				{/if}
+			{/each}
+		</div>
+	</div>
+	<aside id="preview" class:previewOpen={open} inert={!open && mini} aria-label="Mod Information">
+		{#if (open && mini) || keepOpen}
+			<HideNavBar/>
+		{/if}
+		<Gallery bind:fullscreen={fullscreen} images={images}/>
+		{#if !fullscreen}
+			<div class="previewContent">
+				<h1>Hello</h1>
+			</div>
+		{/if}
+	</aside>
+</div>
+<style lang="postcss">
+	@property --defaultMargin {
+		syntax: "<length>";
+	}
+	:root {
+		--mini: no;
+	}
+	@below lg {
+		:root {
+			--mini: yes;
+		}
+	}
+	h1 {
+		margin-block: 0;
+	}
+	.main {
+		display: flex;
+		flex-flow: row wrap;
+		align-content: flex-start;
+		gap: 1rem;
+		overflow-y: auto;
+		justify-content: center;
+	}
+	.mods {
+		display: flex;
+		flex-flow: column wrap;
+		flex-grow: 1;
+		max-inline-size: 50rem;
+		gap: var(--defaultMargin);
+	}
+	.container {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		block-size: 100%;
+	}
+	aside {
+		overflow-x: hidden;
+		inline-size: 0;
+		/* TODO: Slide in from inline-end when open, and vice-versa when closed */
+	}
+	@above lg {
+		.container {
+			grid-template-columns: 50% 50%;
+		}
+		aside {
+			border-inline-start: 1px solid rgb(127 127 127 / 0.5);
+			inline-size: auto;
+		}
+		.previewContent {
+			padding-inline: var(--defaultMargin);
+			padding-block: var(--defaultMargin);
+		}
+	}
+	@below lg {
+		.container:has(aside.previewOpen) {
+			grid-template-columns: auto 100%;
+		}
+		.container:has(aside.previewOpen) .main {
+			inline-size: 0;
+			padding-inline: 0;
+			padding-block: 0;
+		}
+		aside.previewOpen {
+			inline-size: 100%;
+		}
+		/* BUG: Cannot nest rule below with rule above. Creates an error while compiling. Probably nothing I can do. Report to Svelte? PostCSS? Vite? */
+		aside.previewOpen .previewContent {
+			padding-inline: var(--defaultMargin);
+			padding-block: var(--defaultMargin);
+		}
+	}
+</style>

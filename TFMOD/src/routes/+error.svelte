@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import { title } from "$lib/js/stores/store";
+	import { title, currentPage } from "$lib/js/stores/store";
 	import Link from "$lib/components/Link.svelte";
 	import "@fontsource/roboto";
+	import { i18n } from "$lib/js/i18n";
 	title.set(`Error ${$page.status}`);
-	import { currentPage } from "$lib/js/stores/store";
 	currentPage.set(null);
 	console.dir($page);
 	function goBack() {
@@ -14,21 +14,33 @@
 		window.location.reload();
 	}
 	const notFoundError = 404;
+	let translations: Record<string, string>;
+	$: translations = {
+		error: $i18n.t("error-title", {status: $page.status, message: $page.error?.message}),
+		notFound: $i18n.t("not-found", {page: $page.url.pathname}),
+		githubIssues: $i18n.t("github-issue"),
+		reload: $i18n.t("error-reload"),
+		back: $i18n.t("error-back")
+	};
 </script>
 <div class="error">
-	<h1 class="title">Error {$page.status + " " + $page.error?.message}</h1>
+	<h1 class="title">{translations.error}</h1>
 	{#if $page.status === notFoundError}
-		<p>Could not find a page for "{$page.url.pathname}".</p>
+		<p>{translations.notFound}</p>
 	{/if}
-	<p>Report issues to the <Link href="https://github.com/NicholasDJM/ProvisionsModManager/issues/new?title=Page+Error+{$page.status}&template=bug_report.md">GitHub repo</Link></p>
+	<p><Link icon={false} href="https://github.com/NicholasDJM/ProvisionsModManager/issues/new?title=Page+Error+{$page.status}&template=bug_report.md">{translations.githubIssues}</Link></p>
 	<div class="actions">
 		{#if $page.status === notFoundError}
-			<button on:click={goBack}>Go Back</button>
+			<button on:click={goBack}>{translations.back}</button>
 		{/if}
-		<button on:click={reload}>Reload</button>
+		<button on:click={reload}>{translations.reload}</button>
 	</div>
 </div>
 <style lang="postcss">
+	@property --defaultMargin {
+		syntax: "<length>";
+		inherits: true;
+	}
 	:root{
 		font-family: Roboto, sans-serif;
 		display: flex;

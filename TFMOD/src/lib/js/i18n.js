@@ -4,6 +4,8 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import Fluent from "i18next-fluent";
 // @ts-expect-error Can't do anything about missing types.
 import FluentBackend from "i18next-fluent-backend";
+import Backend from "i18next-chained-backend";
+import LocalStorageBackend from "i18next-localstorage-backend";
 const detectionOptions = {
 		order: ["localStorage", "navigator"],
 		lookupLocalStorage: "language"

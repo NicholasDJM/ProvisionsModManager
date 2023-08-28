@@ -1,0 +1,77 @@
+* {
+	box-sizing: border-box;
+}
+:root {
+	--border: #D7D7DB;
+	--accent: #0061E0;
+
+	accent-color: var(--accent);
+	color-scheme: light dark;
+	font-family: "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: rgb(35 34 43);
+		color: rgb(251 251 254);
+	}
+	:root {
+		--border: rgb(249 249 250 / 0.2);
+		--accent: rgb(0 221 255 / 1);
+	}
+}
+body, html {
+	overflow: hidden;
+	block-size: 100%;
+	margin: 0;
+	padding-block-end: 1rem;
+}
+p {
+	font-size: 15px;
+}
+h1 {
+	display: flex;
+	justify-content: center;
+	font-size: 2rem;
+	margin-block: 0;
+}
+a {
+	text-decoration: none;
+	&:hover, &:focus-visible {
+		text-decoration: underline;
+	}
+	&:link {
+		color: var(--accent);
+	}
+	&:visited {
+		color: var(--accent);
+	}
+}
+img {
+	inline-size: 16px;
+	block-size: 16px;
+	display: inline-block;
+	margin-inline-end: 10px;
+	margin-block: auto;
+}
+fieldset {
+	border: none;
+	border-block-start: 1px solid var(--border);
+	margin-block-end: 10px;
+}
+.row {
+	font-size: 15px;
+	display: flex;
+	justify-content: space-between;
+	padding-block: 5px;
+	> label {
+		font-size: 15px;
+		padding-block: 2px;
+		display: flex;
+	}
+}
+input:invalid {
+	border: 3px ridge red;
+}
+.red {
+	color: red;
+}

@@ -1,0 +1,56 @@
+{
+	"manifest_version": 3,
+	"name": "__MSG_extensionName__",
+	"version": "0.1",
+	"description": "__MSG_extensionDescription__",
+	"author": "Nicholas Miller",
+	"homepage_url": "https://github.com/NicholasDJM",
+	"default_locale": "en",
+	"content_scripts": [
+		{
+			"matches": ["*://*.gamebanana.com/*"],
+			"js": ["build/gamebanana.com.js"],
+			"run_at": "document_end"
+		},
+		{
+			"matches": ["*://*.mods.tf/*"],
+			"js": ["build/mods.tf.js"],
+			"run_at": "document_end"
+		},
+		{
+			"matches": ["*://*.tf2maps.net/*"],
+			"js": ["build/tf2maps.net.js"],
+			"run_at": "document_end"
+		},
+		{
+			"matches": ["*://tf2classic.com/*"],
+			"js": ["build/tf2classic.com.js"],
+			"run_at": "document_end"
+		},
+		{
+			"matches": ["*://openfortress.fun/*"],
+			"js": ["build/openfortress.fun.js"],
+			"run_at": "document_end"
+		},
+		{
+			"matches": ["*://prefortress.com/*"],
+			"js": ["build/prefortress.fun.js"],
+			"run_at": "document_end"
+		}
+	],
+	"options_ui":
+	{
+		"page": "src/settings.html",
+		"open_in_tab": false,
+		"browser_style": false
+	},
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "provisions.mod.manager@nicholasmiller"
+		}
+	},
+	"permissions": [
+		"storage",
+		"nativeMessaging"
+	]
+}
