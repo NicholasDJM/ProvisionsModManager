@@ -1,6 +1,7 @@
 import fs from "node:fs";
 // TODO: Create Optimal text colours for Alt Accent and Alt Background
 // Theme generator assumes access to reasonableColors
+// TODO: Redo theme system with no dependency on reasonableColors, and use a contrast function to set optimal text color.
 /**
  * Generates text for a CSS theme file.
  * @param {string} theme - Name of theme
