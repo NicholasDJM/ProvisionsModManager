@@ -4,6 +4,7 @@
 @import url("./theme-purple.css");
 @import url("./theme-yellow.css");
 @import url("./globalProperties.css");
+@import url("./defaultMargin.css");
 :root {
 	--defaultMargin: 0.5rem;
 	--transitionOriginal: 200;
@@ -43,7 +44,7 @@
 .colored * {
 	/* The Webkit way of colouring the scrollbar is non-standard,
 		so I'm defining the scrollbar-color as future proofing. */
-	
+
 	/* Thumb, Track */
 	scrollbar-color: var(--accentColor) var(--backgroundColor);
 	scrollbar-width: auto;
@@ -144,7 +145,7 @@ dialog {
 		backdrop-filter: blur(0.1rem);
 	}
 }
-button:not(.noStyle):active {
+/* button:not(.noStyle):active {
 	background-color: var(--light) !important;
 	color: var(--dark) !important;
 }
@@ -160,4 +161,4 @@ button:not(.noStyle) {
 		color: var(--textColorOptimal);
 		box-shadow: 0 0 0.5rem 1px var(--accentColor);
 	}
-}
+} */

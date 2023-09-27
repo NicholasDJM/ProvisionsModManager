@@ -71,6 +71,8 @@
 	- Quickly compile a tiny map (1x1 HU?) with every possible mod that requires asset preloading. If you want some things to work in casual, or you want to override models in maps that package their models with the map, this would fix that.
 	- Then we could use “map_background preload; wait 10; disconnect” in autoexec.cfg
 		- A note, this would effectively mute all menu music, perhaps a con in some people‘s eyes.
+- Common settings sync
+	Sync settings, like video settings, key bindings, and mouse settings across all games.
 
 ## Future Features
 - Integrate installation and auto updating of Source Mods, like Team Fortress 2 Classic, Open Fortress, and Pre-Fortress 2 right inside Provisions mod manager.

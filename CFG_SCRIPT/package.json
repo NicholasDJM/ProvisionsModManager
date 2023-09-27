@@ -1,0 +1,20 @@
+{
+	"name": "cfgscript",
+	"version": "1.0.0",
+	"description": "Compiles/decompiles CFG Script for Source Engine games.",
+	"main": "version1.js",
+	"private": true,
+	"scripts": {},
+	"keywords": [],
+	"author": "Nicholas Miller",
+	"license": "GPL-3.0",
+	"type": "module",
+	"dependencies": {
+		"commander": "^11.0.0",
+		"globby": "^13.2.2",
+		"kleur": "^4.1.5"
+	},
+	"devDependencies": {
+		"pkg": "^5.8.1"
+	}
+}

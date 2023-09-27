@@ -71,17 +71,18 @@
 				"createDir": false,
 				"exists": true,
 				"readDir": false,
-				"readFile": false,
+				"readFile": true,
 				"removeDir": false,
 				"removeFile": false,
 				"renameFile": false,
-				"writeFile": false,
+				"writeFile": true,
 				"scope": [
 					"C:/Program Files (x86)/Steam/steamapps/common/Team Fortress 2",
 					"C:/Program Files (x86)/Steam/steamapps/common/Team Fortress 2/**/*",
-					"C:/Program Files (x86)/Steam/steamapps/sourcemods/tf2classic",
-					"C:/Program Files (x86)/Steam/steamapps/sourcemods/open_fortress",
-					"C:/Program Files (x86)/Steam/steamapps/sourcemods/pf2",
+					"C:/Program Files (x86)/Steam/steamapps/sourcemods/tf2classic/**/*",
+					"C:/Program Files (x86)/Steam/steamapps/sourcemods/open_fortress/**/*",
+					"C:/Program Files (x86)/Steam/steamapps/sourcemods/pf2/**/*",
+					"C:/Program Files (x86)/Steam/steamapps/sourcemods/tf2vintage/**/*",
 					"C:/Program Files (x86)/Steam/steamapps/common/Source SDK Base 2013 Multiplayer/hl2.exe"
 
 				]

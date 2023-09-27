@@ -1,4 +1,6 @@
 <script lang="ts">
+	/* TODO: Look into popover API, and rewrite this with that, and extend with svelte event dispatchers.
+		https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover */
 	import { onMount, createEventDispatcher } from "svelte";
 	import { fade } from "svelte/transition";
 	import Icon from "svelte-material-icons/HelpRhombusOutline.svelte";

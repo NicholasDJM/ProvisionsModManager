@@ -55,7 +55,11 @@
 <Link href="steam://install/440">Install</Link>
 <br>
 <button on:click={testRead}>Test Read</button>
+<br/>
 <a href="/404" id="a">404</a>
+<br/>
+<br/>
+{navigator.appVersion}
 <style type="postcss">
 	#a {
 		color: green;

@@ -25,13 +25,13 @@
 	export function previewHide() {
 		show = false;
 	}
+	const https = "https://",
+		http = "http://",
+		steamProtocol = "steam://";
 	export async function openLink(href: string, bypass = false, steam = false, noSave = false) {
 		// NOTE: Set steam to true only when needed.
 		// TODO: Disallow saving links when getting links from descriptions of mods. Use noSave.
-		const https = "https://",
-			http = "http://",
-			steamProtocol = "steam://",
-			s = href.slice(0, https.length),
+		const s = href.slice(0, https.length),
 			s2 = href.slice(0, http.length);
 		if (s !== https && s2 !== http && (steam && s !== steamProtocol)) throw new Error(`Only HTTP(S) ${steam ? "/ STEAM " : ""}addresses are allowed`);
 		address = href;
@@ -65,7 +65,7 @@
 		show2 = false,
 		translations: Record<string, string>,
 		timer: ReturnType<typeof setInterval>,
-		address2: string,
+		address2: string | undefined,
 		errorMessage = "";
 	const close = () => {
 		element?.close();
@@ -73,7 +73,7 @@
 		_errorMessage = "";
 	};
 	// NOTE: Can't set title here because address is not a reactive variable
-	/* // Try to uncomment this (add a slash to the start of this line), and look at what eslint has to say.
+	/*// Try to uncomment this (add a slash to the start of this line), and look at what eslint has to say.
 	$: address2 = address;
 	//*/
 	// TODO: This gives me an idea! Use this quirk to correct pyroland.svelte! (replace storing maps in localStorage to sotring in a non-reactive variable)

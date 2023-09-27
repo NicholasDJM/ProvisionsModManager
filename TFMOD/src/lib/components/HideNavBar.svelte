@@ -1,3 +1,4 @@
+<!-- TODO: Refactor this for newer layout. -->
 <!-- eslint-disable @intlify/svelte/no-raw-text -- Not text. -->
 <svelte:head>
 	<style lang="postcss">

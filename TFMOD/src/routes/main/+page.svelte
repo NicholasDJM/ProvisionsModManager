@@ -9,22 +9,22 @@
 			conflicts: 0,
 			enabled: true,
 			position: 0,
-			src: "",
+			src: "/images/test.webp",
 			alt: "",
 			outdated: false,
 			update: false,
 			md5: ""
 		}
 	];
+	import { title } from "$lib/js/stores/store";
+	title.set("Installed Mods");
 	/* global Mod */
 </script>
-<div class="test"></div>
+<div class="defaultMargin">
 {#each mods as mod}
 	<!-- svelte-ignore missing-declaration -->
 	<Mod info={mod}/>
 {/each}
+</div>
 <style lang="postcss">
-	.test {
-		display: flex
-	}
 </style>

@@ -1,0 +1,12 @@
+//@version(1)
+//@team="RED"
+//@greet=(team)
+//@"echo 'Hello "+team+"team!'"
+//@end
+//@if (team == "RED")
+//	@greet("Red")
+//@else
+//	@greet("Blu")
+//@end
+//@-->
+echo 'Hello Red team!'

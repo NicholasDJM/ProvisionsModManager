@@ -87,7 +87,7 @@
 		background-color: rgb(0 0 0 / 0);
 		border: 0;
 		color: var(--textColorOptimal);
-		transition: var(--transition);
+		/* transition: var(--transition); */
 		cursor: pointer;
 		aspect-ratio: 1;
 		border-radius: 50%;
@@ -114,13 +114,13 @@
 	}
 	.link:hover>span,.link:focus-visible>span {
 		color: var(--dark);
-		transition: var(--menuSpeed);
+		/* transition: var(--menuSpeed); */
 	}
 	.link:hover,.link:focus-visible {
 		background-color: var(--light);
 		color: var(--dark);
 		box-shadow: 0 0 0.8rem 1px var(--light);
-		transition: var(--menuSpeed);
+		/* transition: var(--menuSpeed); */
 	}
 	.buttonTextElement {
 		color: var(--textColorOptimal);
@@ -137,7 +137,7 @@
 	}
 	.link:hover>.buttonTextElement,.link:focus-visible>.buttonTextElement {
 		color: var(--dark);
-		transition: var(--menuSpeed);
+		/* transition: var(--menuSpeed); */
 	}
 	.showText {
 		margin-inline-start: 0.66rem;

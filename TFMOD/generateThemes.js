@@ -123,6 +123,7 @@ function generate(
  * @param  {...any} data - String: colours.
  */
 function create(theme, ...data) {
+	// eslint-disable-next-line security/detect-non-literal-fs-filename -- Not a problem. Not production facing code.
 	fs.writeFile("./src/lib/css/theme-" + theme + ".css", generate(theme, ...data), error => {
 		if (error) console.error(error);
 	});

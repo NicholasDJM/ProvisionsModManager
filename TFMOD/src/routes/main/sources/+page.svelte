@@ -57,11 +57,10 @@
 		};
 		console.log(translations);
 	}
-	let gb: LinkTypeNoUrl =
-		{
-			translation: "gamebanana",
-			alt: ""
-		},
+	let gb: LinkTypeNoUrl = {
+		translation: "gamebanana",
+		alt: ""
+	},
 		modstf: LinkTypeNoUrl = {
 			translation: "mods",
 			alt: ""
@@ -158,6 +157,30 @@
 					height: 500
 				},
 				url: "https://prefortress.com"
+			},
+			{
+				// ==== TF2 Vintage ====
+				links: [
+					link("https://www.steamgriddb.com/game/5314030", grid)
+				],
+				logo: {
+					url: "/images/copyrighted_images/tf2v.png",
+					alt: translations.tf2v,
+					width: 1000,
+					height: 366
+				},
+				url: "https://github.com/TF2V/TF2Vintage"
+			},
+			{
+				// ==== Hammer++ ====
+				links: [],
+				logo: {
+					url: "/images/copyrighted_images/hammer.webp",
+					alt: translations.hammer,
+					width: 825,
+					height: 156
+				},
+				url: "https://ficool2.github.io/HammerPlusPlus-Website"
 			}
 		];
 	}
@@ -200,7 +223,7 @@
 		border: 1px solid gray;
 		padding-inline: var(--defaultMargin);
 		padding-block: var(--defaultMargin);
-		flex-grow: 1;
+		flex: 1;
 		background-color: var(--backgroundColorAlt);
 		color: var(--textColor);
 	}
