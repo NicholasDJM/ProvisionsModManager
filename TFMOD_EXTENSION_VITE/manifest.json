@@ -1,0 +1,56 @@
+{
+	"manifest_version": 3,
+	"name": "__MSG_extensionName__",
+	"version": "0.1",
+	"description": "__MSG_extensionDescription__",
+	"author": "Nicholas Miller",
+	"homepage_url": "https://github.com/NicholasDJM/ProvisionsModManager",
+	"default_locale": "en",
+	"content_scripts": [
+		{
+			"matches": ["*://*.gamebanana.com/*"],
+			"js": ["src/gamebanana.com.ts"],
+			"run_at": "document_end"
+		},
+		{
+			"matches": ["*://*.mods.tf/*"],
+			"js": ["src/mods.tf.ts"],
+			"run_at": "document_end"
+		},
+		{
+			"matches": ["*://*.tf2maps.net/*"],
+			"js": ["src/tf2maps.net.ts"],
+			"run_at": "document_end"
+		},
+		{
+			"matches": ["*://tf2classic.com/*"],
+			"js": ["src/tf2classic.com.ts"],
+			"run_at": "document_end"
+		},
+		{
+			"matches": ["*://openfortress.fun/*"],
+			"js": ["src/openfortress.fun.ts"],
+			"run_at": "document_end"
+		},
+		{
+			"matches": ["*://prefortress.com/*"],
+			"js": ["src/prefortress.com.ts"],
+			"run_at": "document_end"
+		}
+	],
+	"options_ui":
+	{
+		"page": "src/settings.html",
+		"open_in_tab": false,
+		"browser_style": false
+	},
+	"{{firefox}}.browser_specific_settings": {
+		"gecko": {
+			"id": "provisions.mod.manager@nicholasmiller"
+		}
+	},
+	"permissions": [
+		"storage",
+		"nativeMessaging"
+	]
+}

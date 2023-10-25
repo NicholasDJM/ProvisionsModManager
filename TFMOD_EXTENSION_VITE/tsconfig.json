@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "NodeNext",
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"target": "ESNext",
+		"module": "NodeNext",
+		"noEmit": true,
+		"allowImportingTsExtensions": true,
+		"lib": [
+			"DOM",
+			"DOM.Iterable",
+			"ES6"
+		],
+		"types": [
+			"vite/client"
+		]
+	},
+	"exclude": [
+		"build",
+		"node_modules",
+		"src/**/*.js",
+		"dist"
+	]
+}

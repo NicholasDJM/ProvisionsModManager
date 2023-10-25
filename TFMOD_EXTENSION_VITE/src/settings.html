@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="/settings.css">
+		<script type="module" src="./settings.ts"></script>
+	</head>
+	<body>
+		<form id="settings">
+			<a href="https://www.github.com/NicholasDJM/ProvisionsModManager"><h1 id="version"></h1></a>
+			<!-- <fieldset>
+				<legend data-string="sectionWebsite"></legend>
+				<div class="row">
+					<label for="enableGameBanana"><img src="https://icons.duckduckgo.com/ip2/gamebanana.com.ico" alt="GameBanana Logo">GameBanana</label>
+					<input id="enableGameBanana" type="checkbox" data-key="gamebanana" checked>
+				</div>
+				<div class="row">
+					<label for="enableModsTf"><img src="https://icons.duckduckgo.com/ip2/mods.tf.ico" alt="Mod.tf Logo">Mods.tf</label>
+					<input id="enableModsTf" type="checkbox" data-key="mods_tf" checked>
+				</div>
+			</fieldset> -->
+			<fieldset>
+				<legend data-string="sectionOptions"></legend>
+					<div class="row">
+						<label for="removeModBoy" data-string="optionModBoy"></label>
+						<input id="removeModBoy" type="checkbox" data-key="modboy" checked>
+					</div>
+					<div class="row">
+						<label for="port" data-string="optionPort"></label>
+						<input id="port" type="number" data-key="port" value="42069" min="0" max="65535" maxlength="5" inputmode="numeric" enterkeyhint="done" required>
+					</div>
+			</fieldset>
+			<div class="row">
+				<span></span>
+				<button type="button" id="reset" data-string="buttonReset"></button>
+			</div>
+		</form>
+	</body>
+</html>
