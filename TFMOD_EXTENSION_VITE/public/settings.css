@@ -1,18 +1,18 @@
-* {
-	box-sizing: border-box;
-}
 :root {
 	accent-color: var(--accent);
 	color-scheme: light dark;
 }
-body, html {
-	block-size: 100%;
-	padding-block-end: 1rem;
+body {
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: space-between;
 }
 .firefox {
 	--border: #D7D7DB;
 	--accent: #0061E0;
+
 	font-family: "Segoe UI", sans-serif;
+	min-height: 200px;
 	@media (prefers-color-scheme: dark) {
 		body {
 			--border: rgb(249 249 250 / 0.2);
@@ -22,37 +22,33 @@ body, html {
 			color: rgb(251 251 254);
 		}
 	}
-	body, html {
+
+	block-size: 100%;
+	body {
 		overflow: hidden;
-		margin: 0;
+		margin-inline: 0;
+		margin-block: 0;
+		block-size: 100%;
 	}
 }
-
 .chrome {
 	--border: rgb(0 0 0 / .06);
-	--accent: rgb(66,133,244);
-	font-family: "Segoe UI", sans-serif;
+	--accent: rgb(66 133 244);
+
+	font-family: "Segoe UI", Tahoma, sans-serif;
+	body {
+		margin-inline: 0.5rem;
+		margin-block-end: .5rem;
+	}
 	@media (prefers-color-scheme: dark) {
 		body {
 			--border: rgb(255 255 255 / .1);
-			--accent: rgb(138,180,248);
+			--accent: rgb(138 180 248);
 
-			background-color: #292a2d;
+			background-color: #292A2D;
 			color: rgb(232 234 237);
 		}
 	}
-	h1 {
-		font-size: 1rem;
-	}
-}
-p {
-	font-size: 15px;
-}
-h1 {
-	display: flex;
-	justify-content: center;
-	font-size: 2rem;
-	margin-block: 0;
 }
 a {
 	text-decoration: none;
@@ -66,33 +62,33 @@ a {
 		color: var(--accent);
 	}
 }
-img {
-	inline-size: 16px;
-	block-size: 16px;
-	display: inline-block;
-	margin-inline-end: 10px;
-	margin-block: auto;
-}
 fieldset {
 	border: none;
 	border-block-start: 1px solid var(--border);
-	margin-block-end: 10px;
+	margin-block-end: 0.25rem;
 }
 .row {
-	font-size: 15px;
+	font-size: 1rem;
 	display: flex;
 	justify-content: space-between;
-	padding-block: 5px;
+	padding-block: 0.15rem;
 	> label {
-		font-size: 15px;
-		padding-block: 2px;
+		font-size: 1rem;
+		padding-block: 0.15rem;
 		display: flex;
 	}
+}
+.row:last-child {
+	margin-block-start: 1rem;
+}
+button {
+	max-block-size: 1.6em;
 }
 input {
 	accent-color: var(--accent);
 }
 input:invalid {
+	/* stylelint-disable-next-line rem-over-px/rem-over-px -- We need px. */
 	border: 3px ridge red;
 }
 .red {

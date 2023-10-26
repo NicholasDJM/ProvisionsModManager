@@ -4,7 +4,7 @@
 		"description": "Name of the extension."
 	},
 	"extensionDescription": {
-		"message": "Companion extension for Provisions Mod Manager that provides a button on supported websites, like GameBanana, to quickly install mods.",
+		"message": "Companion extension for Provisions Mod Manager that provides a button on supported websites, like GameBanana, to quickly install mods. Requires Provisions Mod Manager to be installed.",
 		"description": "Description of the extension."
 	},
 	"optionsTitle": {
@@ -40,5 +40,13 @@
 	"buttonReset": {
 		"message": "Reset",
 		"description": "Text inside the reset button."
+	},
+	"optionGrant": {
+		"message": "Missing permission to read and modify websites. Click to grant permission.",
+		"description": "Ask the user to grant permmissions to read and modify websites related to TF2 modding."
+	},
+	"grantButton": {
+		"message": "Grant",
+		"description": "Text inside the grant button."
 	}
 }

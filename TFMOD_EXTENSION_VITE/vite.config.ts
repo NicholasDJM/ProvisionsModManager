@@ -19,4 +19,3 @@ export default defineConfig({
 		"__MODE__": process.env.NODE_ENV || "development"
 	}
 });
-//TODO: Configure output path based on browser target.

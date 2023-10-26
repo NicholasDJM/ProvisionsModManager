@@ -23,17 +23,17 @@
 			"run_at": "document_end"
 		},
 		{
-			"matches": ["*://tf2classic.com/*"],
+			"matches": ["*://*.tf2classic.com/*"],
 			"js": ["src/tf2classic.com.ts"],
 			"run_at": "document_end"
 		},
 		{
-			"matches": ["*://openfortress.fun/*"],
+			"matches": ["*://*.openfortress.fun/*"],
 			"js": ["src/openfortress.fun.ts"],
 			"run_at": "document_end"
 		},
 		{
-			"matches": ["*://prefortress.com/*"],
+			"matches": ["*://*.prefortress.com/*"],
 			"js": ["src/prefortress.com.ts"],
 			"run_at": "document_end"
 		}

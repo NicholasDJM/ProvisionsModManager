@@ -178,6 +178,9 @@ importers:
       eslint-plugin-unicorn:
         specifier: 46.0.0
         version: 46.0.0(eslint@8.36.0)
+      normalize.css:
+        specifier: 8.0.1
+        version: 8.0.1
       stylelint:
         specifier: ^15.11.0
         version: 15.11.0(typescript@5.2.2)
