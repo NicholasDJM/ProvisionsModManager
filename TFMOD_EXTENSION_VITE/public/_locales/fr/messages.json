@@ -1,0 +1,101 @@
+{
+	"extensionName": {
+		"message": "Provisions Mod Manager: programme d'installation en un clic",
+		"description": "Name of the extension."
+	},
+	"extensionDescription": {
+		"message": "Extension complémentaire pour Provisions Mod Manager qui fournit un bouton sur les sites Web pris en charge, comme GameBanana, pour installer rapidement des mods. Nécessite l’installation de Provisions Mod Manager.",
+		"description": "Description of the extension."
+	},
+	"version": {
+		"message": "Installateur en un clic $version$",
+		"description": "Extension version number.",
+		"placeholders": {
+			"version": {
+				"content": "$1",
+				"example": "0.1"
+			}
+		}
+	},
+	"sectionWebsite": {
+		"message": "Sites Web pris en charge",
+		"descriptions": "Title of the Supported Websites section in the options page."
+	},
+	"sectionOptions": {
+		"message": "Options diverses",
+		"description": "Title of various options for website specific functions."
+	},
+	"optionModboy": {
+		"message": "Supprimer les liens Modboy",
+		"description": "Label of the option to remove links to Modboy's one click installer."
+	},
+	"optionPort": {
+		"message": "Port",
+		"description": "Label of the option for the port to connect to."
+	},
+	"labelReset": {
+		"message": "Réinitialiser les options par défaut",
+		"description": "Label for the reset button."
+	},
+	"buttonReset": {
+		"message": "Réinitialiser",
+		"description": "Text inside the reset button."
+	},
+	"optionGrant": {
+		"message": "Autorisations manquantes pour lire et modifier les pages.",
+		"description": "Ask the user to grant permmissions to read and modify websites related to TF2 modding."
+	},
+	"grantButton": {
+		"message": "Donner la permission",
+		"description": "Text inside the grant button."
+	},
+	"install": {
+		"message": "Provisions Mod Manager",
+		"description": "Name of Provisions Mod Manager, to be used on install buttons."
+	},
+	"installSubtext": {
+		"message": "Installation en un clic",
+		"description": "Describes what the install button does."
+	},
+	"chromePermissionsNotice": {
+		"message": "Chrome n'autorise pas la révocation des autorisations par programme. Utilisez la page de configuration de l'extension pour révoquer l'accès.",
+		"description": "Explanation of why the checkboxes for read and modify permissions for websites is disabled in Chrome."
+	},
+	"sectionPermissions": {
+		"message": "Autorisations",
+		"description": "Title of the permissions section."
+	},
+	"whyPermissionStorageTitle": {
+		"message": "Stockage",
+		"description": "Name of the 'storage' permission."
+	},
+	"whyPermissionStorage": {
+		"message": "Pour enregistrer les paramètres tels que le port à utiliser lors de la connexion à Provisions Mod Manager.",
+		"description": "Reason for the 'storage' permission."
+	},
+	"whyPermissionNativeMessagingTitle": {
+		"message": "Messagerie Native",
+		"description": "Name of the 'nativeMessaging' permission."
+	},
+	"whyPermissionNativeMessaging": {
+		"message": "Pour communiquer avec Provisions Mod Manager.",
+		"description": "Reason for the 'nativeMessaging' permission."
+	},
+	"whyPermissionDownloadsTitle": {
+		"message": "Téléchargements",
+		"description": "Name of the 'downloads' permission."
+	},
+	"whyPermissionDownloads": {
+		"message": "Gérez les téléchargements sur 'http://mods.tf'. Mods.tf nécessite que vous soyez connecté via Steam, les téléchargements doivent donc avoir lieu dans le navigateur et non dans Provisions Mod Manager.",
+		"description": "Reason for the 'downloads' permission."
+	},
+	"whyPermissionNotificationsTitle": {
+		"message": "Notifications",
+		"description": "Name of the 'notifications' permission."
+	},
+	"whyPermissionNotifications": {
+		"message": "Nous permet de vous alerter d’éventuelles erreurs ; un échec de connexion avec Provisions Mod Manager, par exemple.",
+		"description": "Reason for the 'notifications' permission."
+	}
+
+}

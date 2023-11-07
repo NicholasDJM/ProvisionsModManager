@@ -1,0 +1,152 @@
+@import url("normalize.css");
+:root {
+	--firefox-blue-light: rgb(0 97 224 / 1);
+	--firefox-blue-dark: rgb(0 221 225 / 1);
+	--firefox-border-light: rgb(215 215 219 / 1);
+	--firefox-border-dark: rgb(249 249 250 / 0.2);
+	--firefox-background-dark: rgb(35 34 43 / 1);
+	--firefox-color-dark: rgb(251 251 254 / 1);
+
+	--chrome-blue-light: rgb(66 133 244 / 1);
+	--chrome-blue-dark: rgb(138 180 248 / 1);
+	--chrome-border-light: rgb(0 0 0 / 0.06);
+	--chrome-border-dark: rgb(255 255 255 / 0.1);
+	--chrome-background-dark: rgb(41 42 45 / 1);
+	--chrome-color-dark: rgb(232 234 237 / 1);
+
+	--edge-blue-light: rgb(0 120 212 / 1);
+	--edge-blue-dark: rgb(99 173 229 / 1);
+	--edge-border-light: rgb(182 182 182 / 1);
+	--edge-border-dark: rgb(182 182 182 / 1);
+	--edge-background-dark: rgb(59 59 59 / 1);
+	--edge-color-dark: rgb(255 255 255 / 1);
+
+	accent-color: var(--accent);
+	color-scheme: light dark;
+	/* stylelint-disable-next-line stylelint-logical-properties/enforce-logical-properties -- Logical properties do not work on the html tag. */
+	min-height: 15.625rem;
+}
+main {
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: space-between;
+}
+input {
+	accent-color: var(--accent);
+}
+.firefox {
+	--border: var(--firefox-border-light);
+	--accent: var(--firefox-blue-light);
+
+	font-family: "Segoe UI", sans-serif;
+	@media (prefers-color-scheme: dark) {
+		body {
+			--border: var(--firefox-border-dark);
+			--accent: var(--firefox-blue-dark);
+
+			background-color: var(--firefox-background-dark);
+			color: var(--firefox-color-dark);
+		}
+	}
+}
+.chrome {
+	--border: var(--chrome-border-light);
+	--accent: var(--chrome-blue-light);
+
+	font-family: "Segoe UI", Tahoma, sans-serif;
+	body {
+		margin-inline: 0.5rem;
+		margin-block-end: .5rem;
+	}
+	.chromeNotice {
+		color: rgb(154 160 166 / 1);
+		font-size: 0.9rem;
+	}
+	@media (prefers-color-scheme: dark) {
+		body {
+			--border: var(--chrome-border-dark);
+			--accent: var(--chrome-blue-dark);
+
+			background-color: var(--chrome-background-dark);
+			color: var(--chrome-color-dark);
+		}
+	}
+}
+.edge {
+	--border: var(--edge-border-light);
+	--accent: var(--edge-blue-light);
+
+	accent-color: auto;
+	font-family: "System UI", sans-serif;
+	body {
+		margin-block-end: 2rem;
+		/* A UI bug in Edge means we need a larger empty space at the end of the Extensions Options page. */
+	}
+	.chromeNotice {
+		color:#A7A7A7;
+		font-size: 0.9rem;
+	}
+	input {
+		accent-color: auto;
+	}
+	@media (prefers-color-scheme: dark) {
+		body {
+			--border: var(--edge-border-dark);
+			--accent: var(--edge-blue-dark);
+
+			background-color: var(--edge-background-dark);
+			color: var(--edge-color-dark);
+		}
+	}
+}
+a {
+	text-decoration: none;
+	&:hover, &:focus-visible {
+		text-decoration: underline;
+	}
+	&:link {
+		color: var(--accent);
+	}
+	&:visited {
+		color: var(--accent);
+	}
+}
+fieldset {
+	border: none;
+	border-block-start: 1px solid var(--border);
+	margin-block-end: 0.25rem;
+}
+.row {
+	font-size: 1rem;
+	display: flex;
+	justify-content: space-between;
+	padding-block: 0.15rem;
+	gap: 0.5rem;
+	> label {
+		inline-size: 100%;
+		font-size: 1rem;
+		padding-block: 0.15rem;
+		display: flex;
+		justify-content: space-between;
+	}
+}
+/* stylelint-disable-next-line a11y/no-display-none -- Intended behavior. */
+[hidden] {
+	display: none !important;
+}
+input:invalid {
+	border: 0.1875rem ridge red;
+}
+.red {
+	color: red;
+}
+.justify {
+	text-align: justify;
+}
+p {
+	margin-block: 0;
+	padding-block-end: 0.5rem;
+}
+.margin {
+	margin-inline: 0.8rem;
+}

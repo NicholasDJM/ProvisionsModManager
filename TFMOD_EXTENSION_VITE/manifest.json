@@ -1,7 +1,6 @@
 {
 	"manifest_version": 3,
 	"name": "__MSG_extensionName__",
-	"version": "0.1",
 	"description": "__MSG_extensionDescription__",
 	"author": "Nicholas Miller",
 	"homepage_url": "https://github.com/NicholasDJM/ProvisionsModManager",
@@ -49,8 +48,15 @@
 			"id": "provisions.mod.manager@nicholasmiller"
 		}
 	},
+	"background": {
+		"{{chrome}}.service_worker": "src/background.ts",
+		"{{firefox}}.scripts": ["src/background.ts"],
+		"type": "module"
+	},
 	"permissions": [
 		"storage",
-		"nativeMessaging"
+		"nativeMessaging",
+		"downloads",
+		"notifications"
 	]
 }

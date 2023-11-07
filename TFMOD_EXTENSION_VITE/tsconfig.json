@@ -16,7 +16,8 @@
 		"lib": [
 			"DOM",
 			"DOM.Iterable",
-			"ES6"
+			"ES6",
+			"ESNext"
 		],
 		"types": [
 			"vite/client"
@@ -27,5 +28,10 @@
 		"node_modules",
 		"src/**/*.js",
 		"dist"
+	],
+	"include": [
+		"src/**/*.ts",
+		"globals.d.ts",
+		"vite.config.ts"
 	]
 }

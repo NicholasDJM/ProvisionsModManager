@@ -7,9 +7,9 @@
 		"message": "Companion extension for Provisions Mod Manager that provides a button on supported websites, like GameBanana, to quickly install mods. Requires Provisions Mod Manager to be installed.",
 		"description": "Description of the extension."
 	},
-	"optionsTitle": {
+	"version": {
 		"message": "One-Click Installer $version$",
-		"description": "Title of the options page, with version number.",
+		"description": "Extension version number.",
 		"placeholders": {
 			"version": {
 				"content": "$1",
@@ -30,23 +30,102 @@
 		"description": "Label of the option to remove links to Modboy's one click installer."
 	},
 	"optionPort": {
-		"message": "WebSocket Port",
-		"description": "Label of the option for the WebSocket port to connect to."
+		"message": "Port",
+		"description": "Label of the option for the port to connect to."
 	},
 	"labelReset": {
 		"message": "Reset options to default",
 		"description": "Label for the reset button."
 	},
 	"buttonReset": {
-		"message": "Reset",
+		"message": "Defaults",
 		"description": "Text inside the reset button."
 	},
 	"optionGrant": {
-		"message": "Missing permission to read and modify websites. Click to grant permission.",
+		"message": "Missing permission to read and modify websites. Click to grant permission for all websites.",
 		"description": "Ask the user to grant permmissions to read and modify websites related to TF2 modding."
 	},
 	"grantButton": {
 		"message": "Grant",
 		"description": "Text inside the grant button."
+	},
+	"install": {
+		"message": "Provisions Mod Manager",
+		"description": "Name of Provisions Mod Manager, to be used on install buttons."
+	},
+	"installSubtext": {
+		"message": "1-Click Install",
+		"description": "A short tagline of what the install button does."
+	},
+	"installPopup": {
+		"message": "Install '$mod$' in one click with Provisions Mod Manager.",
+		"description": "Explanation of what the install button will do when the user hovers over the button.",
+		"placeholders": {
+			"mod": {
+				"content": "$1",
+				"example": "File.vpk"
+			}
+		}
+	},
+	"chromePermissionsNotice": {
+		"message": "Chromium-based browsers do not allow revoking permissions programmatically. Use the extension configuration page to revoke access.",
+		"description": "Explanation of why the checkboxes for read and modify permissions for websites is disabled in Chrome/Chromium."
+	},
+	"sectionPermissions": {
+		"message": "Permissions",
+		"description": "Title of the permissions section."
+	},
+	"whyPermissionStorageTitle": {
+		"message": "Storage",
+		"description": "Name of the 'storage' permission."
+	},
+	"whyPermissionStorage": {
+		"message": "To save settings like which port to use when connecting to Provisions Mod Manager.",
+		"description": "Reason for the 'storage' permission."
+	},
+	"whyPermissionNativeMessagingTitle": {
+		"message": "Native Messaging",
+		"description": "Name of the 'nativeMessaging' permission."
+	},
+	"whyPermissionNativeMessaging": {
+		"message": "To communicate with Provisions Mod Manager.",
+		"description": "Reason for the 'nativeMessaging' permission."
+	},
+	"whyPermissionDownloadsTitle": {
+		"message": "Downloads",
+		"description": "Name of the 'downloads' permission."
+	},
+	"whyPermissionDownloads": {
+		"message": "Manage downloads on 'http://mods.tf'. Mods.tf requires you to be logged in via Steam, so downloads must happen in the browser, and not in Provisions Mod Manager.",
+		"description": "Reason for the 'downloads' permission."
+	},
+	"whyPermissionNotificationsTitle": {
+		"message": "Notifications",
+		"description": "Name of the 'notifications' permission."
+	},
+	"whyPermissionNotifications": {
+		"message": "Allows us to alert you of any errors; a failed connection with Provisions Mod Manager, for example.",
+		"description": "Reason for the 'notifications' permission."
+	},
+	"notificationFailedInstallProvisions": {
+		"message": "Failed to install '$mod$', could not connect to Provisions Mod Manager. Is it running? Is the port correct?",
+		"description": "Reason for a failed installation, due to connection issues with Provisions Mod Manager.",
+		"placeholders": {
+			"mod": {
+				"content": "$1",
+				"example": "File.vpk"
+			}
+		}
+	},
+	"notificationFailedInstallBridge": {
+		"message": "Failed to install '$mod$', could not connect to Bridge. Please re-install Provisions Mod Manager.",
+		"description": "Reason for a failed installation, due to an in ability to communicate with the Bridge (Native Host). Ask the user to re-install Provisions Mod Manager.",
+		"placeholders": {
+			"mod": {
+				"content": "$1",
+				"example": "File.vpk"
+			}
+		}
 	}
+
 }

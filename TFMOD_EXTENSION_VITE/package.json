@@ -1,26 +1,41 @@
 {
+	"version": "0.1",
 	"scripts": {
 		"dev": "pnpm run ff",
-		"ff": "set TARGET=firefox& vite dev",
-		"chrome": "set TARGET=chrome& vite dev",
-		"build": "set NODE_ENV=production& set TARGET=firefox& vite build & set TARGET=chrome& vite build",
-		"lint": "eslint ./src/*.{js,ts}",
-		"lint:fix": "eslint --fix ./src/*.{js,ts}"
+		"ff": "set TARGET=firefox&& vite dev",
+		"chrome": "set TARGET=chrome&& vite dev",
+		"edge": "set TARGET=edge&&vite dev",
+		"build-ff": "set node_env=production&&set target=firefox&&vite build",
+		"build-chrome": "set node_env=production&&set target=chrome&&vite build",
+		"build-edge": "set node_env=production&&set target=edge&&vite build",
+		"build": "pnpm run lint:fix&&concurrently -g npm:build-*",
+		"build:debug": "set debug_override=true&pnpm run build",
+		"lint": "eslint ./src/*.{js,ts} & stylelint ./src/*.{css,scss}",
+		"lint:fix": "eslint --fix ./src/*.{js,ts} & stylelint --fix ./src/*.{css,scss}"
 	},
+	"browserslist": [
+		"last 2 versions and fully supports es6, not dead"
+	],
 	"type": "module",
 	"devDependencies": {
 		"@babel/runtime": "7.21.0",
+		"@types/dompurify": "^3.0.4",
 		"@types/firefox-webext-browser": "^111.0.3",
 		"@types/node": "18.15.11",
 		"@types/webextension-polyfill": "0.10.0",
 		"@typescript-eslint/eslint-plugin": "5.56.0",
 		"@typescript-eslint/parser": "5.56.0",
+		"concurrently": "8.2.2",
+		"dompurify": "^3.0.6",
 		"eslint": "8.36.0",
 		"eslint-plugin-no-unsanitized": "4.0.2",
 		"eslint-plugin-security": "1.7.1",
 		"eslint-plugin-sonarjs": "0.19.0",
 		"eslint-plugin-unicorn": "46.0.0",
 		"normalize.css": "8.0.1",
+		"postcss": "8.4.31",
+		"postcss-nesting": "12.0.1",
+		"postcss-preset-env": "9.3.0",
 		"stylelint": "^15.11.0",
 		"stylelint-a11y": "^1.2.3",
 		"stylelint-config-recommended": "^13.0.0",
@@ -28,9 +43,10 @@
 		"stylelint-logical-properties": "^1.0.0",
 		"stylelint-non-zero-length-expect-unit": "^1.0.0",
 		"stylelint-rem-over-px": "^1.0.1",
+		"url-sanitizer": "^0.10.14",
 		"vite": "4.5.0",
-		"vite-plugin-static-copy": "0.17.0",
 		"vite-plugin-web-extension": "3.0.2",
+		"vite-plugin-zip-pack": "1.0.6",
 		"webextension-polyfill": "0.10.0"
 	},
 	"eslintConfig": {
@@ -384,5 +400,14 @@
 			"**/*.txt",
 			"**/*.html"
 		]
+	},
+	"postcss": {
+		"plugins": {
+			"postcss-preset-env": {
+				"features": {
+					"logical-properties-and-values": false
+				}
+			}
+		}
 	}
 }

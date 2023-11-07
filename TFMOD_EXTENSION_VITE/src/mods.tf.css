@@ -1,0 +1,27 @@
+.provisions {
+	position:absolute;
+	inset-block-end:0;
+	inline-size:120%;
+	inset-inline-start: -10%;
+	font-size: 75%;
+	background-color: rgb(49 46 41 / 1);
+	border: 1px solid rgb(243 115 45 / 1);
+	border-radius: 0.25rem;
+	display: flex;
+	flex-flow: column;
+	z-index: 1;
+	visibility: hidden;
+}
+.provisionsContainer {
+	position: relative;
+	&:hover, &:focus-visible {
+		overflow: visible !important;
+		>img {
+			inset-inline-start:0;
+			position:absolute;
+		}
+		>.provisions {
+			visibility: visible !important;
+		}
+	}
+}

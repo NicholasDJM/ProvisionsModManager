@@ -2,30 +2,42 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="/settings.css">
+		<link rel="stylesheet" href="./settings.css">
 		<script type="module" src="./settings.ts"></script>
 	</head>
 	<body>
-		<div class="row red" id="grantMessage" style="display: none;">
-			<label for="grant" data-string="optionGrant"></label>
-			<button type="button" id="grant" data-string="grantButton"></button>
-		</div>
-		<form id="settings">
-			<fieldset>
-				<legend data-string="sectionOptions"></legend>
-					<div class="row">
-						<label for="removeModBoy" data-string="optionModBoy"></label>
-						<input id="removeModBoy" type="checkbox" data-key="modboy" checked>
-					</div>
-					<div class="row">
-						<label for="port" data-string="optionPort"></label>
-						<input id="port" type="number" data-key="port" value="42069" min="0" max="65535" maxlength="5" inputmode="numeric" enterkeyhint="done" required>
-					</div>
+		<main>
+			<div class="row red" id="grantMessage" hidden>
+				<label class="justify" for="grant" data-string="optionGrant"></label>
+				<button type="button" id="grant" data-string="grantButton"></button>
+			</div>
+			<form id="settings">
+				<fieldset id="websites">
+					<legend data-string="sectionWebsite"></legend>
+					<div class="row chromeNotice" data-string="chromePermissionsNotice" id="chromeNotice" hidden></div>
+				</fieldset>
+				<fieldset>
+					<legend data-string="sectionOptions"></legend>
+						<div class="row">
+							<label for="removeModBoy" data-string="optionModBoy"></label>
+							<input id="removeModBoy" type="checkbox" data-key="modboy" checked>
+						</div>
+						<div class="row">
+							<label for="port" data-string="optionPort"></label>
+							<input id="port" type="number" data-key="port" value="42069" min="0" max="65535" maxlength="5" inputmode="numeric" enterkeyhint="done" required>
+						</div>
+				</fieldset>
+			</form>
+			<fieldset id="permissions">
+				<legend data-string="sectionPermissions"></legend>
 			</fieldset>
-		</form>
-		<div class="row">
-			<a href="https://www.github.com/NicholasDJM/ProvisionsModManager" target="_blank" rel="noopener noreferrer"><span id="version"></span></a>
-			<button type="button" id="reset" data-string="buttonReset"></button>
-		</div>
+			<div class="margin">
+				<div class="row">
+					<label for="reset" data-string="labelReset"></label>
+					<button type="button" id="reset" data-string="buttonReset"></button>
+				</div>
+				<a href="https://www.github.com/NicholasDJM/ProvisionsModManager" target="_blank" rel="noopener noreferrer"><span id="version"></span></a>
+			</div>
+		</main>
 	</body>
 </html>

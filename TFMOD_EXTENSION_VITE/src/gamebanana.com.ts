@@ -1,72 +1,80 @@
-import { common } from "./lib/common.ts";
-const { log, error, debug, get, set } = common("GameBanana");
+import browser from "webextension-polyfill";
+import { common, locale, appendText, tag, isNumber } from "./lib/common.ts";
+import { gamebanana, regex } from "./lib/defaults.ts";
+const { get, log, error } = common("GameBanana");
 log("Loading...");
-
-let ids = [];
-function getIds() {
-	for (const [index, element] of document.querySelectorAll(".DownloadOptions").entries()) {
-		for (let index_ = 0; index_ < element.children.length; index_++) {
-			const element_ = element.children[index_];
-			if (element_.getAttribute("href") && element_.dataset.provisions === undefined) {
-				ids[ids.length] = element_;
-				element_.dataset.provisions = true;
-				// If we have already added a button, don't add it again, thus we add provisions = true to each matching element's dataset.
-			}
-		}
-	}
-	log(ids);
-	for (const [index, element] of ids.entries()) {
-		if (element.getAttribute("href").includes("https://")) {
-			// create an element matching the style of other buttons on GameBanana
-			const anchor = document.createElement("a"),
-				span = document.createElement("span"),
-				small = document.createElement("small");
-			span.append(document.createTextNode("Provisions Mod Manager"));
-			small.append(document.createTextNode("1-Click Install"));
-			span.append(small);
-			anchor.append(span);
-			anchor.addEventListener("click", (event) => {
-				event.preventDefault();
-				const downloadId = element.getAttribute("href").split("https://gamebanana.com/mods/download/")[1].split("#FileInfo_")[1],
-					modificationId = element.getAttribute("href").split("https://gamebanana.com/mods/download/")[1].split("#FileInfo_")[0];
-				console.log("Download ID:", downloadId);
-				console.log("Mod Page ID:", modificationId);
-				set("message", {type:"install", id:downloadId, modId:modificationId});
-			});
-			anchor.dataset.provisions = true;
-			element.parentNode.insertBefore(anchor, element);
-		}
-		if (element.getAttribute("href").includes("modboy://")) {
+function getLinks(): NodeListOf<HTMLAnchorElement> {
+	return document.querySelectorAll(".DownloadOptions a");
+}
+// eslint-disable-next-line unicorn/prevent-abbreviations -- Not an abbreviation.
+function deleteModBoyButton(callback: () => undefined) {
+	const links = getLinks();
+	for (const element of links) {
+		if (element.href.includes("modboy://")) {
 			element.remove();
 		}
+		callback();
 	}
 }
-const path = window.location.pathname.split("/")[1],
-	p = text => path === text,
-	oneSecond = 1000;
-if (p("mods") || p("sprays") || p("sounds") || p("scripts")) {
-	const interval = setInterval(async () => {
-		log(document.readyState);
-		if (document.readyState === "complete") {
-			clearInterval(interval);
-			let pageType = document.querySelector("#Breadcrumb").children[0].getAttribute("href").split("https://gamebanana.com/games/")[1],
-				websites = await get("websites") ?? [["gamebanana", true], ["mods_tf", true]];
-			// TODO: Add more cases
-			log(pageType);
-			// eslint-disable-next-line sonarjs/no-small-switch -- Will add more in the future
-			switch(pageType) {
-				case "297": {
-					console.log(websites[0][1]);
-					if (websites[0][1]) {
-						getIds();
+
+function createButton(gameId: number) {
+	const links = getLinks();
+	for (const element of links) {
+		if (regex.gamebanana.test(element.getAttribute("href") || "") && element.dataset.provisions !== "true") {
+			log("Creating button...");
+			const [anchor, span, small] = tag("a", "span", "small"),
+				downloadId = element.href.split("#FileInfo_")[1], // FIXME Sanitize
+				url = new URL(window.location.href),
+				pageId = url.pathname.split("/").at(-1);
+			if (pageId && !/\d/.test(pageId)) continue;
+			appendText(span, "install");
+			appendText(small, "installSubtext");
+			span.append(small);
+			anchor.append(span);
+			anchor.title = locale("installPopup", downloadId);
+			anchor.addEventListener("click", (event: MouseEvent) => {
+				event.preventDefault();
+				log("Sending message to background script...", gameId, pageId, downloadId);
+				browser.runtime.sendMessage({
+					"gamebanana": {
+						gameId,
+						pageId,
+						downloadId
 					}
-					break;
-				}
-				default: {
-					error("Not a TF2 Mod page");
-				}
+				});
+			});
+			if (isNumber(pageId, gameId, downloadId)) {
+				element.parentElement?.prepend(anchor);
+				element.dataset.provisions = "true";
+				log("Created button for ID: " + downloadId + ".");
+			} else {
+				element.dataset.provisions = "false";
+				error("Something when wrong. Extracted IDs aren't numbers.");
 			}
 		}
-	}, oneSecond);
+	}
 }
-log("Done...");
+// eslint-disable-next-line unicorn/prefer-top-level-await -- Must use IIFE, top-level await not available in this context.
+(async () => {
+// eslint-disable-next-line unicorn/prevent-abbreviations -- Not an abbreviation.
+	const removeModBoy: boolean = await get("modboy") as boolean,
+		game = document.querySelector<HTMLAnchorElement>("#Breadcrumb a")?.href.split("https://gamebanana.com/games/")[1];
+	for (const id of Object.values(gamebanana.id)) {
+		const delay = 250;
+		if (game === String(id)) {
+			setInterval(() => {
+				createButton(id);
+			}, delay);
+			if (removeModBoy) {
+				const timer = setInterval(() => {
+					deleteModBoyButton(() => {
+						log("Removed Modboy button...");
+						clearInterval(timer);
+					});
+				}, delay);
+			}
+		}
+	}
+	log("Done.");
+})();
+
