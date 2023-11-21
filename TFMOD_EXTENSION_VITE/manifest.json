@@ -13,7 +13,7 @@
 		},
 		{
 			"matches": ["*://*.mods.tf/*"],
-			"js": ["src/mods.tf.ts"],
+			"js": ["src/modstf/mods.tf.ts"],
 			"run_at": "document_end"
 		},
 		{
@@ -35,23 +35,24 @@
 			"matches": ["*://*.prefortress.com/*"],
 			"js": ["src/prefortress.com.ts"],
 			"run_at": "document_end"
+		},
+		{
+			"matches": ["*://*.colors.tf/*"],
+			"js": ["src/colors.tf.ts"],
+			"run_at": "document_end"
 		}
 	],
 	"options_ui":
 	{
-		"page": "src/settings.html",
+		"page": "src/options/settings.html",
 		"open_in_tab": false,
 		"browser_style": false
 	},
 	"{{firefox}}.browser_specific_settings": {
 		"gecko": {
-			"id": "provisions.mod.manager@nicholasmiller"
+			"id": "provisions.mod.manager@nicholasmiller",
+			"strict_min_version": "114"
 		}
-	},
-	"background": {
-		"{{chrome}}.service_worker": "src/background.ts",
-		"{{firefox}}.scripts": ["src/background.ts"],
-		"type": "module"
 	},
 	"permissions": [
 		"storage",

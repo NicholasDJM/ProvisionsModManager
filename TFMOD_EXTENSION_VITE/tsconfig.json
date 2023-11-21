@@ -1,37 +1,52 @@
 {
-	"compilerOptions": {
-		"allowJs": true,
-		"checkJs": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"moduleResolution": "NodeNext",
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
-		"strict": true,
-		"target": "ESNext",
-		"module": "NodeNext",
-		"noEmit": true,
-		"allowImportingTsExtensions": true,
-		"lib": [
-			"DOM",
-			"DOM.Iterable",
-			"ES6",
-			"ESNext"
-		],
-		"types": [
-			"vite/client"
-		]
-	},
-	"exclude": [
-		"build",
-		"node_modules",
-		"src/**/*.js",
-		"dist"
-	],
-	"include": [
-		"src/**/*.ts",
-		"globals.d.ts",
-		"vite.config.ts"
-	]
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "NodeNext",
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "ESNext",
+        "module": "NodeNext",
+        "noEmit": true,
+        "allowImportingTsExtensions": true,
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ES6",
+            "ESNext"
+        ],
+        "types": [
+            "vite/client"
+        ],
+        "baseUrl": "./",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            "@lib/*": [
+                "src/lib/*"
+            ],
+            "@modstf/*": [
+                "src/modstf/*"
+            ],
+            "@options/*": [
+                "src/options/*"
+            ]
+        }
+    },
+    "exclude": [
+        "build",
+        "node_modules",
+        "src/**/*.js",
+        "dist"
+    ],
+    "include": [
+        "src/**/*.ts",
+        "globals.d.ts",
+        "vite.config.ts"
+    ]
 }

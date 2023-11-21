@@ -13,3 +13,4 @@ grid-alt = {-g} Logo
 wiki = {$game} Wiki
 tf2maps = {-map}
 workshop = Team Fortress 2 Workshop
+colorstf = Colors.tf

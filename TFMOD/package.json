@@ -22,7 +22,7 @@
 		"stylelint": "stylelint ./src/**/*"
 	},
 	"dependencies": {
-		"@tauri-apps/api": "^1.4.0"
+		"@tauri-apps/api": "^1.5.1"
 	},
 	"devDependencies": {
 		"@csstools/postcss-sass": "5.0.1",
@@ -32,16 +32,16 @@
 		"@postcss-plugins/console": "0.2.5",
 		"@stylify/unplugin": "0.5.31",
 		"@sveltejs/adapter-static": "^2.0.3",
-		"@sveltejs/kit": "^1.24.1",
-		"@tauri-apps/cli": "^1.4.0",
-		"@types/blueimp-md5": "^2.18.0",
-		"@types/eslint": "^8.44.2",
-		"@types/gulp": "^4.0.13",
-		"@types/gulp-rename": "^2.0.2",
-		"@types/jquery": "^3.5.18",
+		"@sveltejs/kit": "^1.27.1",
+		"@tauri-apps/cli": "^1.5.6",
+		"@types/blueimp-md5": "^2.18.1",
+		"@types/eslint": "^8.44.6",
+		"@types/gulp": "^4.0.16",
+		"@types/gulp-rename": "^2.0.4",
+		"@types/jquery": "^3.5.25",
 		"@types/markdown-it": "^12.2.3",
-		"@types/md5": "^2.3.2",
-		"@types/sortablejs": "^1.15.2",
+		"@types/md5": "^2.3.4",
+		"@types/sortablejs": "^1.15.4",
 		"@typescript-eslint/eslint-plugin": "5.57.1",
 		"@typescript-eslint/parser": "5.57.1",
 		"ajv": "8.12.0",
@@ -115,7 +115,7 @@
 		"stylelint-non-zero-length-expect-unit": "1.0.0",
 		"stylelint-rem-over-px": "1.0.0",
 		"svelte": "^3.59.2",
-		"svelte-check": "^3.5.1",
+		"svelte-check": "^3.5.2",
 		"svelte-codemirror-editor": "1.1.0",
 		"svelte-eslint-parser": "0.24.2",
 		"svelte-flags": "0.4.1",
@@ -135,9 +135,12 @@
 		"tslib": "^2.6.2",
 		"typescript": "^5.2.2",
 		"uint8arrays": "4.0.3",
-		"vite": "^4.4.9",
+		"vite": "^4.5.0",
 		"vite-plugin-image-optimizer": "1.1.2",
-		"vtflib": "1.0.2"
+		"vtflib": "1.0.2",
+		"hotkey": "^0.0.2",
+		"vite-imagetools": "^6.2.3",
+		"wireit": "latest"
 	},
 	"eslintConfig": {
 		"root": true,

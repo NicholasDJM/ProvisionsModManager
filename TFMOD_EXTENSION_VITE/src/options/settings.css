@@ -1,0 +1,180 @@
+@import url("modern-normalize");
+:root {
+	accent-color: var(--accent);
+	color-scheme: light dark;
+	body {
+		margin-block-end: var(--body-margin,.5rem);
+		/* stylelint-disable-next-line rem-over-px/rem-over-px -- We're setting a baseline for rem, so it needs to be in pixels. */
+		font-size: 15px;
+		font-family: var(--font, sans-serif);
+	}
+	/* stylelint-disable declaration-block-no-duplicate-custom-properties, declaration-block-no-duplicate-properties -- Duplicates will be removed at build time. */
+	/* #if (target == "firefox") */
+	/* #info Firefox */
+	--accent-light: rgb(0 97 224 / 1);
+	--accent-dark: rgb(0 221 225 / 1);
+	--border-light: rgb(215 215 219 / 1);
+	--border-dark: rgb(249 249 250 / 0.2);
+	--background-dark: rgb(35 34 43 / 1);
+	--color-dark: rgb(251 251 254 / 1);
+	--color-sub-light: color-mix(in srgb, currentcolor 69%, transparent);
+	--color-sub-dark: color-mix(in srgb, currentcolor 75%, transparent);
+
+	--font: "Segoe UI", sans-serif;
+	/* #elif (target == "chrome") */
+	/* #info Chrome */
+	--accent-light: rgb(66 133 244 / 1);
+	--accent-dark: rgb(138 180 248 / 1);
+	--border-light: rgb(0 0 0 / 0.06);
+	--border-dark: rgb(255 255 255 / 0.1);
+	--background-dark: rgb(41 42 45 / 1);
+	--color-dark: rgb(232 234 237 / 1);
+	--color-sub-light: rgb(95 99 104 / 1);
+	--color-sub-dark: rgb(154 160 166 / 1);
+
+	/* stylelint-disable-next-line value-keyword-case -- Must have exact name. */
+	--font: "Segoe UI", Tahoma, sans-serif;
+	/* #elif (target == "edge") */
+	/* #info Edge */
+	--accent-light: rgb(0 120 212 / 1);
+	--accent-dark: rgb(99 173 229 / 1);
+	--border-light: rgb(182 182 182 / 1);
+	--border-dark: rgb(182 182 182 / 1);
+	--background-dark: rgb(59 59 59 / 1);
+	--color-dark: rgb(255 255 255 / 1);
+	--color-sub-light: #767676;
+	--color-sub-dark: #A7A7A7;
+	--body-margin: 2rem;
+
+	accent-color: auto;
+	--font: "System UI", sans-serif;
+	/* #elif (target == "opera") */
+	/* #info Opera */
+	--accent-light: #007ACC;
+	--accent-dark: #96DEFF;
+	--border-light: gray;
+	--border-dark: gray;
+	--background-dark: rgb(41 42 45 / 1);
+	--color-dark: white;
+	--color-sub-light: gray;
+	--color-sub-dark: gray;
+
+	/* stylelint-disable-next-line value-keyword-case -- Must have exact name. */
+	--font: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+	/* #else */
+	/* #error Target is not a known value! */
+	/* #endif */
+	/* stylelint-enable declaration-block-no-duplicate-custom-properties, declaration-block-no-duplicate-properties */
+
+	/* Background-light and color-light don't exist, as the browser defaults should be sufficient */
+	/* Colours taken from browser styles, used to mimic their option pages. */
+
+	--border: var(--border-light, grey);
+	--accent: var(--accent-light, skyblue);
+
+}
+.subtext {
+	color: var(--color-sub-light, grey);
+}
+@media (prefers-color-scheme: dark) {
+	:root {
+		--border: var(--border-dark, grey);
+		--accent: var(--accent-dark, skyblue);
+
+		background-color: var(--background-dark, #1B1B1B);
+		color: var(--color-dark, white);
+	}
+	.subtext {
+		color: var(--color-sub-dark, grey);
+	}
+}
+main {
+	max-inline-size: 80ch;
+	margin-inline: auto;
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: space-between;
+}
+/* #if (target != "edge") */
+input {
+	accent-color: var(--accent);
+}
+/* #endif */
+legend {
+	padding-inline: 0.5rem;
+	margin-inline: auto;
+	font-weight: bold;
+}
+a {
+	text-decoration: none;
+	&:hover, &:focus-visible {
+		text-decoration: underline;
+	}
+	&:link {
+		color: var(--accent);
+	}
+	&:visited {
+		color: var(--accent);
+	}
+}
+.section {
+	border: none;
+	border-block-start: 1px solid var(--border);
+	margin-block-end: 0.25rem;
+}
+.row {
+	font-size: 1rem;
+	display: flex;
+	justify-content: space-between;
+	padding-block: 0.15rem;
+	gap: 0.5rem;
+	> label {
+		inline-size: 100%;
+		font-size: 1rem;
+		padding-block: 0.15rem;
+		display: flex;
+		justify-content: space-between;
+	}
+}
+/* stylelint-disable-next-line a11y/no-display-none -- Intended behavior. */
+[hidden] {
+	display: none !important;
+}
+input:invalid {
+	border: 0.1875rem ridge red;
+}
+.red {
+	color: red;
+}
+.justify {
+	text-align: justify;
+}
+p {
+	margin-block: 0;
+	padding-block-end: 0.5rem;
+}
+.margin {
+	margin-inline: 0.8rem;
+}
+.strong {
+	/* Use for bold titles, without changing child elements. */
+	font-weight: bold;
+	* {
+		font-weight: normal;
+	}
+}
+ul, ol {
+	padding-inline-start: 1rem;
+}
+.description {
+	font-size: 90%;
+}
+.column {
+	flex-flow: column;
+	gap: 0;
+}
+/* #if (target == "opera") */
+button {
+	color-scheme: light;
+}
+/* #endif */

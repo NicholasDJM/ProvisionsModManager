@@ -1,8 +1,9 @@
 {
 	"root": true,
 	"private": true,
-	"license": "GPL 3.0",
+	"license": "GPL-3.0-or-later",
 	"todo": "Finish moving all ESLint configs to root package.json",
+	"type": "module",
 	"_eslintConfig": {
 		"root": true,
 		"env": {
@@ -230,5 +231,17 @@
 			"no-restricted-properties": "off",
 			"unicorn/expiring-todo-comments": "off"
 		}
+	},
+	"devDependencies": {
+		"@stylistic/eslint-plugin": "^1.3.2",
+		"@typescript-eslint/eslint-plugin": "^6.11.0",
+		"eslint": "^8.53.0",
+		"eslint-plugin-await-in-async": "^0.1.3",
+		"eslint-plugin-compat": "^4.2.0",
+		"eslint-plugin-i18next": "^6.0.3",
+		"eslint-plugin-no-unsanitized": "^4.0.2",
+		"eslint-plugin-security": "^1.7.1",
+		"eslint-plugin-sonarjs": "^0.23.0",
+		"eslint-plugin-unicorn": "^49.0.0"
 	}
 }

@@ -4,3 +4,7 @@
 /src/gamebanana.com.ts.old
 /src/lib/storage.ts
 /edge
+/.wireit
+/createRegFile.js
+/src/lib/form.ts
+/pnpm-lock.yaml

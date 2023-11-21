@@ -1,10 +1,11 @@
-/* eslint-disable unicorn/prefer-top-level-await */
 import browser from "webextension-polyfill";
-import { regex } from "./lib/defaults.ts";
-import { common, locale } from "./lib/common.ts";
+import { regex } from "@lib/defaults.ts";
+import { common, locale } from "@lib/common.ts";
 const { log } = common("TF2Maps.net");
 import { sanitizeURL } from "url-sanitizer";
-import * as sanitizeHTML from "dompurify";
+import DOMPurify from "dompurify";
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css";
 log("Loading...");
 
 function createButton(href: string, name: string): HTMLAnchorElement {
@@ -21,24 +22,29 @@ function createButton(href: string, name: string): HTMLAnchorElement {
 	button.addEventListener("click", () => {
 		browser.runtime.sendMessage({"tf2maps": href});
 	});
-	button.title = locale("installPopup", name) || `Install '${name}' in one click with Provisions Mod Manager.`;
+	//@ts-expect-error Tippy() function is callable. Types are misconfigured. This works in browser.
+	tippy(button, {
+		content: locale("installPopup", name)
+	});
 	return button;
 }
-
-for (const element of document.querySelectorAll<HTMLAnchorElement>(".p-title-pageAction a")) {
-	if (regex.tf2maps.test(element.href)) {
-		sanitizeURL(element.href).then(url => {
-			const title = document.querySelector("title");
-			let name = "";
-			if (title && title.textContent) {
-				name = sanitizeHTML.sanitize(title.textContent.split(" |")[0]);
-			}
-			if (url) {
-				log(element);
-				element.parentElement?.append(createButton(url, name));
-				element.style.marginBlockEnd = "1rem"; // Space out the first button from the new one.
-			}
-		});
+if (document.body.dataset.provisions === undefined) {
+	document.body.dataset.provisions = "true";
+	for (const element of document.querySelectorAll<HTMLAnchorElement>(".p-title-pageAction a")) {
+		if (regex.tf2maps.test(element.href)) {
+			sanitizeURL(element.href).then(url => {
+				const title = document.querySelector("title");
+				let name = "";
+				if (title && title.textContent) {
+					name = DOMPurify.sanitize(title.textContent.split(" |")[0]);
+				}
+				if (url && name) {
+					log(element);
+					element.parentElement?.append(createButton(url, name));
+					element.style.marginBlockEnd = "1rem"; // Space out the first button from the new one.
+				}
+			});
+		}
 	}
+	log("Done.");
 }
-log("Done.");

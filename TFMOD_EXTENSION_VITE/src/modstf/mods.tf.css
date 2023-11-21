@@ -24,4 +24,21 @@
 			visibility: visible !important;
 		}
 	}
+	/* stylelint-disable-next-line a11y/no-display-none -- Another element takes it place. */
+	>.provisions .provisionsInstalled {
+		display: none;
+	}
+	>.provisions .provisionsNotInstalled {
+		display: inline;
+	}
+}
+.provisionsContainer>.provisions.installed {
+	background-color: green;
+	>.provisionsInstalled {
+		display: inline;
+	}
+	/* stylelint-disable-next-line a11y/no-display-none -- Another element takes it place. */
+	>.provisionsNotInstalled {
+		display: none;
+	}
 }

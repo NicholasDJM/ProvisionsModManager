@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title data-locale="title"></title>
+		<link rel="stylesheet" href="./settings.css">
+		<script type="module" src="./settings.ts"></script>
+	</head>
+	<body>
+		<main>
+			<div class="row" style="margin-inline:0.5rem" id="grantMessage" hidden>
+				<label class="red" for="grant" data-locale="optionGrant">
+					Missing permission to read and modify websites. Click to grant permission for all websites.
+				</label>
+				<button type="button" id="grant" data-locale="grantButton">Grant</button>
+			</div>
+			<form id="settings">
+				<fieldset class="section">
+					<legend data-locale="sectionWebsite">Supported Websites</legend>
+					<!-- #if chromium -->
+					<p data-locale="chromePermissionsNotice">
+						Chromium-based browsers do not support revoking permissions programatically.
+						Use the extension configuration page to revoke access.
+					</p>
+					<!-- #endif -->
+					<div id="websites"></div>
+				</fieldset>
+				<fieldset class="section">
+					<legend data-locale="sectionOptions">Miscellaneous Options</legend>
+						<div class="row">
+							<label for="removeModBoy" data-locale="optionModBoy"></label>
+							<input id="removeModBoy" type="checkbox" data-key="modboy" checked>
+						</div>
+						<div class="row">
+							<label for="port" data-locale="optionPort"></label>
+							<input id="port" type="number" data-key="port" value="42069" min="0" max="65535" maxlength="5" inputmode="numeric" enterkeyhint="done" required>
+						</div>
+				</fieldset>
+			</form>
+			<fieldset class="section">
+				<legend data-locale="sectionPermissions">Permissions</legend>
+				<ul id="permissions"></ul>
+				<!-- #if (target == "firefox") -->
+				<a href="https://support.mozilla.org/en-US/kb/permission-request-messages-firefox-extensions?as=u&utm_source=inproduct" target="_blank" rel="noopener noreferrer" data-locale="permissionsLearnMore">Learn More about permissions</a>
+				<!-- #elif (target == "chrome") -->
+				<!-- Chrome doesn't have a help page for managing permissions for extensions. -->
+				<!-- #elif (target == "edge")-->
+				<a href="https://support.microsoft.com/en-us/microsoft-edge/change-site-access-permissions-for-extensions-in-microsoft-edge-7d1c889d-e267-4be0-15d4-3ed5d0c82ef5" target="_blank" rel="noopener noreferrer" data-locale="permissionsLearnMore">Learn More about permissions</a>
+				<!-- #endif -->
+			</fieldset>
+			<div class="margin">
+				<div class="row">
+					<label for="reset" data-locale="labelReset">Reset options to default</label>
+					<button type="button" id="reset" data-locale="buttonReset">Defaults</button>
+				</div>
+				<a id="version" href="https://www.github.com/NicholasDJM/ProvisionsModManager" target="_blank" rel="noopener noreferrer"></a>
+			</div>
+		</main>
+	</body>
+</html>

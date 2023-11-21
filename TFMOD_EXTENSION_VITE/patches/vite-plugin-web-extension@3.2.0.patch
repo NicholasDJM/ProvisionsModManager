@@ -1,0 +1,22 @@
+diff --git a/dist/index.js b/dist/index.js
+index 2814e8d46c43ee7afbc4646e27f449bfd50a92d6..54a4015342a3ab353f78ba907d0b59b7fd7243c1 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -321,7 +321,7 @@ function hmrRewritePlugin(config) {
+     config(config2) {
+       var _a, _b;
+       inputIds = Object.values(((_b = (_a = config2.build) == null ? void 0 : _a.rollupOptions) == null ? void 0 : _b.input) ?? {}).map(
+-        (inputId) => vite.normalizePath(inputId)
++        (inputId) => inputId // Patched: When in dev mode, file URLs have localhost prepended for HMR, but this breaks stuff in web extensions (likely due to CSP), so I've removed vite.normalizedPath(). (This also disables HMR)
+       );
+       return {
+         server: {
+@@ -466,7 +466,7 @@ function getViteConfigsForInputs(options) {
+         lib: {
+           name: "_",
+           entry,
+-          formats: ["iife"],
++          formats: ["es"], // Enables the use of top level await in code.
+           fileName: () => moduleId + ".js"
+         }
+       },

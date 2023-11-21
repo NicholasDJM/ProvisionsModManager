@@ -1,3 +1,5 @@
 /TFMOD_WAILS
 node_modules
 dump.js
+*.old
+/TFMOD_EXTENSION

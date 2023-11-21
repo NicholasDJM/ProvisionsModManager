@@ -1,0 +1,303 @@
+//eslint.config.js
+import unicorn from "eslint-plugin-unicorn"; // More generic rules to compliment ESLint's built in rules.
+import security from "eslint-plugin-security"; // Security best practices.
+import typescript from "@typescript-eslint/eslint-plugin"; // Rules for TypeScript
+import sonar from "eslint-plugin-sonarjs"; // Ensure better maintainability.
+import unsanitized from "eslint-plugin-no-unsanitized"; // Avoid unsafe practices like innerHTML.
+import stylistic from "@stylistic/eslint-plugin"; // Style rules like always require semicolons.
+import compat from "eslint-plugin-compat"; // No unsupported JS features in older browsers.
+import i18n from "eslint-plugin-i18next"; // No literal strings.
+import awaitAsync from "eslint-plugin-await-in-async"; // Only allow await inside async blocks.
+// This is a Flat Config, a new config format for ESLint. Unlike eslintrc files, which can be split among many files, eslint.config.js is a centralized file. You can import other configs via JavaScript's import statement.
+// Rules can be set "off", "warn", or "error", if rule has options, the severity must be the first item in the array.
+
+// NOTE: This config shouldn't be used until all plugins have been updated to support Flat Config. Or use import {FlatCompat} from @eslint/eslintrc
+const stylisticRules = {
+		"stylistic/indent": [
+			"warn",
+			"tab", // Indent style
+			{
+				SwitchCase: 1 // Case indent count. 1 = plus one from switch statement.
+			}
+		],
+		"stylistic/semi": "error",
+		"stylistic/linebreak-style": [
+			"error",
+			"windows" // Break style
+		],
+		"stylistic/quotes": [
+			"warn",
+			"double" // Quotes style
+		],
+		"stylistic/comma-spacing": "warn",
+		"stylistic/dot-location": [
+			"error",
+			"property" // Or object
+			/*
+				Only applies to multiline statements.
+				Property: The dot is on the same line as the property.
+					variable
+					.property
+				Object: The dot is on a serparate line from the property.
+					variable.
+					property
+			*/
+		],
+		"stylistic/array-bracket-spacing": [
+			"error",
+			"never"
+		],
+		"stylistic/arrow-spacing": "error",
+		"stylistic/brace-style": "error",
+		"stylistic/comma-dangle": "error",
+		"stylistic/comma-style": "error",
+		"stylistic/func-call-spacing": "error",
+		"stylistic/no-multi-spaces": "error",
+		"stylistic/no-multiple-empty-lines": "error",
+		"stylistic/no-trailing-spaces": "error",
+		"stylistic/semi-spacing": [
+			"error",
+			{
+				"before": false,
+				"after": true
+			}
+		],
+		"stylistic/semi-style": "error",
+		"stylistic/space-before-blocks": "error",
+		"stylistic/space-in-parens": [
+			"error",
+			"never"
+		],
+		"stylistic/space-infix-ops": "error"
+	},
+	genericRules = {
+		"no-unused-vars": "warn",
+		"camelcase": "warn",
+		"no-var": "warn",
+		"no-warning-comments": [
+			"warn",
+			{
+				"terms": [
+					"TODO:",
+					"FIXME:",
+					"BUG:",
+					"ERROR:",
+					"WARNING:",
+					"A11Y:"
+				]
+			}
+		],
+		"yoda": "warn", // Error on "red" === color, pass on color === "red"
+		"no-constant-condition": [
+			"error",
+			{
+				"checkLoops": false
+			}
+		],
+		"eqeqeq": [
+			"error",
+			"smart" // Allow certain situations, like typeof variable == "string", or comparing against null.
+			// Other option: always
+		],
+		"dot-notation": "error", // Error on variable["property"]
+		/* Func styles: Expressions, Declaration
+			Expression: const name = function() {}
+			Declaration: function name() {}
+		Options:
+			allowArrowFunction: const name = () => {}
+				Only applies if style is set to declaration.
+		*/
+		"func-style": [
+			"error",
+			"declaration",
+			{
+				"allowArrowFunction": true
+			}
+		],
+		"guard-for-in": "error", // Must check if property is not inherited. Use object.hasOwn();
+		"multiline-comment-style": [
+			"warn",
+			"bare-block" // Other options are starred-block and separate-lines. Ignores JSDoc comments.
+		],
+		"no-alert": "error",
+		"no-confusing-arrow": "error",
+		"no-else-return": "error",
+		"no-lonely-if": "error",
+		"no-await-in-loop": "warn",
+		"no-constant-binary-expression": "error",
+		"no-duplicate-imports": "warn",
+		"no-self-compare": "error",
+		"no-template-curly-in-string": "warn",
+		"no-unmodified-loop-condition": "error",
+		"no-unreachable-loop": "error",
+		"no-use-before-define": "error",
+		"arrow-body-style": [
+			"warn",
+			"as-needed"
+		],
+		"complexity": [
+			"warn",
+			15
+		],
+		"max-depth": [
+			"off", // TODO: Figure out optimal depth, factoring read-ability and productivity.
+			4
+		],
+		"consistent-return": "error",
+		"default-case": "error",
+		"default-case-last": "error",
+		"no-eq-null": "error", // Must use typeof or ===
+		"no-implicit-coercion": "error",
+		"no-magic-numbers": [
+			"error",
+			{
+				"ignore": [
+					0,
+					1,
+					-1
+				],
+				"enforceConst": true, // Must use const to assign magic numbers.
+				"ignoreDefaultValues": true, // function name(value=100) is okay.
+				"ignoreArrayIndexes": true, // array[100] is okay.
+				"ignoreClassFieldInitialValues": false, // class name {property = 100} is not okay.
+				"detectObjects": true // const object = {property: 100} is not okay.
+			}
+		],
+		"no-multi-assign": "error",
+		"no-multi-str": "error",
+		"no-nested-ternary": "off",
+		"no-eval": "error",
+		"no-implied-eval": "error",
+		"no-script-url": "error",
+		"no-empty-function": "error",
+		"no-floating-decimal": "error",
+		"no-implicit-globals": "error",
+		"one-var": [
+			"error",
+			"consecutive"
+		],
+		"one-var-declaration-per-line": [
+			"error",
+			"always"
+		],
+		"require-await": "error"
+	},
+	unicornRules = {
+		"unicorn/expiring-todo-comments": "off", // This is buggy, it usually crashes ESlint.
+		"unicorn/no-abusive-disables": "error", // When using eslint-disable, you must specify which rule to disable.
+		"unicorn/consistent-function-scoping": "warn",
+		"unicorn/filename-case": [
+			"error",
+			{
+				"case": "camelCase",
+				"ignore": [
+					"**/components/*.svelte"
+				]
+			}
+		],
+		"unicorn/prefer-query-selector": "warn",
+		"unicorn/numeric-separators-style": "off",
+		"unicorn/prevent-abbreviations": [
+			"warn",
+			{
+				"checkFilenames": false
+			}
+		],
+		"unicorn/prefer-top-level-await": "off"
+	},
+	sonarRules = {
+		"sonar/no-collapsible-if": "off" // unicorn/no-lonely-if has better detection.
+	},
+	typescriptRules = {
+		"no-unused-vars": "off",
+		"typescript/no-unused-vars": "warn", // This rule is preferred over ESlint's native no-unused-vars, as it supports types.
+		"no-unused-expression": "off",
+		"typescript/no-unused-expression": "warn", //Ditto
+	}
+
+export default [
+	// Rules and other settings cascade if the files have the same values.
+	"eslint/recommended",
+	"unicorn/recommended",
+	"sonarjs/recommended",
+	"security/recommended",
+	"no-unsanitized/DOM",
+	"compat/recommended",
+	{
+		files: ["**/*.js", "**/*.cjs", "**/*.mjs", "**/*.ts", "**/*.svelte"],
+		root: true,
+		plugins: [
+			unicorn,
+			security,
+			sonar,
+			unsanitized,
+			stylistic,
+			compat,
+			awaitAsync
+		],
+		rules: {
+			...stylisticRules,
+			...genericRules,
+			...unicornRules
+		},
+		env: {
+			browser: true,
+			commonjs: false,
+			es6: true
+		},
+		ignorePatterns: [
+			"/node_modules",
+			"/dist",
+			"/build",
+			"*.min.js"
+		],
+		reportUnusedDisabeDirectives: true
+	},
+	{
+		files: ["**/*.cjs"],
+		rules: {
+			"unicorn/prefer-module": "off" // Allow CommonJS-isms like require and __dirname
+		},
+		env: {
+			commonjs: true
+		}
+	},
+	{
+		files: ["**/*.ts"],
+		plugins: [
+			typescript,
+		],
+		parser: "@typescript-eslint/parser",
+		parserOptions: {
+			project: "./tsconfig.json",
+			tsconfigRootDir: "."
+		},
+		extends: [
+			"plugin:@typescript-eslint/recommended"
+		],
+		rules: {
+			...typescriptRules
+		}
+	},
+	{
+		files: ["**/*.svelte"],
+		plugins: [
+			i18n
+		],
+		parser: "svelte-eslint-parser",
+		processor: "svelte/svelte",
+		parserOptions: {
+			extraFileExtensions: [".svelte"],
+			parser: "@typescript-eslint/eslint"
+		},
+		rules: {
+			"i18n/no-literal-string": "error" // Disallow literal strings in components. Must use i18n.t("key")
+		}
+	},
+	{
+		files: ["./TFMOD_EXTENSIONS_VITE/**/*"],
+		env: {
+			webextensions: true,
+		}
+	}
+]

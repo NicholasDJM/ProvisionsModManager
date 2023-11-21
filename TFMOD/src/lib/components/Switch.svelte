@@ -87,7 +87,7 @@
 		}
 
 	}
-	/* I would use nesting here, but either PostCSS or Svelte doesn't like it, and doesn't output it correctly. */
+	/* I would use nesting here and combine it with the above, but either PostCSS or Svelte doesn't like it, and doesn't output it correctly. */
 	.switch:hover, .switch:focus-visible {
 		& .check {
 			inset-inline-start: calc(var(--width) / var(--hover));

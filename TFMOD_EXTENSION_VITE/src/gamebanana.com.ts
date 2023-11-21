@@ -1,39 +1,48 @@
 import browser from "webextension-polyfill";
-import { common, locale, appendText, tag, isNumber } from "./lib/common.ts";
-import { gamebanana, regex } from "./lib/defaults.ts";
+import { common, locale, appendText, isNumber, emmet } from "@lib/common.ts";
+import { gamebanana, regex, tippyConfig } from "@lib/defaults.ts";
 const { get, log, error } = common("GameBanana");
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css";
+//@ts-expect-error Property setDefaultProps does exist.
+tippy.setDefaultProps({...tippyConfig});
 log("Loading...");
 function getLinks(): NodeListOf<HTMLAnchorElement> {
 	return document.querySelectorAll(".DownloadOptions a");
 }
-// eslint-disable-next-line unicorn/prevent-abbreviations -- Not an abbreviation.
-function deleteModBoyButton(callback: () => undefined) {
+// eslint-disable-next-line unicorn/prevent-abbreviations, @typescript-eslint/no-explicit-any -- 1. Not an abbreviation. 2. We want any as to indicate we don't do anything with the return value.
+function deleteModBoyButton(callback?: () => any) {
 	const links = getLinks();
 	for (const element of links) {
 		if (element.href.includes("modboy://")) {
 			element.remove();
+			if (callback) callback();
 		}
-		callback();
 	}
 }
 
 function createButton(gameId: number) {
-	const links = getLinks();
-	for (const element of links) {
-		if (regex.gamebanana.test(element.getAttribute("href") || "") && element.dataset.provisions !== "true") {
+	for (const element of getLinks()) {
+		if (element.dataset.provisions !== "true" && regex.gamebanana.test(element.getAttribute("href") || "")) {
 			log("Creating button...");
-			const [anchor, span, small] = tag("a", "span", "small"),
+			const [button, span, image] = [
+					emmet("a"),
+					emmet(`span>small{${locale("installSubtext")}}`),
+					emmet("img(style='margin-inline-start:.5em')")
+				], //tag("a", "span", "small", "img[style=margin-inline-start:.5em]"),
 				downloadId = element.href.split("#FileInfo_")[1], // FIXME Sanitize
-				url = new URL(window.location.href),
-				pageId = url.pathname.split("/").at(-1);
-			if (pageId && !/\d/.test(pageId)) continue;
-			appendText(span, "install");
-			appendText(small, "installSubtext");
-			span.append(small);
-			anchor.append(span);
-			anchor.title = locale("installPopup", downloadId);
-			anchor.addEventListener("click", (event: MouseEvent) => {
-				event.preventDefault();
+				pageId = new URL(window.location.href).pathname.split("/").at(-1),
+				filename = element.parentElement?.parentElement?.querySelector(".FileInfo span code")?.textContent || downloadId;
+			if ((pageId && !/\d/.test(pageId)) || (downloadId && !/\d/.test(downloadId))) continue;
+			//image.src //TODO: Create Logo.
+			button.append(appendText(span, "install"));
+			/* span.append(appendText(small, "installSubtext"));
+			   @ts-expect-error Tippy() function is callable. */
+			tippy(button, {
+				content: locale("installPopup", filename),
+				placement: "bottom-start"
+			});
+			button.addEventListener("click", () => {
 				log("Sending message to background script...", gameId, pageId, downloadId);
 				browser.runtime.sendMessage({
 					"gamebanana": {
@@ -44,35 +53,29 @@ function createButton(gameId: number) {
 				});
 			});
 			if (isNumber(pageId, gameId, downloadId)) {
-				element.parentElement?.prepend(anchor);
+				element.parentElement?.prepend(button);
 				element.dataset.provisions = "true";
 				log("Created button for ID: " + downloadId + ".");
-			} else {
-				element.dataset.provisions = "false";
-				error("Something when wrong. Extracted IDs aren't numbers.");
+				continue;
 			}
+			element.dataset.provisions = "false";
+			error("Something when wrong. Extracted IDs aren't numbers.");
 		}
 	}
 }
-// eslint-disable-next-line unicorn/prefer-top-level-await -- Must use IIFE, top-level await not available in this context.
 (async () => {
 // eslint-disable-next-line unicorn/prevent-abbreviations -- Not an abbreviation.
-	const removeModBoy: boolean = await get("modboy") as boolean,
-		game = document.querySelector<HTMLAnchorElement>("#Breadcrumb a")?.href.split("https://gamebanana.com/games/")[1];
+	const removeModBoy = await get("modboy") as boolean,
+		game = document.querySelector<HTMLAnchorElement>("#Breadcrumb a")?.href.split("https://gamebanana.com/games/")[1] || "",
+		interval = 250;
 	for (const id of Object.values(gamebanana.id)) {
-		const delay = 250;
 		if (game === String(id)) {
 			setInterval(() => {
 				createButton(id);
-			}, delay);
-			if (removeModBoy) {
-				const timer = setInterval(() => {
-					deleteModBoyButton(() => {
-						log("Removed Modboy button...");
-						clearInterval(timer);
-					});
-				}, delay);
-			}
+				if (removeModBoy) {
+					deleteModBoyButton(() => console.log("Removed ModBoy link..."));
+				}
+			}, interval);
 		}
 	}
 	log("Done.");

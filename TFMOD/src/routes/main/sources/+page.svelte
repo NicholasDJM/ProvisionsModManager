@@ -53,7 +53,8 @@
 			tf2Wiki: $i18n.t("sources:wiki", {game: translations.tf2}),
 			tf2cWiki: $i18n.t("sources:wiki", {game: translations.tf2c}),
 			tf2maps: $i18n.t("sources:tf2maps"),
-			workshop: $i18n.t("sources:workshop")
+			workshop: $i18n.t("sources:workshop"),
+			colorstf: $i18n.t("source:colorstf")
 		};
 		console.log(translations);
 	}
@@ -100,6 +101,11 @@
 					{
 						url: "https://wiki.teamfortress.com/wiki/Main_Page",
 						translation: "tf2Wiki",
+						alt: ""
+					},
+					{
+						url: "https://colors.tf",
+						translation: "colrstf",
 						alt: ""
 					}
 				],
