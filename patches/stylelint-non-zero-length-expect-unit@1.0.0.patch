@@ -1,0 +1,13 @@
+diff --git a/index.js b/index.js
+index 099db01262d6a625008643635683aad0224673c1..ded6fa0c6d4973fc476207f3519848ce5b2d4734 100644
+--- a/index.js
++++ b/index.js
+@@ -22,6 +22,7 @@ const propertiesWithoutUnits = [
+   "elevation",
+   "z-index",
+   "font-weight",
++  "line-height",
++  "tab-size"
+ ];
+ 
+ const propertiesWithUnitsRegExp = new RegExp(propertiesWithoutUnits.join("|"));
